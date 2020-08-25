@@ -12,7 +12,7 @@ class Memory{
 
 	//Private data
 		uint8_t mem[MEMORY_SIZE];
-		bool memErr;
+		bool memError;
 
 	//Private functions
 		void	store	(uint16_t waddr, uint8_t val);
@@ -22,8 +22,10 @@ class Memory{
 	public:
 		Memory();
 		uint8_t	getByte (uint16_t byteAddress);
-		void		putByte (uint16_t byteAddress, uint8_t value);
+		void 	putByte	(uint16_t byteAddress, uint8_t val);
 		uint8_t	getWord (uint16_t byteAddress);
+		void 	putWord	(uint16_t byteAddress, uint8_t wordValue);
+		void 	reset(void);
 };
 
 #endif
