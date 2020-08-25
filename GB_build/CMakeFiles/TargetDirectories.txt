@@ -1,3 +1,0 @@
-/Users/hunter/Documents/School/4800/Game-Boy-Sim/GB_build/CMakeFiles/rebuild_cache.dir
-/Users/hunter/Documents/School/4800/Game-Boy-Sim/GB_build/CMakeFiles/edit_cache.dir
-/Users/hunter/Documents/School/4800/Game-Boy-Sim/GB_build/CMakeFiles/GB.dir
