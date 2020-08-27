@@ -21,11 +21,11 @@ class Memory{
 	//public stuff
 	public:
 		Memory();
+		uint64_t getLong(int32_t baddy);
 		uint8_t	getByte (uint16_t byteAddress);
 		void 	putByte	(uint16_t byteAddress, uint8_t val);
-		uint8_t	getWord (uint16_t byteAddress);
-		void 	putWord	(uint16_t byteAddress, uint8_t wordValue);
 		void 	reset(void);
-};
+		void 	dump(void);
 
+};
 #endif

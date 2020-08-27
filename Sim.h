@@ -4,7 +4,7 @@
 #ifndef SIM_H
 #define SIM_H
 
-#define MEMORY_SIZE 8192 //8-bit words
+#define MEMORY_SIZE 8192 //8-bit bytes
 
 #define NUM_REGISTERS 6 //16-bit registers
 #define AF 0
