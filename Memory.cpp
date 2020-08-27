@@ -17,11 +17,15 @@ void Memory::store(uint16_t waddr, uint8_t val){
 	else{
 		mem[waddr] = val;
 	}
-	//TODO: Store data in memory.
 }
 
 uint8_t Memory::fetch(uint16_t waddr){
-	//TODO: Fetch data from memory.
+	if(waddr >= MEMORY_SIZE){
+		memError = true;
+	}
+	else{
+		return mem[waddr];
+	}
 	return 0;
 }
 
