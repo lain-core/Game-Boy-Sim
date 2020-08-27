@@ -11,6 +11,12 @@ Memory::Memory(){
 }
 
 void Memory::store(uint16_t waddr, uint8_t val){
+	if(waddr >= MEMORY_SIZE){
+		memError = true;
+	}
+	else{
+		mem[waddr] = val;
+	}
 	//TODO: Store data in memory.
 }
 
