@@ -86,7 +86,7 @@ void Memory::dump(void){
 			std::cout << std::endl
 					  << std::setw(3) << std::setfill('0') << std::hex << i << ": ";
 			for (int32_t j = 0; j < 4; j++)
-				std::cout << std::setw(16) << std::setfill('0') << std::hex
+				std::cout << std::setw(8) << std::setfill('0') << std::hex
 						  << currLine[j] << " ";
 			star = false;
 		}
