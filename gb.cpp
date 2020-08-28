@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include <cstdint>
-#include "Memory.h"
-//#include "gb.h"
+#include "gb.h"
 
 
 // using namespace std;
