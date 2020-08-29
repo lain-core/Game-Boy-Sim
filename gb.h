@@ -28,11 +28,13 @@ class gb{
         //void clock();
         //uint8_t getStat(void)
         bool load   (char *fname);
-        //void dumpMemory();
-        //void dumpProgRegisters();
-        //void dumpProcRegisters();
-        //void trace(void);
-        Memory& getMemory(){return memory;}
+        bool readFile(std::string filename);
+            //void dumpMemory();
+            //void dumpProgRegisters();
+            //void dumpProcRegisters();
+            //void trace(void);
+            Memory & getMemory(){return memory;
+}
         //Registers& getProgRegisters(){return regs;}
 };
 

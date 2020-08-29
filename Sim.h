@@ -5,6 +5,8 @@
 #define SIM_H
 
 #define MEMORY_SIZE 8192 //8-bit bytes
+#define ROM_START 0x0150
+#define ROM_END 0x3FFF
 
 #define NUM_REGISTERS 6 //16-bit registers
 #define AF 0

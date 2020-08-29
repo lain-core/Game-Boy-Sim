@@ -1,8 +1,44 @@
 #include "GBLoader.h"
+#include "Sim.h"
 #include "gb.h" //In lab, we included this because we implemented several Y86 funcs in here.
 //Note to us: we may not even need half of this stuff; GB roms are already compiled to binary so itt we will just do a dumb unload into ram at 0x0150 (until mappers).
 bool gb::load(char* filename){
-    return false;
+    bool status = true;
+    status = GBLoader::isValidFileName(filename);
+    if(status) status = readFile(filename); 
+    return status;
+}
+
+bool gb::readFile(std::string filename){
+    bool status = true;
+    std::string dump;
+    std::string instruction;
+    std::ifstream file(filename, std::ifstream::in);
+    int lineNum = 0;
+    uint64_t baddy;
+    uint64_t len;
+
+    if (!file){
+        std::cout << "File is empty :(" << std::endl;
+        status = false;
+    }
+
+    getline(file, dump); // loading the entire rom into dump
+    while(file){
+        lineNum++;
+        if (dump.length() != 0){
+            std::cout << "Error on line " << lineNum << std::endl;
+            std::cout << instruction << std::endl;
+            status = false;
+            break;
+        }
+        else {
+            baddy = ROM_START; // byte address will just begin at 0150 because thats where a cart rom starts
+            len = (ROM_END - ROM_START);
+            instruction = file.read(8);
+            
+        }
+    }
 }
 
 namespace GBLoader{
@@ -23,42 +59,5 @@ static bool isValidFileName(std::string filename){
     return validName;
 }
 
-static bool checkLine(std::string instruction){
-    //Check that line will buff.
-    bool willBuff = true;
-    willBuff = willBuff && hasValidAddress(instruction);
-    willBuff = willBuff && hasData(instruction);
-    willBuff = willBuff && hasValidData(instruction);
-    
-    return willBuff;
-}
-
-static bool hasValidAddress(std::string){
-    return false;
-}
-
-static bool hasData(std::string){
-    return false;
-}
-
-static bool hasValidData(std::string){
-    return false;
-}
-
-static std::string getAddress(std::string){
-    return "";
-}
-
-static std::string getData(std::string){
-    return "";
-}
-
-static bool checkHex(std::string){
-    return false;
-}
-
-static uint8_t stringToHex(std::string){
-    return 0;
-}
 
 } //end namespace Y86Loader
