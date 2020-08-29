@@ -5,12 +5,32 @@ bool gb::load(char* filename){
     return false;
 }
 
-static bool isValidFileName(std::string){
-    return false;
+namespace GBLoader{
+
+static bool isValidFileName(std::string filename){
+    bool validName = true;
+
+    //If filename is empty, return false.
+    if(filename.length() == 0){
+        std::cout << "Filename was empty." << std::endl;
+        validName = false;
+    }
+    //If file extension is wrong, return false.
+    else{
+        filename = filename.substr(filename.find('.'), filename.length());
+        if(filename != ".gb" || filename != ".GB") validName = false;
+    }
+    return validName;
 }
 
-static bool checkLine(std::string){
-    return false;
+static bool checkLine(std::string instruction){
+    //Check that line will buff.
+    bool willBuff = true;
+    willBuff = willBuff && hasValidAddress(instruction);
+    willBuff = willBuff && hasData(instruction);
+    willBuff = willBuff && hasValidData(instruction);
+    
+    return willBuff;
 }
 
 static bool hasValidAddress(std::string){
@@ -40,3 +60,5 @@ static bool checkHex(std::string){
 static uint8_t stringToHex(std::string){
     return 0;
 }
+
+} //end namespace Y86Loader
