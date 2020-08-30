@@ -36,8 +36,10 @@ static bool isValidFileName(std::string filename){
     //If file extension is wrong, return false.
     else{
         filename = filename.substr(filename.find('.'), filename.length());
-        if(filename != ".gb" && filename != ".GB") validName = false;
-        std::cout << "Your file extension was not a GB file." << std::endl;
+        if(filename != ".gb" && filename != ".GB"){
+            validName = false;
+            std::cout << "Your file extension was not a GB file." << std::endl;
+        }
     }
     return validName;
 }
