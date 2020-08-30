@@ -24,7 +24,7 @@ class gb{
     /* Public Member Functions */
     public:
         gb();
-        //void reset();
+        void reset();
         //void clock();
         //uint8_t getStat(void)
         bool load   (char *fname);
@@ -33,8 +33,7 @@ class gb{
             //void dumpProgRegisters();
             //void dumpProcRegisters();
             //void trace(void);
-            Memory & getMemory(){return memory;
-}
+        Memory & getMemory(){return memory;}
         //Registers& getProgRegisters(){return regs;}
 };
 

@@ -5,12 +5,15 @@
 #include "gb.h"
 
 gb::gb(){
-	int thisInt = 0;
+	reset();
 }
 // using namespace std;
 int main(){
 	gb myGB;
 	myGB.load("Tetris.gb");
-	Memory memory;
-	memory.dump();
+	myGB.getMemory().dump();
+}
+
+void gb::reset(){
+	cycles = 0;
 }
