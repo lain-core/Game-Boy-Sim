@@ -10,11 +10,15 @@ bool gb::load(char* filename){
 }
 
 bool gb::readFile(std::string filename){
+    std::cout << "in readfile!" << std::endl;
     bool status = true;
     std::string dump;
+    char buf[8];
     std::string instruction;
-    std::ifstream file(filename, std::ifstream::in);
-    int lineNum = 0;
+    std::ifstream file(filename, std::ios::in | std::ios::binary);
+    file.read(buf, 8);
+    std::cout << std::hex << buf[0] << std::endl;
+    /*int lineNum = 0;
     uint64_t baddy;
     uint64_t len;
 
@@ -35,10 +39,9 @@ bool gb::readFile(std::string filename){
         else {
             baddy = ROM_START; // byte address will just begin at 0150 because thats where a cart rom starts
             len = (ROM_END - ROM_START);
-            instruction = file.read(8);
-            
+            //instruction = file.read(8);
         }
-    }
+    }*/
 }
 
 namespace GBLoader{
