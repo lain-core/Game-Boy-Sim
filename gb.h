@@ -27,8 +27,8 @@ class gb{
         void reset();
         //void clock();
         //uint8_t getStat(void)
-        bool load   (char *fname);
-        bool readFile(std::string filename);
+        bool load   (std::string);
+        bool readFile(std::string);
             //void dumpMemory();
             //void dumpProgRegisters();
             //void dumpProcRegisters();
