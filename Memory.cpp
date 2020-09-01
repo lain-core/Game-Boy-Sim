@@ -65,41 +65,25 @@ uint64_t Memory::getLong(int32_t baddy){
 	return 0;
 }
 
-void Memory::dump(void){
-	uint64_t prevLine[4] = {0, 0, 0, 0};
-	uint64_t currLine[4] = {0, 0, 0, 0};
-	int32_t i;
-	bool star = false;
-
-	// 32 bytes per line (four 8-byte words)
-	for (i = 0; i < MEMORY_SIZE; i += 32)
-	{
-		// get the values for the current line
-		for (int32_t j = 0; j < 4; j++)
-			currLine[j] = getLong(i + j * 8);
-
-		// if they are the same as the values in the previous line then
-		// don't display them, but always display the first line
-		if (i == 0 || currLine[0] != prevLine[0] || currLine[1] != prevLine[1] ||
-			currLine[2] != prevLine[2] || currLine[3] != prevLine[3])
-		{
-			std::cout << std::endl
-					  << std::setw(3) << std::setfill('0') << std::hex << i << ": ";
-			for (int32_t j = 0; j < 4; j++)
-				std::cout << std::setw(8) << std::setfill('0') << std::hex
-						  << currLine[j] << " ";
-			star = false;
+void Memory::dumpROM(void){
+	// uint8_t prevLine[16];
+	uint8_t currLine[16];
+	// initializing arrays to 0
+	for (int i = 0; i < 16; i++){
+		// prevLine[i] = 0;
+		currLine[i] = 0;
+	}
+	for (int i = ROM_START; i < ROM_END; i+=16){
+		for (int j = 0; j < 16; j++){
+			currLine[j] = getByte(i + j);
 		}
-		else
-		{
-			// if this line is exactly like the previous line then
-			// just print a * if one hasn't been printed already
-			if (star == false)
-				std::cout << "*";
-			star = true;
-		}
-		for (int32_t j = 0; j < 4; j++)
-			prevLine[j] = currLine[j];
+			// printing out the correct address and formatting
+			std::cout << std::endl << std::setw(4) << std::setfill('0') << std::hex << i << ": ";
+			// printing out the contents of the address in 16 bytes per line
+			for (int j = 0; j < 16; j++){
+				std::cout << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(currLine[j]) << " ";			
+			} 
+		// for (int32_t l = 0; l < 16; l++) prevLine[l] = currLine[l];
 	}
 	std::cout << std::endl;
 }

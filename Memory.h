@@ -25,7 +25,6 @@ class Memory{
 		uint8_t	getByte (uint16_t byteAddress);
 		void 	putByte	(uint16_t byteAddress, uint8_t val);
 		void 	reset(void);
-		void 	dump(void);
-
+		void 	dumpROM(void);
 };
 #endif
