@@ -6,6 +6,7 @@ file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
 
 add_executable(GB ${SRC_FILES})
 target_include_directories(GB PUBLIC ${PROJECT_SOURCE_DIR})
+add_definitions("-g")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
