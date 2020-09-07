@@ -12,6 +12,6 @@ target_include_directories(GB PUBLIC ${PROJECT_SOURCE_DIR})
 
 target_link_libraries(GB "SDL2")
 add_definitions("-g")
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+add_subdirectory("SDL_Demo")

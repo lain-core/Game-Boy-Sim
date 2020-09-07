@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(SDL_DEMO)
 
-# do we want static libraries?
-# When STATIC_LINKING is TRUE, than cmake looks for libraries ending
-# with .a. This is for linux only!
 
 find_package(SDL2)
 include_directories(${SDL2_INCLUDE_DIRECTORIES})
