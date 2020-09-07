@@ -5,12 +5,12 @@
 #include <cstdint>
 #include <string>
 #include "Memory.h"
-//#include "Registers.h"
+#include "Registers.h"
 
 class gb{
     int cycles;
     Memory          memory;
-    //Registers     regs;
+    Registers     regs;
 
     /* Private Member Functions */
 
@@ -29,7 +29,6 @@ class gb{
         //uint8_t getStat(void)
         bool load   (std::string);
         bool readFile(std::string);
-            //void dumpMemory();
             //void dumpProgRegisters();
             //void dumpProcRegisters();
             //void trace(void);

@@ -11,9 +11,11 @@ Tools.o: Tools.h
 
 Memory.o: Tools.h Memory.h Sim.h
 
+ProgRegisters.o: ProgRegisters.h Sim.h
+
 GBLoader.o: gb.h GBLoader.h
 
-gb.o: Tools.h Memory.h 
+gb.o: Tools.h Memory.h Registers.h
 
 clean:
 	rm $(OBJ) gb || true
