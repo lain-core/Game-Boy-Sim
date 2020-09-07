@@ -7,6 +7,3 @@
 
 using namespace std;
 
-int main(){
-	printf("Sim is working.\n");
-}
