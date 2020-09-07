@@ -12,14 +12,14 @@
 
 /* 8-bit Program Register Values */
 #define NUM_REGISTERS 8
-#define regA 0
-#define regF 1
-#define regB 2
-#define regC 3
-#define regD 4
-#define regE 5
-#define regH 6
-#define regL 7
+#define A 0
+#define F 1
+#define B 2
+#define C 3
+#define D 4
+#define E 5
+#define H 6
+#define L 7
 
 /* 16-bit Program Register Values */
 #define NUM_16REGISTERS 5

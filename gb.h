@@ -10,7 +10,7 @@
 class gb{
     int cycles;
     Memory          memory;
-    Registers     regs;
+    Registers       regs;
 
     /* Private Member Functions */
 
@@ -33,7 +33,7 @@ class gb{
             //void dumpProcRegisters();
             //void trace(void);
         Memory & getMemory(){return memory;}
-        //Registers& getProgRegisters(){return regs;}
+        Registers & getRegisters(){return regs;}
 };
 
 #endif

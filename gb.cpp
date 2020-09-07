@@ -11,8 +11,13 @@ gb::gb(){
 int main(){
 	gb myGB;
 	myGB.load("Tetris_World_Rev_1.gb");
-	myGB.getMemory().dumpROM();
-	
+	//myGB.getMemory().dumpROM();
+	printf("Reg A: %d\n", myGB.getRegisters().getReg(A));
+	printf("Reg AF: %d\n", myGB.getRegisters().getBigReg(AF));
+	myGB.getRegisters().setBigReg(AF, 0x7F);
+	printf("Reg A: %d\n", myGB.getRegisters().getReg(A));
+	printf("Reg F: %d\n", myGB.getRegisters().getReg(F));
+	printf("Reg AF: %d\n", myGB.getRegisters().getBigReg(AF));
 }
 
 void gb::reset(){
