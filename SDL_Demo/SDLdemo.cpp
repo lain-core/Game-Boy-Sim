@@ -11,22 +11,24 @@ int main(){
     
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 
-    SDL_Surface * image = SDL_LoadBMP("borgar.bmp");
-    // printf("\n\nERROR MESSAGE: %s\n\n", SDL_GetError());
+    SDL_Surface * image = SDL_LoadBMP("textures/borgar.bmp");
+    
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
 
     while(!quit){
-        SDL_WaitEvent(&event);
-        switch(event.type){
-            case SDL_QUIT:
-                quit = true;
-                break;
-        }
 
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-        
+        while(SDL_PollEvent(&event) != 0){
+            SDL_WaitEvent(&event);
+            if(event.type == SDL_QUIT){
+                quit = true;
+            }
+
+             
+        }
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_RenderPresent(renderer);
     }
+    
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(image);
     SDL_DestroyRenderer(renderer);
@@ -34,3 +36,9 @@ int main(){
     SDL_Quit();
     return 0;
 }
+
+void putPixelRGB(SDL_Renderer * renderer, int x, int y, unsigned char r, 
+    unsigned char g, unsigned char b){
+    SDL_SetRenderDrawColor(renderer, (Uint8)r, (Uint8)g, (Uint8)b, 255);
+    SDL_RenderDrawPoint(renderer, x, y);
+    }
