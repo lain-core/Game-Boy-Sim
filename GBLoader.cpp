@@ -12,8 +12,8 @@ bool gb::load(std::string filename){
 bool gb::readFile(std::string filename){
     bool status = true;
     std::ifstream file(filename, std::ios::binary);
-    int baddy = ROM_START; // byte address will just begin at 0x0150 because thats where a cart rom starts
-    int len = (ROM_END - ROM_START);
+    int baddy = ROM; // byte address will just begin at 0x0150 because thats where a cart rom starts
+    int len = (ROM_END - ROM);
     for(int i = 0; i < len; i++){
         getMemory().putByte((baddy + i), file.get());
     }

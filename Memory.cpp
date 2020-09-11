@@ -73,7 +73,7 @@ void Memory::dumpROM(void){
 		// prevLine[i] = 0;
 		currLine[i] = 0;
 	}
-	for (int i = ROM_START; i < ROM_END; i+=16){
+	for (int i = ROM; i < ROM_END; i+=16){
 		for (int j = 0; j < 16; j++){
 			currLine[j] = getByte(i + j);
 		}
