@@ -8,40 +8,23 @@ Registers::Registers(){
 }
 
 void Registers::setReg(int reg, uint8_t regVal){
-	regs[reg] = &regVal;
+	regs.reg8[reg] = regVal;
 }
 
 void Registers::setBigReg(int reg, uint16_t regVal){
-	bigRegs[reg] = regVal;
+	regs.reg16[reg] = regVal;
 }
 
-uint8_t * Registers::getReg(int reg){
-	return regs[reg];
+uint8_t Registers::getReg(int reg){
+	return (regs.reg8[reg]);
 }
 
 uint16_t Registers::getBigReg(int reg){
-	return bigRegs[reg];
+	return (regs.reg16[reg]);
 }
 
 void Registers::reset(){
 	for(int i = 0; i < NUM_16REGISTERS; i++){
-		bigRegs[i] = 0;
-	}	
-
-	for(int i = 0; i < NUM_REGISTERS; i++){
-		// if(i % 2 == 0) regs[i] = &bigRegs[i];
-		if(i % 2 == 1) regs[i] = regByte(bigRegs, bigRegs[i] >> 8); 
+		regs.reg16[i] = 0;
 	}
 }
-
-uint8_t * Registers::regByte(uint16_t * bigRegs, uint8_t pointer){
-	uint8_t * answer;
-	int count = 0;
-	for (int i = pointer; i < 8; i++){
-		answer[count] = bigRegs[i];
-		count++;
-	}
-}
-
-// 16bitarray[AF, BC, DE, HL, stackpointer]
-// 8bitarray[&A, &B, &(*BC >> 8), &D, &(*DE >> 8), &H, &(*HL >> 8)];

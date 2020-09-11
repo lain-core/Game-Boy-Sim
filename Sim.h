@@ -11,7 +11,7 @@
 #define ROM_END 0x3FFF
 
 /* 8-bit Program Register Values */
-#define NUM_REGISTERS 8
+#define NUM_8REGISTERS 8
 #define A 0
 #define F 1
 #define B 2
