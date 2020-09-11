@@ -22,10 +22,10 @@ class Registers{
 	//Private functions
 	public:		
 		Registers();
-		void setReg(int, uint8_t);
-		uint8_t getReg(int);
-		uint16_t getBigReg(int);
-		void setBigReg(int, uint16_t);
+		uint8_t getReg8(int);
+		uint16_t getReg16(int);
+		void setReg8(int, uint8_t);
+		void setReg16(int, uint16_t);
 		void reset(void);
 };
 
