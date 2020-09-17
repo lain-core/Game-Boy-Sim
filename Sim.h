@@ -54,10 +54,10 @@
 
 /* Flags register bit number definitions */
 //8-Bit Register F's low bits are always set to zero. The upper 4 are used as flags.
-#define c   4 //Carry Flag
-#define h   5 //Half Carry Flag
-#define n   6 //Add/Sub-Flag
-#define z   7 //Zero Flag
+#define flagc   (1 << 4) //Carry Flag
+#define flagh   (1 << 5) //Half Carry Flag
+#define flagn   (1 << 6) //Add/Sub-Flag
+#define flagz   (1 << 7) //Zero Flag
 
 /* Major Opcodes */
 

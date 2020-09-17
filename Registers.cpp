@@ -23,13 +23,14 @@ uint16_t Registers::getReg16(int reg){
 	return (regs.reg16[reg]);
 }
 
-void Registers::setFlags(){
-	uint8_t finalFlag = 0;
+void Registers::setFlags(bool z, bool n, bool h, bool c){
 	setReg8(F, 0);
-	if(getReg8(A) == 0){
-		//Do stuff.
-		return;	
-	}
+	uint8_t finalFlag = 0;
+	if(z) finalFlag = finalFlag | flagz;
+	if(n) finalFlag = finalFlag | flagn;
+	if(h) finalFlag = finalFlag | flagh;
+	if(c) finalFlag = finalFlag | flagc;
+	setReg8(F, finalFlag);
 }
 
 void Registers::reset(){
