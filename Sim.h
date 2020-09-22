@@ -4,7 +4,7 @@
 #ifndef SIM_H
 #define SIM_H
 
-#define MEMORY_SIZE 8192 //bytes
+#define MEMORY_SIZE 0xFFFF //bytes
 
 /* Important Memory Locations */
 #define RSI                 0x0000 //RSI is ReStart and Interrupt Vectors.
@@ -15,8 +15,8 @@
 #define ROM_END             0x3FFF
 #define BANK                0x4000 //0x4000-0x7FFF is reserved for Switchable ROM banks
 #define BANK_END            0x7FFF
-#define CHAR_RAM            0x8000
-#define CHAR_RAM_END        0x97FF
+#define VRAM_START          0x8000
+#define VRAM_END            0x97FF
 #define BG_DATA_1           0x9800 //BG Map Data is split into two chunks.
 #define BG_DATA_1_END       0x9BFF
 #define BG_DATA_2           0x9C00
