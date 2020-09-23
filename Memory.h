@@ -26,7 +26,7 @@ class Memory{
 		void 		putByte(uint16_t byteAddress, uint8_t val);
 		void 		putTile(uint16_t baddy, uint8_t arr[16]);
 		uint8_t *	getTile(uint16_t baddy);
-		void reset(void);
+		void 		reset(void);
 		void 		dumpROM(void);
 		void 		dumpVRAM(void);
 		uint16_t	trace(void);
