@@ -16,7 +16,7 @@ int main(){
 	Pixel pix;
 
 	uint8_t * miniPix;
-	miniPix = (pix.getByteColor(0x5030));
+	miniPix = (pix.getTileColor(0x5030));
 }
 
 void gb::reset(){
