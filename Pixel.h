@@ -12,6 +12,6 @@ class Pixel{
 
 public:
     Pixel();
-    uint8_t* getTileColor(uint16_t);
+    uint8_t* getRowColor(uint16_t);
 };
 #endif

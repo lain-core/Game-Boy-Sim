@@ -1,3 +1,10 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cstdint>
+#include <sstream>
+#include <array>
+#include <string.h>
 #include "GBLoader.h"
 #include "Sim.h"
 #include "gb.h" //In lab, we included this because we implemented several Y86 funcs in here.
@@ -14,7 +21,7 @@ bool gb::readFile(std::string filename){
     std::ifstream file(filename, std::ios::binary);
     int baddy = ROM; // byte address will just begin at 0x0150 because thats where a cart rom starts
     int len = (ROM_END - ROM);
-    for(int i = 0; i < len; i++){
+    for(int i = 0; i <= len; i++){
         getMemory().putByte((baddy + i), file.get());
     }
     file.close();

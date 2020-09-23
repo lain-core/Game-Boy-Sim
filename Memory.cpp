@@ -9,25 +9,16 @@ Memory::Memory(){
 	reset();
 }
 
-void Memory::store(uint16_t baddy, uint8_t val){
-	lastUsed = baddy;
-	if(baddy >= MEMORY_SIZE){
-		memError = true;
+void Memory::reset(void){
+	for(int i = 0; i < MEMORY_SIZE; i++){
+		mem[i] = 0;
 	}
-	else{
-		mem[baddy] = val;
-	}
+	lastUsed = 0;
+	memError = false;
 }
 
-uint8_t Memory::fetch(uint16_t baddy){
-	lastUsed = baddy;
-	if(baddy >= MEMORY_SIZE){
-		memError = true;
-	}
-	else{
-		return mem[baddy];
-	}
-	return 0;
+uint16_t Memory::trace(){
+	return lastUsed;
 }
 
 uint8_t Memory::getByte(uint16_t baddy)
@@ -37,6 +28,19 @@ uint8_t Memory::getByte(uint16_t baddy)
 		return mem[baddy];
 	}
 	else{
+		memError = true;
+		return 0;
+	}
+}
+
+uint8_t * Memory::getTile(uint16_t baddy)
+{
+	lastUsed = baddy;
+	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){
+		return &(mem[baddy]);
+	}
+	else
+	{
 		memError = true;
 		return 0;
 	}
@@ -54,19 +58,6 @@ void Memory::putByte(uint16_t baddy, uint8_t val)
 
 }
 
-uint8_t * Memory::getTile(uint16_t baddy)
-{
-	lastUsed = baddy;
-	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){
-		return &(mem[baddy]);
-	}
-	else
-	{
-		memError = true;
-		return 0;
-	}
-}
-
 void Memory::putTile(uint16_t baddy, uint8_t val[16]){
 	lastUsed = baddy;
 	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){	
@@ -75,14 +66,6 @@ void Memory::putTile(uint16_t baddy, uint8_t val[16]){
 	else{
 		memError = true;
 	}
-}
-
-void Memory::reset(void){
-	for(int i = 0; i < MEMORY_SIZE; i++){
-		mem[i] = 0;
-	}
-	lastUsed = 0;
-	memError = false;
 }
 
 void Memory::dumpROM(void){
@@ -132,8 +115,4 @@ void Memory::dumpVRAM(void){
 		}
 	}
 	std::cout << std::endl;
-}
-
-uint16_t Memory::trace(){
-	return lastUsed;
 }

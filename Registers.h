@@ -19,14 +19,14 @@ class Registers{
 
 	regSet regs;
 
-	//Private functions
+	//Public functions
 	public:		
 		Registers();
+		void reset(void);
 		uint8_t getReg8(int);
 		uint16_t getReg16(int);
 		void setReg8(int, uint8_t);
 		void setReg16(int, uint16_t);
-		void reset(void);
 		void setFlags(bool, bool, bool, bool);
 };
 

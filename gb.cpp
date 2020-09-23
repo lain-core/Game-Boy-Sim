@@ -9,18 +9,20 @@
 gb::gb(){
 	reset();
 }
+
+void gb::reset(){
+	cycles = 0;
+}
+
 // using namespace std;
 int main(){
 	gb myGB;
 	Memory mem;
 	Pixel pix;
-
+	myGB.load("Tetris_World_Rev_1.gb");
+	myGB.getMemory().dumpROM();
 	uint8_t * miniPix;
-	miniPix = (pix.getTileColor(0x5030));
-}
-
-void gb::reset(){
-	cycles = 0;
+	miniPix = (pix.getRowColor(0x5030));
 }
 
 void gb::trace(){
