@@ -27,7 +27,7 @@ class Registers{
 		uint16_t getReg16(int);
 		void setReg8(int, uint8_t);
 		void setReg16(int, uint16_t);
-		void setFlags(bool, bool, bool, bool);
+		void setFlag(uint8_t);
 };
 
 #endif

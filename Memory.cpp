@@ -14,10 +14,18 @@ void Memory::reset(void){
 	memError = false;
 }
 
+/*
+ * Trace
+ * Returns the last utilized memory location.
+ */
 uint16_t Memory::trace(){
 	return lastUsed;
 }
 
+/*
+ * getByte
+ * Returns a single byte in memory, given a 16-bit byte address.
+ */
 uint8_t Memory::getByte(uint16_t baddy)
 {
 	lastUsed = baddy;
@@ -30,6 +38,10 @@ uint8_t Memory::getByte(uint16_t baddy)
 	}
 }
 
+/*
+ * getTile
+ * Returns a pointer to the start of a tile (16 bytes), given a 16-bit byte address.
+ */
 uint8_t * Memory::getTile(uint16_t baddy)
 {
 	lastUsed = baddy;
@@ -43,6 +55,10 @@ uint8_t * Memory::getTile(uint16_t baddy)
 	}
 }
 
+/*
+ * putByte
+ * Puts a single byte into memory, given a 16-bit byte address.
+ */
 void Memory::putByte(uint16_t baddy, uint8_t val)
 {
 	lastUsed = baddy;
@@ -55,6 +71,10 @@ void Memory::putByte(uint16_t baddy, uint8_t val)
 
 }
 
+/*
+ * putTile
+ * Puts a tile (16 bytes) into memory, given a 16-bit byte address.
+ */
 void Memory::putTile(uint16_t baddy, uint8_t val[16]){
 	lastUsed = baddy;
 	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){	
@@ -65,6 +85,11 @@ void Memory::putTile(uint16_t baddy, uint8_t val[16]){
 	}
 }
 
+/*
+ * dumpROM
+ * Dumps the contents in memory from range 0x100 to 0x3FFF (CART_HEADER to ROM_END).
+ * Formats into 16-byte chunks with the starting address prefixed.
+ */
 void Memory::dumpROM(void){
 	// uint8_t prevLine[16];
 	uint8_t currLine[16];
@@ -87,6 +112,11 @@ void Memory::dumpROM(void){
 	std::cout << std::endl;
 }
 
+/*
+ * dumpROM
+ * Dumps the contents in memory from range 0x8000 to 0x97FF (VRAM_START to VRAM_END).
+ * Formats into 16-byte chunks with the starting address prefixed.
+ */
 void Memory::dumpVRAM(void){
 	// uint8_t prevLine[16];
 	uint8_t currLine[16];
