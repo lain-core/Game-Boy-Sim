@@ -29,9 +29,10 @@ class gb{
         //uint8_t getStat(void)
         bool load   (std::string);
         bool readFile(std::string);
+        void decode(void);
             //void dumpProgRegisters();
             //void dumpProcRegisters();
-            //void trace(void);
+        void trace(void);
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
 };

@@ -10,6 +10,7 @@ Memory::Memory(){
 }
 
 void Memory::store(uint16_t baddy, uint8_t val){
+	lastUsed = baddy;
 	if(baddy >= MEMORY_SIZE){
 		memError = true;
 	}
@@ -19,6 +20,7 @@ void Memory::store(uint16_t baddy, uint8_t val){
 }
 
 uint8_t Memory::fetch(uint16_t baddy){
+	lastUsed = baddy;
 	if(baddy >= MEMORY_SIZE){
 		memError = true;
 	}
@@ -30,7 +32,7 @@ uint8_t Memory::fetch(uint16_t baddy){
 
 uint8_t Memory::getByte(uint16_t baddy)
 {
-	//TODO: Get Byte from memory.
+	lastUsed = baddy;
 	if (baddy >= 0 && baddy < MEMORY_SIZE){
 		return mem[baddy];
 	}
@@ -42,15 +44,11 @@ uint8_t Memory::getByte(uint16_t baddy)
 
 void Memory::putByte(uint16_t baddy, uint8_t val)
 {
-	//TODO: Put a byte in memory.
+	lastUsed = baddy;
 	if (baddy < MEMORY_SIZE){
 		mem[baddy] = val;
-		// printf("baddy: %d", baddy);
 	}
 	else{
-		// printf("ERRoR\n");
-		// printf("Mem Size: %d\n", MEMORY_SIZE);
-		// printf("baddy: %d\n", baddy);
 		memError = true;
 	}
 
@@ -58,8 +56,8 @@ void Memory::putByte(uint16_t baddy, uint8_t val)
 
 uint8_t * Memory::getTile(uint16_t baddy)
 {
-	//TODO: Get Byte from memory.
-	if (VRAM_START >= baddy && (baddy + 15) <= VRAM_END){
+	lastUsed = baddy;
+	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){
 		return &(mem[baddy]);
 	}
 	else
@@ -70,7 +68,7 @@ uint8_t * Memory::getTile(uint16_t baddy)
 }
 
 void Memory::putTile(uint16_t baddy, uint8_t val[16]){
-	//TODO: Put a tile in memory.
+	lastUsed = baddy;
 	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){	
 		for (int i = 0; i < 16; i++) mem[baddy + i] = val[i];
 	}
@@ -83,14 +81,8 @@ void Memory::reset(void){
 	for(int i = 0; i < MEMORY_SIZE; i++){
 		mem[i] = 0;
 	}
+	lastUsed = 0;
 	memError = false;
-}
-
-uint64_t Memory::getLong(int32_t baddy){
-	if (baddy >= 0 && baddy < MEMORY_SIZE && baddy % 8 == 0){
-		return Tools::buildWord(mem[baddy], mem[baddy + 1], mem[baddy + 2], mem[baddy + 3], mem[baddy + 4], mem[baddy + 5], mem[baddy + 6], mem[baddy + 7]);
-	} 
-	return 0;
 }
 
 void Memory::dumpROM(void){
@@ -140,4 +132,8 @@ void Memory::dumpVRAM(void){
 		}
 	}
 	std::cout << std::endl;
+}
+
+uint16_t Memory::trace(){
+	return lastUsed;
 }
