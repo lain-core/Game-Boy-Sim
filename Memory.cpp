@@ -56,6 +56,29 @@ void Memory::putByte(uint16_t baddy, uint8_t val)
 
 }
 
+uint8_t * Memory::getTile(uint16_t baddy)
+{
+	//TODO: Get Byte from memory.
+	if (VRAM_START >= baddy && (baddy + 15) <= VRAM_END){
+		return &(mem[baddy]);
+	}
+	else
+	{
+		memError = true;
+		return 0;
+	}
+}
+
+void Memory::putTile(uint16_t baddy, uint8_t val[16]){
+	//TODO: Put a tile in memory.
+	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){	
+		for (int i = 0; i < 16; i++) mem[baddy + i] = val[i];
+	}
+	else{
+		memError = true;
+	}
+}
+
 void Memory::reset(void){
 	for(int i = 0; i < MEMORY_SIZE; i++){
 		mem[i] = 0;
@@ -88,7 +111,6 @@ void Memory::dumpROM(void){
 			for (int j = 0; j < 16; j++){
 				std::cout << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(currLine[j]) << " ";			
 			} 
-		// for (int32_t l = 0; l < 16; l++) prevLine[l] = currLine[l];
 	}
 	std::cout << std::endl;
 }
@@ -116,7 +138,6 @@ void Memory::dumpVRAM(void){
 		{
 			std::cout << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(currLine[j]) << " ";
 		}
-		// for (int32_t l = 0; l < 16; l++) prevLine[l] = currLine[l];
 	}
 	std::cout << std::endl;
 }

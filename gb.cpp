@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <cstdint>
 #include "gb.h"
+#include "Memory.h"
 
 gb::gb(){
 	reset();
@@ -10,17 +11,11 @@ gb::gb(){
 // using namespace std;
 int main(){
 	gb myGB;
-	//Demo rom in memory using dumpROM.
-	myGB.load("Tetris_World_Rev_1.gb");
-	//myGB.getMemory().dumpROM();
-	//Demo setting a register and dumping a register (16 and 8-bit.)
-	//Remember to describe how the registers type works.
-	
-	myGB.getRegisters().setReg16(AF, 0x0304);
-	std::cout << "Reg A: 0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(myGB.getRegisters().getReg8(A)) << std::endl;
-	std::cout << "Reg F: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(myGB.getRegisters().getReg8(F)) << std::endl;
-	std::cout << "Reg AF: 0x" << std::setw(4) << std::setfill('0') << std::hex << myGB.getRegisters().getReg16(AF) << std::endl;
-	
+	Memory mem;
+	uint8_t smile [] = {0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x24 ,0xFF, 0x00, 0xFF, 0x42, 0xFF, 0x7E, 0xFF, 0x00, 0xFF, 0x00}; 
+	myGB.getMemory().putTile(VRAM_END - 0xF, smile);
+	// printf("%d\n", myGB.getMemory().getByte(VRAM_END - 0xF));
+	myGB.getMemory().dumpVRAM();
 }
 
 void gb::reset(){
