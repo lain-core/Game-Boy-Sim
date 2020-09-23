@@ -3,16 +3,14 @@
 
 #include <iostream>
 #include <iomanip>
-#include <array>
 #include "Pixel.h"
-#include "Tools.h"
 
 Pixel::Pixel(){
 }
 
 uint8_t * Pixel::getRowColor(uint16_t row){
     uint16_t byte1 = (row & 0xFF00) >> 8; // grab high order byte out of the 2
-    uint16_t byte2 = (row & 0x00FF);        // grab low order byte
+    uint16_t byte2 = (row & 0x00FF);      // grab low order byte
     uint16_t mask = 0x01;
 
     std::cout << "our tile is: 0x" << std::hex << row << std::endl;

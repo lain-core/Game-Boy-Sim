@@ -1,9 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include <cstdint>
-#include <array>
 #include "Memory.h"
-#include "Tools.h"
 // btw baddy stands for byte address
 Memory::Memory(){
 	reset();

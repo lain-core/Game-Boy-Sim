@@ -5,10 +5,9 @@
             Z80 simulator. Taken from CS 3481 Y86 Simulator Project.
 */
 
-#include <cstdlib>
 #include <iostream>
+#include <cstdlib>
 #include <cassert>
-#include <cstdint>
 #include "Tools.h"
 
 #define WORDBITS 64 // Number of bits in a word ("quad-word" in x86 parlance)

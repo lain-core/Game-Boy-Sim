@@ -1,10 +1,5 @@
 #include <iostream>
-#include <iomanip>
-#include <stdio.h>
-#include <cstdint>
 #include "gb.h"
-#include "Memory.h"
-#include "Pixel.h"
 
 gb::gb(){
 	reset();
@@ -12,6 +7,7 @@ gb::gb(){
 
 void gb::reset(){
 	cycles = 0;
+	pc = 0;
 }
 
 // using namespace std;

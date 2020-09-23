@@ -1,10 +1,5 @@
-#include <iostream>
-#include <iomanip>
 #include <fstream>
 #include <cstdint>
-#include <sstream>
-#include <array>
-#include <string.h>
 #include "GBLoader.h"
 #include "Sim.h"
 #include "gb.h" //In lab, we included this because we implemented several Y86 funcs in here.

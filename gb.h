@@ -3,14 +3,16 @@
 
 #include <iostream>
 #include <cstdint>
-#include <string>
 #include "Memory.h"
 #include "Registers.h"
+#include "Pixel.h"
 
 class gb{
     int cycles;
+    int pc;
     Memory          memory;
     Registers       regs;
+    Pixel           pix;
 
     /* Private Member Functions */
 
