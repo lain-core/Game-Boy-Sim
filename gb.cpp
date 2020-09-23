@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "gb.h"
 #include "Memory.h"
+#include "Pixel.h"
 
 gb::gb(){
 	reset();
@@ -12,11 +13,10 @@ gb::gb(){
 int main(){
 	gb myGB;
 	Memory mem;
-	uint8_t smile [] = {0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x24 ,0xFF, 0x00, 0xFF, 0x42, 0xFF, 0x7E, 0xFF, 0x00, 0xFF, 0x00}; 
-	myGB.getMemory().putTile(VRAM_END - 0xF, smile);
-	// printf("%d\n", myGB.getMemory().getByte(VRAM_END - 0xF));
-	//myGB.getMemory().dumpVRAM();
-	myGB.trace();
+	Pixel pix;
+
+	uint8_t * miniPix;
+	miniPix = (pix.getByteColor(0x5030));
 }
 
 void gb::reset(){

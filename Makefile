@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -g -c -Wall -std=c++11 -Og
-OBJ = Tools.o Memory.o GBLoader.o Registers.o gb.o
+OBJ = Tools.o Memory.o GBLoader.o Registers.o Pixel.o gb.o
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
@@ -15,7 +15,9 @@ Registers.o: Registers.h Sim.h
 
 GBLoader.o: gb.h GBLoader.h
 
-gb.o: Tools.h Memory.h Registers.h
+Pixel.o: Sim.h Pixel.h
+
+gb.o: Tools.h Memory.h Registers.h Pixel.h
 
 clean:
 	rm $(OBJ) gb || true
