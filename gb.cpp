@@ -13,8 +13,6 @@ void gb::reset(){
 // using namespace std;
 int main(){
 	gb myGB;
-	Memory mem;
-	Pixel pix;
 	myGB.load("Tetris_World_Rev_1.gb");
 	myGB.getMemory().dumpROM();
 	uint8_t * miniPix;
