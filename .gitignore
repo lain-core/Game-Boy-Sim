@@ -1,6 +1,3 @@
-# Macma
-.DS_Store
-
 # cMake
 CMakeLists.txt.user
 CMakeCache.txt
@@ -47,3 +44,7 @@ _deps
 *.app
 *.gb
 gb
+
+# Workspace
+.DS_Store
+.VSCode
