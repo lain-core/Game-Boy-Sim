@@ -13,15 +13,21 @@ void gb::reset(){
 // using namespace std;
 int main(){
 	gb myGB;
-	myGB.load("Tetris_World_Rev_1.gb");
-	myGB.getMemory().dumpROM();
+	//myGB.load("Tetris_World_Rev_1.gb");
+	//myGB.getMemory().dumpROM();
 	uint8_t * miniPix;
 	miniPix = (myGB.getPixel().getRowColor(0x5030));
     for (int i = 0; i < 8; i++){
         printf("%d ", miniPix[i]);
     }
 	printf("\n");
-	myGB.trace();
+	//myGB.trace();
+	myGB.scf();
+	std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
+	myGB.ccf();
+	std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
+	myGB.ccf();
+	std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
 }
 
 /*

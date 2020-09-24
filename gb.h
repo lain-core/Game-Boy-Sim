@@ -8,6 +8,7 @@
 #include "Pixel.h"
 
 class gb{
+    bool status;
     int cycles;
     int pc;
     Memory          memory;
@@ -36,6 +37,16 @@ class gb{
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
         Pixel & getPixel(){return pix;}
+
+    /* Opcode-Related Functions */
+    
+    /* Miscellaneous Opcodes */
+    void stop(void);
+    void halt(void);
+    void nop(void);
+    void scf(void);
+    void ccf(void);
+
 };
 
 #endif

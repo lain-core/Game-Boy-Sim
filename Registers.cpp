@@ -45,9 +45,25 @@ void Registers::setReg16(int reg, uint16_t regVal){
 }
 
 /*
+ * getFlag
+ * Using a pre-defined flag bit macro (Sim.h), gets a flag value.
+ */
+bool Registers::getFlag(uint8_t flag){
+	return ((getReg8(F) & (1 << flag)) >> flag);
+}
+
+/*
  * setFlag
  * Using a pre-defined flag bit macro (Sim.h), sets a flag value.
  */
 void Registers::setFlag(uint8_t flag){
-	setReg8(F, (getReg8(F) | flag));
+	setReg8(F, (getReg8(F) | (1 << flag)));
+}
+
+/*
+ * clearFlag
+ * Using a pre-defined flag bit macro (Sim.h), resets a flag value.
+ */
+void Registers::clearFlag(uint8_t flag){
+	setReg8(F, (getReg8(F) & (~(1 << flag))));
 }

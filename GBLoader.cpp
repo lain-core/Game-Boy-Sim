@@ -1,8 +1,9 @@
 #include <fstream>
 #include <cstdint>
+#include <filesystem>
 #include "Sim.h"
 #include "gb.h" //In lab, we included this because we implemented several Y86 funcs in here.
-//Note to us: we may not even need half of this stuff; GB roms are already compiled to binary so itt we will just do a dumb unload into ram at 0x0150 (until mappers).
+//Note to us: we may not even need half of this stuff; GB roms are already compiled to binary so itt we will just do a dumb unload into ram at 0x0100 (until mappers).
 
 
 /*

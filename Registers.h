@@ -28,6 +28,8 @@ class Registers{
 		void setReg8(int, uint8_t);
 		void setReg16(int, uint16_t);
 		void setFlag(uint8_t);
+		void clearFlag(uint8_t);
+		bool getFlag(uint8_t);
 };
 
 #endif

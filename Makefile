@@ -1,6 +1,7 @@
 CC = g++
 CFLAGS = -g -c -Wall -std=c++17 -Og
-OBJ = Tools.o Memory.o GBLoader.o Registers.o Pixel.o gb.o
+INSTDIR = Instructions
+OBJ = Tools.o Memory.o GBLoader.o Registers.o Pixel.o gb.o $(INSTDIR)/Misc.o
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
@@ -16,6 +17,8 @@ Registers.o: Registers.h Sim.h
 GBLoader.o: gb.h
 
 Pixel.o: Sim.h Pixel.h
+
+$(INSTDIR)/Misc.o: gb.h
 
 gb.o: Tools.h Memory.h Registers.h Pixel.h
 
