@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -g -c -Wall -std=c++11 -0g
-OBJ = SDL_Demo.o SDL_keyInput.o
+OBJ = SDL_Demo.o SDL_keyInput.o 
 
 INCLUDE_PATHS =	-IC:\mingw_dev_lib\include\SDL2
 LIBRARY_PATHS =	-LC:\mingw_dev_lib\lib
@@ -15,6 +15,12 @@ sdl: $(OBJ)
 SDL_Demo.o:
 
 SDL_keyInput.o:	
+
+mac:
+	g++ pixelmod.cpp -F/Library/Frameworks -framework SDL2
+
+linux:
+	g++ pixelmod.cpp `pkg-config --cflags --libs sdl2`
 
 all: $(OBJS)
 	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(sdl)
