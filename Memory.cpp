@@ -45,7 +45,7 @@ uint8_t Memory::getByte(uint16_t baddy)
 uint8_t * Memory::getTile(uint16_t baddy)
 {
 	lastUsed = baddy;
-	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){
+	if (VRAM <= baddy && (baddy + 15) <= VRAM_END){
 		return &(mem[baddy]);
 	}
 	else
@@ -77,7 +77,7 @@ void Memory::putByte(uint16_t baddy, uint8_t val)
  */
 void Memory::putTile(uint16_t baddy, uint8_t val[16]){
 	lastUsed = baddy;
-	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){	
+	if (VRAM <= baddy && (baddy + 15) <= VRAM_END){	
 		for (int i = 0; i < 16; i++) mem[baddy + i] = val[i];
 	}
 	else{
@@ -126,7 +126,7 @@ void Memory::dumpVRAM(void){
 		// prevLine[i] = 0;
 		currLine[i] = 0;
 	}
-	for (int i = VRAM_START; i < VRAM_END; i += 16)
+	for (int i = VRAM; i < VRAM_END; i += 16)
 	{
 		for (int j = 0; j < 16; j++)
 		{

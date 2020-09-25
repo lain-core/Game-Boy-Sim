@@ -15,7 +15,7 @@
 #define ROM_END             0x3FFF
 #define BANK                0x4000 //0x4000-0x7FFF is reserved for Switchable ROM banks
 #define BANK_END            0x7FFF
-#define VRAM_START          0x8000
+#define VRAM                0x8000
 #define VRAM_END            0x97FF
 #define BG_DATA_1           0x9800 //BG Map Data is split into two chunks.
 #define BG_DATA_1_END       0x9BFF

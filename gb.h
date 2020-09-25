@@ -8,6 +8,7 @@
 #include "Pixel.h"
 
 class gb{
+    bool ime; //IME = Interrupt Master Enable/
     bool status;
     int cycles;
     int pc;
@@ -41,11 +42,15 @@ class gb{
     /* Opcode-Related Functions */
     
     /* Miscellaneous Opcodes */
-    void stop(void);
+    void ccf(void);
+    void cpl(void);
+    void daa(void);
+    void di(void);
+    void ei(void);
     void halt(void);
     void nop(void);
     void scf(void);
-    void ccf(void);
+    void stop(void);
 
 };
 
