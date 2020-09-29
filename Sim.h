@@ -39,14 +39,14 @@
 
 /* 8-bit Program Register Values */
 #define NUM_8REGISTERS 8
-#define A 0
-#define F 1
-#define B 2
-#define C 3
-#define D 4
-#define E 5
-#define H 6
-#define L 7
+#define A 1
+#define F 0
+#define B 3
+#define C 2
+#define D 5
+#define E 4
+#define H 7
+#define L 6
 
 /* 16-bit Program Register Values */
 #define NUM_16REGISTERS 5
