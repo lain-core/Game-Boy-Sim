@@ -17,5 +17,8 @@ endif
 pixelmod:
 	$(CC) $(CFLAGS) pixelmod.cpp -o pixelmod $(SDL)
 
+pixel_arr:
+	$(CC) $(CFLAGS) pixel_arr.cpp -o pixel_arr $(SDL)
+
 clean:
-	rm $(OBJ) || true
+	rm $(OBJ) pixelmod pixel_arr a.out || true

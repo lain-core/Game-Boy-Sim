@@ -29,10 +29,6 @@ int main(){
 	std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
 	myGB.ccf();
 	std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
-
-	for(int i = VRAM; i < VRAM_END; i+=16){
-		printf("poopy");
-	}
 }
 
 /*
