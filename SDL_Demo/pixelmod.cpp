@@ -1,129 +1,95 @@
-// g++ pixelmod.cpp `pkg-config --cflags --libs sdl2`
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <string>
 #include <iostream>
-#include <iomanip>
-#include <vector>
-#include <cstring>
 
-int main(int argc, char **argv)
-{
-    SDL_Init(SDL_INIT_EVERYTHING);
+#define COLOR0 0x000f380f 
+#define COLOR1 0x00306230 
+#define COLOR2 0x008bac0f 
+#define COLOR3 0x009bbc0f 
 
-    SDL_Window *window = SDL_CreateWindow(
-        "SDL2",
-        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        600, 600,
-        SDL_WINDOW_SHOWN);
+uint8_t miniPix[8];
+uint32_t pixel;
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(
-        window,
-        -1,
-        SDL_RENDERER_ACCELERATED);
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 800;
+uint32_t rmask = 0xff000000;
+uint32_t gmask = 0x00ff0000;
+uint32_t bmask = 0x0000ff00;
+uint32_t amask = 0x000000ff;
 
-    SDL_RendererInfo info;
-    SDL_GetRendererInfo(renderer, &info);
-    std::cout << "Renderer name: " << info.name << std::endl;
-    std::cout << "Texture formats: " << std::endl;
-    for (Uint32 i = 0; i < info.num_texture_formats; i++)
-    {
-        std::cout << SDL_GetPixelFormatName(info.texture_formats[i]) << std::endl;
-    }
+void init();
+void loadMedia();
+uint8_t *getTileColor(uint16_t *row);
+uint32_t intToRGB(uint8_t color);
 
-    const unsigned int texWidth = 1024;
-    const unsigned int texHeight = 1024;
-    SDL_Texture *texture = SDL_CreateTexture(
-        renderer,
-        SDL_PIXELFORMAT_ARGB8888,
-        SDL_TEXTUREACCESS_STREAMING,
-        texWidth, texHeight);
+SDL_Window* window = NULL;
+SDL_Surface* screenSurface = NULL;
+SDL_Surface* stretchSurface = NULL;
 
-    std::vector<unsigned char> pixels(texWidth * texHeight * 4, 0);
+void init(){
+    // initialize sdl
+    SDL_Init(SDL_INIT_VIDEO); 
+    //create the window
+    window = SDL_CreateWindow("PLEASE WORK", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    screenSurface = SDL_GetWindowSurface(window);
+}
 
-    SDL_Event event;
-    bool running = true;
-    bool useLocktexture = false;
+void loadMedia(){
+    
+}
 
-    unsigned int frames = 0;
-    Uint64 start = SDL_GetPerformanceCounter();
+int main(){
+    uint8_t colors[64] = {0};
+    // uint32_t *pixels = (unsigned int *)stretchSurface->pixels;
+	// convert bytearray to rgb values
+	uint16_t smileyTile[8] = {0xFF00, 0xFF00,
+                            0xFF24, 0xFF00, 
+                            0xFF42, 0xFF7E, 
+                            0xFF00, 0xFF00};
+   
+   for (int i = 0; i < 64; i++){
+       printf("%x ", getTileColor(smileyTile)[i]);
+   } printf("\n");
+}
 
-    while (running)
-    {
+uint32_t intToRGB(uint8_t color){
+    uint8_t temp;
+	switch(color){
+		case 0:
+			temp = COLOR0;
+			break;
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+		case 1:
+			temp = COLOR1;
+			break;
+			
+		case 2:
+			temp = COLOR2;
+			break;
+			
+		case 3:
+			temp = COLOR3;
+			break;
+			
+		default:
+			break;
+	}
+    return temp;
+}
 
-        while (SDL_PollEvent(&event))
-        {
-            if ((SDL_QUIT == event.type) ||
-                (SDL_KEYDOWN == event.type && SDL_SCANCODE_ESCAPE == event.key.keysym.scancode))
-            {
-                running = false;
-                break;
-            }
-            if (SDL_KEYDOWN == event.type && SDL_SCANCODE_L == event.key.keysym.scancode)
-            {
-                useLocktexture = !useLocktexture;
-                std::cout << "Using " << (useLocktexture ? "SDL_LockTexture() + memcpy()" : "SDL_UpdateTexture()") << std::endl;
-            }
-        }
+uint8_t * getTileColor(uint16_t * rows){
+    uint8_t * retArray;
+    for (int i = 0; i < 8; i++){
+        uint16_t byte1 = (rows[i] & 0xFF00) >> 8; // grab high order byte out of the 2
+        uint16_t byte2 = (rows[i] & 0x00FF);      // grab low order byte
+        uint16_t mask = 0x01;
 
-        // splat down some random pixels
-        for (unsigned int i = 0; i < 1000; i++)
-        {
-            const unsigned int x = rand() % texWidth;
-            const unsigned int y = rand() % texHeight;
-
-            const unsigned int offset = (texWidth * 4 * y) + x * 4;
-            pixels[offset + 0] = 255;     // b
-            pixels[offset + 1] = 102;     // g
-            pixels[offset + 2] = 102;     // r
-            pixels[offset + 3] = SDL_ALPHA_OPAQUE; // a
-        }
-
-        if (useLocktexture)
-        {
-            unsigned char *lockedPixels = nullptr;
-            int pitch = 0;
-            SDL_LockTexture(
-                texture,
-                NULL,
-                reinterpret_cast<void **>(&lockedPixels),
-                &pitch);
-            std::memcpy(lockedPixels, pixels.data(), pixels.size());
-            SDL_UnlockTexture(texture);
-        }
-        else
-        {
-            SDL_UpdateTexture(
-                texture,
-                NULL,
-                pixels.data(),
-                texWidth * 4);
-        }
-
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-
-        frames++;
-        const Uint64 end = SDL_GetPerformanceCounter();
-        const static Uint64 freq = SDL_GetPerformanceFrequency();
-        const double seconds = (end - start) / static_cast<double>(freq);
-        if (seconds > 2.0)
-        {
-            std::cout
-                << frames << " frames in "
-                << std::setprecision(1) << std::fixed << seconds << " seconds = "
-                << std::setprecision(1) << std::fixed << frames / seconds << " FPS ("
-                << std::setprecision(3) << std::fixed << (seconds * 1000.0) / frames << " ms/frame)"
-                << std::endl;
-            start = end;
-            frames = 0;
+        for (int i = 0; i < 8; i++){
+            if (byte1 & (mask << i)) miniPix[7-i] += 1; // if byte 1's bit is on
+            if (byte2 & (mask << i)) miniPix[7-i] += 2; // if byte 2's bit is on
+            retArray[(i*8)+i] = miniPix[i];
         }
     }
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
+    return retArray;
 }
