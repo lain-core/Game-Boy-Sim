@@ -20,5 +20,8 @@ pixelmod:
 pixel_arr:
 	$(CC) $(CFLAGS) pixel_arr.cpp -o pixel_arr $(SDL)
 
+_pixel:
+	$(CC) $(CFLAGS) SDL_pixel.cpp -o sdlpixel $(SDL)
+
 clean:
-	rm $(OBJ) pixelmod pixel_arr a.out || true
+	rm $(OBJ) pixelmod pixel_arr sdlpixel a.out || true
