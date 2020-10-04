@@ -1,53 +1,27 @@
 CC = g++
-CFLAGS = -g -c -Wall -std=c++11 -0g
-OBJ = SDL_Demo.o SDL_keyInput.o
+CFLAGS = -g -Wall -std=c++17
+MAC_SDL = -F/Library/Frameworks -framework SDL2
+LINUX_SDL = `pkg-config --cflags --libs sdl2`
+WIN_SDL = uhh_idk
+PLATFORM := $(shell uname)
+OBJ = pixelmod.o
 
-INCLUDE_PATHS =	-IC:\mingw_dev_lib\include\SDL2
-LIBRARY_PATHS =	-LC:\mingw_dev_lib\lib
-COMPILER_FLAGS = -w -Wl,-subsystem,windows
-LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2
+ifeq ($(PLATFORM),Darwin)
+    SDL = $(MAC_SDL)
+endif
 
-.cpp.o:
-	$(CC) $(FLAGS) $< -o $@
+ifeq ($(PLATFORM),Linux)
+    SDL = $(LINUX_SDL)
+endif
 
-sdl: $(OBJ)
+pixelmod:
+	$(CC) $(CFLAGS) pixelmod.cpp -o pixelmod $(SDL)
 
-SDL_Demo.o:
+pixel_arr:
+	$(CC) $(CFLAGS) pixel_arr.cpp -o pixel_arr $(SDL)
 
-SDL_keyInput.o:	
-
-all: $(OBJS)
-	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(sdl)
+_pixel:
+	$(CC) $(CFLAGS) SDL_pixel.cpp -o sdlpixel $(SDL)
 
 clean:
-	rm $(OBJ) sdl || true
-
-run:
-	make clean
-
-# # Directories
-# S_DIR=source
-# B_DIR=build
-
-# # Files
-# S_FILES=$(S_DIR)/sdl_test.cpp
-
-# # Output
-# EXEC=$(B_DIR)/sdl_app
-
-# # Build settings
-# CC=g++
-# # SDL options
-# CC_SDL=-lSDL `sdl-config --cflags --libs`
-
-
-# all:Build
-
-# Build:
-#   $(CC) $(S_FILES) -o $(EXEC) $(CC_SDL)
-
-# build_run:Build
-#   $(EXEC)
-
-# clean:
-#   rm -rf $(B_DIR)/*
+	rm $(OBJ) pixelmod pixel_arr sdlpixel a.out || true

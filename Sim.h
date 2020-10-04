@@ -15,7 +15,7 @@
 #define ROM_END             0x3FFF
 #define BANK                0x4000 //0x4000-0x7FFF is reserved for Switchable ROM banks
 #define BANK_END            0x7FFF
-#define VRAM_START          0x8000
+#define VRAM                0x8000
 #define VRAM_END            0x97FF
 #define BG_DATA_1           0x9800 //BG Map Data is split into two chunks.
 #define BG_DATA_1_END       0x9BFF
@@ -39,14 +39,14 @@
 
 /* 8-bit Program Register Values */
 #define NUM_8REGISTERS 8
-#define A 0
-#define F 1
-#define B 2
-#define C 3
-#define D 4
-#define E 5
-#define H 6
-#define L 7
+#define A 1
+#define F 0
+#define B 3
+#define C 2
+#define D 5
+#define E 4
+#define H 7
+#define L 6
 
 /* 16-bit Program Register Values */
 #define NUM_16REGISTERS 5
@@ -58,10 +58,10 @@
 
 /* Flags register bit number definitions */
 //8-Bit Register F's low bits are always set to zero. The upper 4 are used as flags.
-#define FLAG_C   (1 << 4) //Carry Flag
-#define FLAG_H   (1 << 5) //Half Carry Flag
-#define FLAG_N   (1 << 6) //Add/Sub-Flag
-#define FLAG_Z   (1 << 7) //Zero Flag
+#define FLAG_C   4 //Carry Flag
+#define FLAG_H   5 //Half Carry Flag
+#define FLAG_N   6 //Add/Sub-Flag
+#define FLAG_Z   7 //Zero Flag
 
 /* Major Opcodes */
 

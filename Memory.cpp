@@ -39,13 +39,28 @@ uint8_t Memory::getByte(uint16_t baddy)
 }
 
 /*
+ * getWord
+ * returns a 16-bit value from memory, given a 16-bit byte address.
+ */
+uint16_t Memory::getWord(uint16_t baddy){
+	lastUsed = baddy;
+	if(baddy >= 0 && baddy < MEMORY_SIZE - 1){
+		return mem[baddy];
+	}
+	else{
+		memError = true;
+		return 0;
+	}
+}
+
+/*
  * getTile
  * Returns a pointer to the start of a tile (16 bytes), given a 16-bit byte address.
  */
 uint8_t * Memory::getTile(uint16_t baddy)
 {
 	lastUsed = baddy;
-	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){
+	if (VRAM <= baddy && (baddy + 15) <= VRAM_END){
 		return &(mem[baddy]);
 	}
 	else
@@ -77,7 +92,7 @@ void Memory::putByte(uint16_t baddy, uint8_t val)
  */
 void Memory::putTile(uint16_t baddy, uint8_t val[16]){
 	lastUsed = baddy;
-	if (VRAM_START <= baddy && (baddy + 15) <= VRAM_END){	
+	if (VRAM <= baddy && (baddy + 15) <= VRAM_END){	
 		for (int i = 0; i < 16; i++) mem[baddy + i] = val[i];
 	}
 	else{
@@ -126,7 +141,7 @@ void Memory::dumpVRAM(void){
 		// prevLine[i] = 0;
 		currLine[i] = 0;
 	}
-	for (int i = VRAM_START; i < VRAM_END; i += 16)
+	for (int i = VRAM; i < VRAM_END; i += 16)
 	{
 		for (int j = 0; j < 16; j++)
 		{
@@ -142,4 +157,12 @@ void Memory::dumpVRAM(void){
 		}
 	}
 	std::cout << std::endl;
+}
+
+/*
+ * isMemError
+ * Returns status of memory error flag, so we can tell if our abort was due to memory accesses.
+ */
+bool Memory::isMemError(void){
+	return memError;
 }

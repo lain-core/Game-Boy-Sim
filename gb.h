@@ -8,8 +8,9 @@
 #include "Pixel.h"
 
 class gb{
+    bool ime; //IME = Interrupt Master Enable/
+    bool status;
     int cycles;
-    int pc;
     Memory          memory;
     Registers       regs;
     Pixel           pix;
@@ -31,11 +32,31 @@ class gb{
         //uint8_t getStat(void)
         bool load   (std::string);
         bool readFile(std::string);
-        void decode(void);
         void trace(void);
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
         Pixel & getPixel(){return pix;}
+        bool getStatus(){return status;}
+        int getPC(){return pc;}
+        int pc;
+
+    /* Opcode-Related Functions */
+    void decode(uint16_t);
+    bool decode_misc(uint16_t);
+
+    /* Miscellaneous Opcodes */
+    void ccf(void);
+    void cpl(void);
+    void daa(void);
+    void di(void);
+    void ei(void);
+    void halt(void);
+    void nop(void);
+    void scf(void);
+    void stop(void);
+
+    /* Debug-only Functions -- Clear for final build */
+    void setStatus(bool newStatus){status = newStatus;}
 };
 
 #endif
