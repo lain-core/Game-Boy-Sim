@@ -38,11 +38,11 @@ class gb{
         Pixel & getPixel(){return pix;}
         bool getStatus(){return status;}
         int getPC(){return pc;}
-        int pc;
+        int pc = 0x0100;
 
     /* Opcode-Related Functions */
-    void decode(uint16_t);
-    bool decode_misc(uint16_t);
+    void decode(uint8_t);
+    bool decode_misc(uint8_t);
 
     /* Miscellaneous Opcodes */
     void ccf(void);

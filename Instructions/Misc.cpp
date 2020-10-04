@@ -14,6 +14,7 @@ void gb::nop(){
  * Stops the operation of the GB-CPU until an Interrupt occurs.
  */
 void gb::halt(){
+    std::cout << "in halt :)" << std::endl;
     status = false;
 }
 
@@ -22,6 +23,7 @@ void gb::halt(){
  * Stops the operation of the GB-CPU until a button is pressed.
  */
 void gb::stop(){
+    std::cout << "in stop :)" << std::endl;
     status = false;
 }
 
@@ -30,6 +32,7 @@ void gb::stop(){
  * Sets the carry flag.
  */
 void gb::scf(){
+    std::cout << "scf" << std::endl;
     getRegisters().clearFlag(FLAG_N);
     getRegisters().clearFlag(FLAG_H);
     getRegisters().setFlag(FLAG_C);
@@ -40,6 +43,7 @@ void gb::scf(){
  * Complements the carry flag.
  */
 void gb::ccf(){
+    std::cout << "ccf" << std::endl;
     getRegisters().clearFlag(FLAG_N);
     getRegisters().clearFlag(FLAG_H);
     if(getRegisters().getFlag(FLAG_C)){
@@ -53,6 +57,7 @@ void gb::ccf(){
  * Disables interrupts by clearing the Interrupt Master Enable flag.
  */
 void gb::di(){
+    std::cout << "di" << std::endl;
     ime = false;
 }
 
@@ -61,6 +66,7 @@ void gb::di(){
  * Enables interrupts by setting the Interrupt Master Enable flag.
  */
 void gb::ei(){
+    std::cout << "ei" << std::endl;
     ime = true;
 }
 
@@ -69,6 +75,7 @@ void gb::ei(){
  * ComPLements the Accumulator.
  */
 void gb::cpl(){
+    std::cout << "cpl" << std::endl;
     getRegisters().setReg8(A, (~getRegisters().getReg8(A)));
     getRegisters().clearFlag(FLAG_H);
 }
@@ -78,6 +85,7 @@ void gb::cpl(){
  * Decimal Adjusts the Accumulator.
  */
 void gb::daa(){
+    std::cout << "daa" << std::endl;
     uint8_t newAcc = getRegisters().getReg8(A);
 
     //If a half-carry or carry occurred, or if the result is out of bounds, we will adjust.
