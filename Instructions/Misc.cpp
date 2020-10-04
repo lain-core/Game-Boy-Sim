@@ -5,12 +5,13 @@
  * No-OPeration. Spends 1 cycle doing nothing.
  */
 void gb::nop(){
+    std::cout << "in nop :)" << std::endl;
     return;
 }
 
 /*
  * halt
- * Stops the operation of the GB-CPU.
+ * Stops the operation of the GB-CPU until an Interrupt occurs.
  */
 void gb::halt(){
     status = false;
@@ -18,7 +19,7 @@ void gb::halt(){
 
 /*
  * stop
- * Stops the operation of the GB-CPU.
+ * Stops the operation of the GB-CPU until a button is pressed.
  */
 void gb::stop(){
     status = false;
