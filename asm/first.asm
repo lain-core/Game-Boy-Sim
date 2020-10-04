@@ -6,5 +6,6 @@ EntryPoint:
     scf
     ccf 
     cpl 
+    daa
     ei 
     halt
