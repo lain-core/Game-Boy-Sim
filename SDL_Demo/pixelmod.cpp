@@ -40,16 +40,22 @@ void loadMedia(){
 }
 
 int main(){
-    uint8_t colors[64] = {0};
+    uint32_t colors[8] = {0};
     // uint32_t *pixels = (unsigned int *)stretchSurface->pixels;
 	// convert bytearray to rgb values
 	uint16_t smileyTile[8] = {0xFF00, 0xFF00,
                             0xFF24, 0xFF00, 
                             0xFF42, 0xFF7E, 
                             0xFF00, 0xFF00};
-   
-   for (int i = 0; i < 64; i++){
-       printf("%x ", getTileColor(smileyTile)[i]);
+
+
+    // uint16_t testTile[8] = {0x0000, 0x0000, 0x0000, 0x0000, 
+    //                         0x0000, 0x0000, 0x0000, 0x0000};
+
+    colors = getTileColor(smileyTile[1]);
+
+   for (int i = 0; i < 8; i++){
+       printf("%x ", colors[i]);
    } printf("\n");
 }
 
@@ -78,18 +84,16 @@ uint32_t intToRGB(uint8_t color){
     return temp;
 }
 
-uint8_t * getTileColor(uint16_t * rows){
-    uint8_t * retArray;
-    for (int i = 0; i < 8; i++){
-        uint16_t byte1 = (rows[i] & 0xFF00) >> 8; // grab high order byte out of the 2
-        uint16_t byte2 = (rows[i] & 0x00FF);      // grab low order byte
+uint32_t * getTileColor(uint16_t row){
+        uint32_t colorArray[8] = {0};
+        uint16_t byte1 = (row & 0xFF00) >> 8; // grab high order byte out of the 2
+        uint16_t byte2 = (row & 0x00FF);      // grab low order byte
         uint16_t mask = 0x01;
 
         for (int i = 0; i < 8; i++){
             if (byte1 & (mask << i)) miniPix[7-i] += 1; // if byte 1's bit is on
             if (byte2 & (mask << i)) miniPix[7-i] += 2; // if byte 2's bit is on
-            retArray[(i*8)+i] = miniPix[i];
+            colorArray[i] = intToRGB(miniPix[i]); 
         }
-    }
-    return retArray;
+    return colorArray;
 }
