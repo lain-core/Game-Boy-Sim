@@ -41,8 +41,9 @@ class gb{
         int pc = 0x0100;
 
     /* Opcode-Related Functions */
-    void decode(uint8_t);
-    bool decode_misc(uint8_t);
+    void decode(uint16_t);
+    bool decode_misc(uint16_t);
+    bool decode_bitops(uint16_t);
 
     /* Miscellaneous Opcodes */
     void ccf(void);
@@ -54,6 +55,13 @@ class gb{
     void nop(void);
     void scf(void);
     void stop(void);
+
+    /* Bit Operations Opcodes */
+    //Not to be confused with bit shifting.
+    void bit(int);
+    void res(int);
+    void set(int);
+    void swap(int);
 
     /* Debug-only Functions -- Clear for final build */
     void setStatus(bool newStatus){status = newStatus;}

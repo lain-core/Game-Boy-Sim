@@ -23,10 +23,9 @@ int main(int argc, char** argv){
 	printf("\n");*/
 	
 	//myGB.load("Tetris_World_Rev_1.gb");
-	myGB.load("asm/first.gb");
+	myGB.setStatus(myGB.load("asm/first.gb"));
 	//myGB.getMemory().dumpROM();
 	//std::cout << "Entering loop!" << std::endl;
-	myGB.setStatus(true);
 	while(myGB.getStatus()){
 		myGB.decode(myGB.getMemory().getWord(myGB.pc++));
 	}

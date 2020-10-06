@@ -9,11 +9,15 @@
  * decode
  * Using a byte passed by gb, we parse out into groups of opcodes to do further work.
  */
-void gb::decode(uint8_t opcode){
-    decode_misc(opcode);
+void gb::decode(uint16_t opcodewithdata){
+    bool ligma = false;
+    ligma = decode_misc(opcodewithdata);
+    ligma = decode_bitops(opcodewithdata);
 }
 
-bool gb::decode_misc(uint8_t opcode){
+bool gb::decode_misc(uint16_t opcodewithdata){
+    uint8_t opcode = (opcodewithdata & 0xFF00) >> 8;
+    printf("Original opcode is: %x, Opcode is: %x\n", opcodewithdata, opcode);
     bool found_inst = true;
     switch(opcode){
         case 0x00: //nop
@@ -48,4 +52,8 @@ bool gb::decode_misc(uint8_t opcode){
             break;
     }
     return found_inst;
+}
+
+bool gb::decode_bitops(uint16_t opcodewithdata){
+    return false;
 }
