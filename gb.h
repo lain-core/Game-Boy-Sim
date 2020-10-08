@@ -42,8 +42,8 @@ class gb{
 
     /* Opcode-Related Functions */
     void decode(uint16_t);
-    bool decode_misc(uint16_t);
-    bool decode_bitops(uint16_t);
+    bool decode_misc(uint8_t, uint8_t);
+    bool decode_bitops(uint8_t, uint8_t);
 
     /* Miscellaneous Opcodes */
     void ccf(void);

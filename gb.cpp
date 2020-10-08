@@ -8,36 +8,26 @@ gb::gb(){
 void gb::reset(){
 	ime = false;
 	cycles = 0;
-	pc = 0;
+	pc = 0x0100;
 }
 
 // using namespace std;
 int main(int argc, char** argv){
 	gb myGB;
-
-	/*uint8_t * miniPix;
-	miniPix = (myGB.getPixel().getRowColor(0x5030));
-    for (int i = 0; i < 8; i++){
-        printf("%d ", miniPix[i]);
-    }
-	printf("\n");*/
-	
-	//myGB.load("Tetris_World_Rev_1.gb");
-	myGB.setStatus(myGB.load("asm/first.gb"));
+	if(argc == 1){
+		printf("No rom specified, loading asm/first.gb.");
+		myGB.setStatus(myGB.load("asm/first.gb"));
+	}
+	else{
+		printf("Loading %s", argv[1]);
+		myGB.setStatus(myGB.load(argv[1]));
+	}
+	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//myGB.getMemory().dumpROM();
-	//std::cout << "Entering loop!" << std::endl;
 	while(myGB.getStatus()){
 		myGB.decode(myGB.getMemory().getWord(myGB.pc++));
 	}
-
 	myGB.trace();
-	// myGB.scf();
-	// std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
-	// myGB.ccf();
-	// std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
-	// myGB.ccf();
-	// std::cout << "cflag: " << myGB.getRegisters().getFlag(FLAG_C) << std::endl;
-	// myGB.trace();
 }
 
 /*

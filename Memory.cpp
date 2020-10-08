@@ -43,9 +43,10 @@ uint8_t Memory::getByte(uint16_t baddy)
  * returns a 16-bit value from memory, given a 16-bit byte address.
  */
 uint16_t Memory::getWord(uint16_t baddy){
+	uint16_t full = 0x0000;
 	lastUsed = baddy;
 	if(baddy >= 0 && baddy < MEMORY_SIZE - 1){
-		return mem[baddy];
+		return (mem[baddy] << 8) + mem[baddy + 1];
 	}
 	else{
 		memError = true;

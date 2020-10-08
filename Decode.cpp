@@ -10,14 +10,14 @@
  * Using a byte passed by gb, we parse out into groups of opcodes to do further work.
  */
 void gb::decode(uint16_t opcodewithdata){
+    uint8_t opcode = (opcodewithdata & 0xFF00) >> 8;
+    uint8_t data = (opcodewithdata & 0x00FF);
     bool ligma = false;
-    ligma = decode_misc(opcodewithdata);
-    ligma = decode_bitops(opcodewithdata);
+    ligma = decode_misc(opcode, data);
+    ligma = decode_bitops(opcode, data);
 }
 
-bool gb::decode_misc(uint16_t opcodewithdata){
-    uint8_t opcode = (opcodewithdata & 0xFF00) >> 8;
-    printf("Original opcode is: %x, Opcode is: %x\n", opcodewithdata, opcode);
+bool gb::decode_misc(uint8_t opcode, uint8_t data){
     bool found_inst = true;
     switch(opcode){
         case 0x00: //nop
@@ -26,8 +26,9 @@ bool gb::decode_misc(uint16_t opcodewithdata){
         case 0x76: //halt
             halt();
             break;
-        case 0x10: //stop
-            stop();
+        case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
+            if(data == 0x00) stop();
+            else found_inst = false;
             break;
         case 0x37: //scf
             scf();
@@ -54,6 +55,6 @@ bool gb::decode_misc(uint16_t opcodewithdata){
     return found_inst;
 }
 
-bool gb::decode_bitops(uint16_t opcodewithdata){
+bool gb::decode_bitops(uint8_t opcode, uint8_t data){
     return false;
 }
