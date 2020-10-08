@@ -43,6 +43,7 @@ class gb{
     /* Opcode-Related Functions */
     void decode(uint16_t);
     bool decode_misc(uint8_t, uint8_t);
+    bool decode_math(uint8_t, uint8_t);
     bool decode_bitops(uint8_t, uint8_t);
 
     /* Miscellaneous Opcodes */
@@ -55,6 +56,39 @@ class gb{
     void nop(void);
     void scf(void);
     void stop(void);
+
+    /* Arithmetic Opcodes */
+    void adc(uint8_t);      //ADC A,r8
+    void adc_n(uint8_t);    //ADC A,n8
+    void adc_sp(void);      //ADC A,HL
+    void add(uint8_t);      //ADD A,r8
+    void add_n(uint8_t);    //ADD A,n8
+    void add_sp(void);      //ADD A,HL
+    void add(uint16_t);     //ADD HL,r16
+    void op_and(uint8_t);   //AND A,r8
+    void op_and_n(uint8_t); //AND A,n8
+    void op_and_sp();       //AND A,HL
+    void op_or(uint8_t);    //OR A,r8
+    void op_or_n(uint8_t);  //OR A,n8
+    void op_or_sp(void);    //OR A,HL
+    void cp(uint8_t);       //CP A,r8
+    void cp_n(uint8_t);     //CP A,n8
+    void cp_sp(void);       //CP A,HL
+    void dec(uint8_t);      //DEC r8
+    void dec_sp(void);      //DEC HL
+    void dec(uint16_t);     //DEC r16
+    void inc(uint8_t);      //INC r8
+    void inc_sp(void);      //INC HL
+    void inc(uint16_t);     //INC r16
+    void sbc(uint8_t);      //SBC A,r8
+    void sbc_n(uint8_t);    //SBC A,n8
+    void sbc_sp(void);      //SBC A,HL
+    void sub(uint8_t);      //SUB A,r8
+    void sub_n(uint8_t);    //SUB A,n8
+    void sub(void);         //SUB A,HL
+    void op_xor(uint8_t);   //XOR A,r8
+    void op_xor_n(uint8_t); //XOR A,n8
+    void op_xor_sp(void);   //XOR A,HL
 
     /* Bit Operations Opcodes */
     //Not to be confused with bit shifting.

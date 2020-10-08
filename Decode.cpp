@@ -14,6 +14,7 @@ void gb::decode(uint16_t opcodewithdata){
     uint8_t data = (opcodewithdata & 0x00FF);
     bool ligma = false;
     ligma = decode_misc(opcode, data);
+    ligma = decode_math(opcode, data);
     ligma = decode_bitops(opcode, data);
 }
 
@@ -53,6 +54,10 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
             break;
     }
     return found_inst;
+}
+
+bool gb::decode_math(uint8_t opcode, uint8_t data){
+    return false;
 }
 
 bool gb::decode_bitops(uint8_t opcode, uint8_t data){
