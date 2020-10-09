@@ -25,7 +25,7 @@ int main(int argc, char** argv){
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//myGB.getMemory().dumpROM();
 	while(myGB.getStatus()){
-		myGB.decode(myGB.getMemory().getWord(myGB.pc++));
+		myGB.setStatus(myGB.decode(myGB.getMemory().getWord(myGB.pc++)));
 	}
 	myGB.trace();
 }

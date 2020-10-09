@@ -38,7 +38,7 @@ class gb{
         int pc = 0x0100;
 
     /* Opcode-Related Functions */
-    void decode(uint16_t);
+    bool decode(uint16_t);
     bool decode_misc(uint8_t, uint8_t);
     bool decode_math(uint8_t, uint8_t);
     bool decode_bitops(uint8_t, uint8_t);
@@ -58,10 +58,10 @@ class gb{
     void adc(uint8_t);      //ADC A,r8
     void adc_n(uint8_t);    //ADC A,n8
     void adc_sp(void);      //ADC A,HL
-    void add(uint8_t);      //ADD A,r8
+    void add(int);      //ADD A,r8
     void add_n(uint8_t);    //ADD A,n8
     void add_sp(void);      //ADD A,HL
-    void add(uint16_t);     //ADD HL,r16
+    void add_r16(int);          //ADD HL,r16
     void op_and(uint8_t);   //AND A,r8
     void op_and_n(uint8_t); //AND A,n8
     void op_and_sp();       //AND A,HL
@@ -86,6 +86,7 @@ class gb{
     void op_xor(uint8_t);   //XOR A,r8
     void op_xor_n(uint8_t); //XOR A,n8
     void op_xor_sp(void);   //XOR A,HL
+    void update_flags(uint8_t);//Update the flags given a value generated from the above arithmetic functions.
 
     /* Bit Operations Opcodes */
     //Not to be confused with bit shifting.

@@ -19,18 +19,52 @@
   * Add the byte pointed to by the stack pointer HL plus the carry flag to A.
   */
 //void gb::adc_sp(void);      //ADC A,HL
-//void gb::add(uint8_t);      //ADD A,r8
 
-void gb::add_n(uint8_t value){    //ADD A,n8
-    uint8_t newValue = Tools::bcd(value) + getRegisters().getReg8(A);
-    newValue = Tools::bcd(newValue);
-    daa();
+/*
+ * add(uint8_t) / add a,r8
+ * Add the value in register r8 to A.
+ */
+void gb::add(int reg8){      //ADD A,r8
+    uint8_t newValue = getRegisters().getReg8(reg8) + getRegisters().getReg8(A);
+    update_flags(newValue);
+    getRegisters().clearFlag(FLAG_N);
+    getRegisters().setReg8(A, newValue);
 }
 
 /*
-void gb::add_sp(void);      //ADD A,HL
-void gb::add(uint16_t);     //ADD HL,r16
-void gb::op_and(uint8_t);   //AND A,r8
+ * add_n(uint8_t) / ADD A,n8
+ * Add the immediate value n8 to A.
+ * Flags modified: 
+ */
+void gb::add_n(uint8_t value){    //ADD A,n8
+    uint8_t newValue = value + getRegisters().getReg8(A);
+    update_flags(newValue);
+    getRegisters().clearFlag(FLAG_N);
+    getRegisters().setReg8(A, newValue);
+}
+
+/*
+ * add_sp() / ADD A,HL
+ * Add the byte pointed to by HL to A.
+ */
+void gb::add_sp(){      //ADD A,HL
+  uint8_t newValue = getRegisters().getReg8(A) + getMemory().getByte(getRegisters().getReg16(HL));
+  update_flags(newValue);
+  getRegisters().clearFlag(FLAG_N);
+  getRegisters().setReg8(A, newValue);
+}
+
+/*
+ * add(uint16_t) / ADD HL,r16
+ * Add the value in r16 to HL.
+ */
+void gb::add_r16(int reg){     //ADD HL,r16
+    uint16_t newValue = getMemory().getWord(reg) + getRegisters().getReg16(HL);
+    getRegisters().clearFlag(FLAG_N);
+    //TODO: Make overflow right.
+}
+
+/*void gb::op_and(uint8_t);   //AND A,r8
 void gb::op_and_n(uint8_t); //AND A,n8
 void gb::op_and_sp();       //AND A,HL
 void gb::op_or(uint8_t);    //OR A,r8
@@ -55,3 +89,15 @@ void gb::op_xor(uint8_t);   //XOR A,r8
 void gb::op_xor_n(uint8_t); //XOR A,n8
 void gb::op_xor_sp(void);   //XOR A,HL
 */
+
+/*
+ * update_flags(uint8_t) 
+ * updates the flags based on a value passed in.
+ */
+void gb::update_flags(uint8_t value){
+  if(value) getRegisters().clearFlag(FLAG_Z);
+  else getRegisters().setFlag(FLAG_Z);
+  if((value & 0x0f) > 0x09) getRegisters().setFlag(FLAG_H);
+  if(value > 0x99) getRegisters().setFlag(FLAG_C);
+  
+}
