@@ -1,3 +1,4 @@
+#include "../Sim.h"
 #include "../gb.h"
 
 /*

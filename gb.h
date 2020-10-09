@@ -5,15 +5,13 @@
 #include <cstdint>
 #include "Memory.h"
 #include "Registers.h"
-#include "Pixel.h"
 
 class gb{
-    bool ime; //IME = Interrupt Master Enable/
+    bool ime; //IME = Interrupt Master Enable
     bool status;
     int cycles;
     Memory          memory;
     Registers       regs;
-    Pixel           pix;
 
     /* Private Member Functions */
 
@@ -35,7 +33,6 @@ class gb{
         void trace(void);
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
-        Pixel & getPixel(){return pix;}
         bool getStatus(){return status;}
         int getPC(){return pc;}
         int pc = 0x0100;
