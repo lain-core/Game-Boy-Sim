@@ -15,7 +15,7 @@ void gb::reset(){
 int main(int argc, char** argv){
 	gb myGB;
 	if(argc == 1){
-		printf("No rom specified, loading asm/first.gb.");
+		printf("No rom specified, loading asm/first.gb (if it exists).");
 		myGB.setStatus(myGB.load("asm/first.gb"));
 	}
 	else{
@@ -24,6 +24,8 @@ int main(int argc, char** argv){
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//myGB.getMemory().dumpROM();
+	
+	//Primary Event Loop.
 	while(myGB.getStatus()){
 		myGB.setStatus(myGB.decode(myGB.getMemory().getWord(myGB.pc++)));
 	}
