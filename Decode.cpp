@@ -67,6 +67,7 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
  */
 bool gb::decode_math(uint8_t opcode, uint8_t data){
     bool found_inst = true;
+    //All 8-Bit relevant ops.
     switch(opcode){
         case 0x04:
             inc(B);
@@ -144,6 +145,52 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
             found_inst = false;
             break;
     }
+
+    //All 16-bit instructons.
+    if(!found_inst){
+        switch(opcode){
+        case 0x03:
+            inc_r16(BC);
+            break;
+        case 0x13:
+            inc_r16(DE);
+            break;
+        case 0x23:
+            inc_r16(HL);
+            break;
+        case 0x33:
+            inc_r16(SP);
+            break;
+        case 0x09:
+            add_r16(BC);
+            break;
+        case 0x19:
+            add_r16(DE);
+            break;
+        case 0x29:
+            add_r16(HL);
+            break;
+        case 0x39:
+            add_r16(SP);
+            break;
+        case 0x0B:
+            dec_r16(BC);
+            break;
+        case 0x1B:
+            dec_r16(DE);
+            break;
+        case 0x2B:
+            dec_r16(HL);
+            break;
+        case 0x3B:
+            dec_r16(SP);
+            break;
+        default:
+            found_inst = false;
+            break;
+        }
+    }
+
     if((opcode & 0xf0) == 0x80) found_inst = decode_add(opcode, data);
     if((opcode & 0xf0) == 0x90) found_inst = decode_sub(opcode, data);
     if((opcode & 0xf0) == 0xA0) found_inst = decode_and_xor(opcode, data);
