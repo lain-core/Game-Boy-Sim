@@ -30,7 +30,7 @@ $(INSTDIR)/Arithmetic.o: gb.h Sim.h
 gb.o: Tools.h Memory.h Registers.h Pixel.h
 
 clean:
-	rm $(OBJ) gb || true
+	rm $(OBJ) $(INST_OBJ) gb || true
 
 run:
 	make clean
