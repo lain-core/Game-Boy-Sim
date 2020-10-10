@@ -35,7 +35,7 @@ class gb{
         Registers & getRegisters(){return regs;}
         bool getStatus(){return status;}
         int getPC(){return pc;}
-        int pc = 0x0100;
+        int pc = 0x0000;
 
     /* Opcode-Related Functions */
     bool decode(uint16_t);
@@ -55,38 +55,37 @@ class gb{
     void stop(void);
 
     /* Arithmetic Opcodes */
-    void adc(uint8_t);      //ADC A,r8
+    void adc(int);          //ADC A,r8
     void adc_n(uint8_t);    //ADC A,n8
     void adc_hl(void);      //ADC A,HL
-    void add(int);      //ADD A,r8
+    void add(int);          //ADD A,r8
     void add_n(uint8_t);    //ADD A,n8
     void add_hl(void);      //ADD A,HL
-    void add_r16(int);          //ADD HL,r16
-    void op_and(uint8_t);   //AND A,r8
+    void add_r16(int);      //ADD HL,r16
+    void op_and(int);       //AND A,r8
     void op_and_n(uint8_t); //AND A,n8
     void op_and_hl();       //AND A,HL
-    void op_or(uint8_t);    //OR A,r8
+    void op_or(int);        //OR A,r8
     void op_or_n(uint8_t);  //OR A,n8
     void op_or_hl(void);    //OR A,HL
-    void cp(uint8_t);       //CP A,r8
+    void cp(int);           //CP A,r8
     void cp_n(uint8_t);     //CP A,n8
     void cp_hl(void);       //CP A,HL
-    void dec(uint8_t);      //DEC r8
+    void dec(int);          //DEC r8
     void dec_hl(void);      //DEC HL
-    void dec(uint16_t);     //DEC r16
-    void inc(uint8_t);      //INC r8
+    void dec_r16(int);      //DEC r16
+    void inc(int);          //INC r8
     void inc_hl(void);      //INC HL
-    void inc(uint16_t);     //INC r16
-    void sbc(uint8_t);      //SBC A,r8
+    void inc_r16(int);      //INC r16
+    void sbc(int);          //SBC A,r8
     void sbc_n(uint8_t);    //SBC A,n8
     void sbc_hl(void);      //SBC A,HL
-    void sub(uint8_t);      //SUB A,r8
+    void sub(int);          //SUB A,r8
     void sub_n(uint8_t);    //SUB A,n8
-    void sub(void);         //SUB A,HL
-    void op_xor(uint8_t);   //XOR A,r8
+    void sub_hl(void);      //SUB A,HL
+    void op_xor(int);       //XOR A,r8
     void op_xor_n(uint8_t); //XOR A,n8
     void op_xor_hl(void);   //XOR A,HL
-    void update_flags(uint8_t, uint8_t);//Update the flags given a value generated from the above arithmetic functions.
 
     /* Bit Operations Opcodes */
     //Not to be confused with bit shifting.

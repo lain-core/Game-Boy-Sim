@@ -25,7 +25,7 @@ $(INSTDIR)/Misc.o: gb.h Sim.h
 
 $(INSTDIR)/BitOps.o: gb.h Sim.h
 
-$(INSTDIR)/Arithmetic.o: gb.h Tools.h Sim.h
+$(INSTDIR)/Arithmetic.o: gb.h Sim.h
 
 gb.o: Tools.h Memory.h Registers.h Pixel.h
 

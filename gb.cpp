@@ -8,6 +8,7 @@ gb::gb(){
 void gb::reset(){
 	ime = false;
 	cycles = 0;
+	//FIXME: We are temporarily using 0x100 as our starting PC because we have not yet implemented the GB bootstrap rom.
 	pc = 0x0100;
 }
 

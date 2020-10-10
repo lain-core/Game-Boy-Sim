@@ -27,8 +27,7 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
             break;
         case 0x76: //halt
             halt();
-            found_inst = false;
-            break;
+            return false;
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
             if(data == 0x00) stop();
             else found_inst = false;
@@ -59,6 +58,7 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
 }
 
 bool gb::decode_math(uint8_t opcode, uint8_t data){
+    //TODO: Finish inserting.
     bool found_inst = true;
     switch(opcode){
         case 0x09:
@@ -95,7 +95,7 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
             add(L);
             break;
         case 0x86: //add_sp() / add a,HL
-            add_sp();
+            add_hl();
             break;
         case 0x87:
             add(A);
@@ -104,6 +104,7 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
             found_inst = false;
             break;
     }
+    return found_inst;
 }
 
 bool gb::decode_bitops(uint8_t opcode, uint8_t data){
