@@ -34,14 +34,21 @@ class gb{
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
         bool getStatus(){return status;}
+        void setStatus(bool newStatus){status = newStatus;}
         int getPC(){return pc;}
         int pc = 0x0000;
 
-    /* Opcode-Related Functions */
+    /* Decode-Related Functions */
     bool decode(uint16_t);
     bool decode_misc(uint8_t, uint8_t);
     bool decode_math(uint8_t, uint8_t);
     bool decode_bitops(uint8_t, uint8_t);
+
+    /* Decode Math Helpers */
+    bool decode_add(uint8_t, uint8_t);
+    bool decode_sub(uint8_t, uint8_t);
+    bool decode_and_xor(uint8_t, uint8_t);
+    bool decode_or_cp(uint8_t, uint8_t);
 
     /* Miscellaneous Opcodes */
     void ccf(void);
@@ -87,15 +94,15 @@ class gb{
     void op_xor_n(uint8_t); //XOR A,n8
     void op_xor_hl(void);   //XOR A,HL
 
+    /* Arithmetic Opcode Helpers */
+    void update_on_add(uint8_t, uint8_t); //Updates flags for ADD funcs.
+
     /* Bit Operations Opcodes */
     //Not to be confused with bit shifting.
     void bit(int);
     void res(int);
     void set(int);
     void swap(int);
-
-    /* Debug-only Functions -- Clear for final build */
-    void setStatus(bool newStatus){status = newStatus;}
 };
 
 #endif

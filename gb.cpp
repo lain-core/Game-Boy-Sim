@@ -16,7 +16,7 @@ void gb::reset(){
 int main(int argc, char** argv){
 	gb myGB;
 	if(argc == 1){
-		printf("No rom specified, loading asm/first.gb (if it exists).");
+		printf("No rom specified, loading asm/first.gb (if it exists).\n");
 		myGB.setStatus(myGB.load("asm/first.gb"));
 	}
 	else{
