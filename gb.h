@@ -49,6 +49,9 @@ class gb{
     bool decode_sub(uint8_t, uint8_t);
     bool decode_and_xor(uint8_t, uint8_t);
     bool decode_or_cp(uint8_t, uint8_t);
+    bool decode_bit(uint8_t);
+    bool decode_res(uint8_t);
+    bool decode_set(uint8_t);
 
     /* Miscellaneous Opcodes */
     void ccf(void);
@@ -99,10 +102,14 @@ class gb{
 
     /* Bit Operations Opcodes */
     //Not to be confused with bit shifting.
-    void bit(int);
-    void res(int);
-    void set(int);
-    void swap(int);
+    void bit(int, int); //BIT u3,r8
+    void bit_hl(int); //BIT u3,[HL]
+    void res(int, int); //RES u3,r8
+    void res_hl(int); //RES u3,[HL]
+    void set(int, int); //SET u3,r8
+    void set_hl(int); //SET u3,[HL]
+    void swap(int);//SWAP r8
+    void swap_hl(void);//SWAP [HL]
 };
 
 #endif

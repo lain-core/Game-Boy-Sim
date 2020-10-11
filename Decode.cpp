@@ -203,7 +203,24 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
  * 
  */
 bool gb::decode_bitops(uint8_t opcode, uint8_t data){
-    return false;
+    bool found_inst = true;
+    if(opcode == 0xCB){    
+        if((data & 0x0f) >= 0x40 && (data & 0x0f) <= 0x70){
+            decode_bit(data);
+        }
+        if((data & 0x0f) >= 0x80 && (data & 0x0f) <= 0xB0){
+            decode_res(data);
+        }
+        if((data & 0x0f) >= 0xC0 && (data & 0x0f) <= 0xF0){
+            decode_set(data);
+        }
+        switch(data){
+            default:
+                found_inst = false;
+                break;
+        }
+    }
+    return found_inst;
 }
 
 /* Helper Functions */
@@ -451,3 +468,68 @@ bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
     }
     return found_inst;
 }
+
+bool gb::decode_bit(uint8_t data){
+    bool inst_found = true;
+    int bit_num = (data & 0xf0) >> 4;
+    int reg_num = (data & 0x0f);
+
+    switch(bit_num){
+        case 4:
+            if(reg_num <= 7) bit_num = 0;
+            if(reg_num >= 8) bit_num = 1;
+            break;
+        case 5:
+            if(reg_num <= 7) bit_num = 2;
+            if(reg_num >= 8) bit_num = 3;
+            break;
+        case 6:
+            if(reg_num <= 7) bit_num = 4;
+            if(reg_num >= 8) bit_num = 5;
+            break;
+        case 7:
+            if(reg_num <= 7) bit_num = 6;
+            if(reg_num >= 8) bit_num = 7;
+            break;  
+    }
+
+    switch(reg_num % 8){
+        case 0:
+            reg_num = B;
+            break;
+        case 1:
+            reg_num = C;
+            break;
+        case 2:
+            reg_num = D;
+            break;
+        case 3:
+            reg_num = E;
+            break;
+        case 4:
+            reg_num = H;
+            break;
+        case 5:
+            reg_num = L;
+            break;
+        case 7:
+            reg_num = A;
+            break;
+        default:
+            reg_num = 8;
+            break;
+    }
+    if(reg_num != 8) bit(bit_num, reg_num);
+    else bit_hl(bit_num);
+    return inst_found;
+}
+
+bool gb::decode_res(uint8_t data){
+    bool inst_found = false;
+    return inst_found;
+}
+
+bool gb::decode_set(uint8_t data){
+    bool inst_found = false;
+    return inst_found;
+} 
