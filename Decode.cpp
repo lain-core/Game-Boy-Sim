@@ -215,6 +215,30 @@ bool gb::decode_bitops(uint8_t opcode, uint8_t data){
             decode_set(data);
         }
         switch(data){
+            case 0x30:
+                swap(B);
+                break;
+            case 0x31:
+                swap(C);
+                break;
+            case 0x32:
+                swap(D);
+                break;
+            case 0x33:
+                swap(E);
+                break;
+            case 0x34:
+                swap(H);
+                break;
+            case 0x35:
+                swap(L);
+                break;
+            case 0x36:
+                swap_hl();
+                break;
+            case 0x37:
+                swap(A);
+                break;
             default:
                 found_inst = false;
                 break;
@@ -469,6 +493,12 @@ bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
     return found_inst;
 }
 
+//TODO: decode_bit, decode_res, decode_set all reuse code, we can probably afford to crunch them together.
+
+/*
+ * decode_bit(uint8_t)
+ * Determines the bit numbers and register numbers and calls out to BIT with the appropriate parameters.
+ */
 bool gb::decode_bit(uint8_t data){
     bool inst_found = true;
     int bit_num = (data & 0xf0) >> 4;
@@ -524,12 +554,120 @@ bool gb::decode_bit(uint8_t data){
     return inst_found;
 }
 
+/*
+ * decode_res(uint8_t)
+ * Determines the bit number and register number and calls to RES with the appropriate parameters.
+ */
 bool gb::decode_res(uint8_t data){
-    bool inst_found = false;
+    bool inst_found = true;
+    int bit_num = (data & 0xf0) >> 4;
+    int reg_num = (data & 0x0f);
+
+    switch(bit_num){
+        case 4:
+            if(reg_num <= 7) bit_num = 0;
+            if(reg_num >= 8) bit_num = 1;
+            break;
+        case 5:
+            if(reg_num <= 7) bit_num = 2;
+            if(reg_num >= 8) bit_num = 3;
+            break;
+        case 6:
+            if(reg_num <= 7) bit_num = 4;
+            if(reg_num >= 8) bit_num = 5;
+            break;
+        case 7:
+            if(reg_num <= 7) bit_num = 6;
+            if(reg_num >= 8) bit_num = 7;
+            break;  
+    }
+
+    switch(reg_num % 8){
+        case 0:
+            reg_num = B;
+            break;
+        case 1:
+            reg_num = C;
+            break;
+        case 2:
+            reg_num = D;
+            break;
+        case 3:
+            reg_num = E;
+            break;
+        case 4:
+            reg_num = H;
+            break;
+        case 5:
+            reg_num = L;
+            break;
+        case 7:
+            reg_num = A;
+            break;
+        default:
+            reg_num = 8;
+            break;
+    }
+    if(reg_num != 8) res(bit_num, reg_num);
+    else res_hl(bit_num);
     return inst_found;
 }
 
+/*
+ * decode_set(uint8_t)
+ * Grabs the bit number and register number to do a SET on, and calls the function with the correct parameters.
+ */
 bool gb::decode_set(uint8_t data){
-    bool inst_found = false;
+    bool inst_found = true;
+    int bit_num = (data & 0xf0) >> 4;
+    int reg_num = (data & 0x0f);
+
+    switch(bit_num){
+        case 4:
+            if(reg_num <= 7) bit_num = 0;
+            if(reg_num >= 8) bit_num = 1;
+            break;
+        case 5:
+            if(reg_num <= 7) bit_num = 2;
+            if(reg_num >= 8) bit_num = 3;
+            break;
+        case 6:
+            if(reg_num <= 7) bit_num = 4;
+            if(reg_num >= 8) bit_num = 5;
+            break;
+        case 7:
+            if(reg_num <= 7) bit_num = 6;
+            if(reg_num >= 8) bit_num = 7;
+            break;  
+    }
+
+    switch(reg_num % 8){
+        case 0:
+            reg_num = B;
+            break;
+        case 1:
+            reg_num = C;
+            break;
+        case 2:
+            reg_num = D;
+            break;
+        case 3:
+            reg_num = E;
+            break;
+        case 4:
+            reg_num = H;
+            break;
+        case 5:
+            reg_num = L;
+            break;
+        case 7:
+            reg_num = A;
+            break;
+        default:
+            reg_num = 8;
+            break;
+    }
+    if(reg_num != 8) set(bit_num, reg_num);
+    else set_hl(bit_num);
     return inst_found;
 } 
