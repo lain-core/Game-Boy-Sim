@@ -31,6 +31,7 @@ class gb{
         bool load   (std::string);
         bool readFile(std::string);
         void trace(void);
+        void sigint_handler(int);
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
         bool getStatus(){return status;}

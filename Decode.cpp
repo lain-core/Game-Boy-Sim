@@ -14,6 +14,8 @@ bool gb::decode(uint16_t opcodewithdata){
     uint8_t data = (opcodewithdata & 0x00FF);
     //Update our status if we can find our opcode. If it passes every function without being found, it must be an illegal (or unimplemented) op.
     bool stat = decode_misc(opcode, data);
+    //FIXME: This is bad. We need a better way to discern if an operation was 16-bits or not.
+    bool was_16_bit = false;
     if(!stat) stat = decode_math(opcode, data);
     if(!stat) stat = decode_bitops(opcode, data);
     return stat;
@@ -31,10 +33,11 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
             break;
         case 0x76: //halt
             halt();
-            return false;
+            found_inst = false;
+            break;
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
             if(data == 0x00) stop();
-            else found_inst = false;
+            found_inst = false;
             break;
         case 0x37: //scf
             scf();
@@ -244,6 +247,7 @@ bool gb::decode_bitops(uint8_t opcode, uint8_t data){
                 break;
         }
     }
+    else found_inst = false;
     return found_inst;
 }
 
