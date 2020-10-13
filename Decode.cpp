@@ -215,8 +215,11 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
  */
 bool gb::decode_bitops(uint8_t opcode, uint8_t data){
     bool found_inst = true;
-    if(opcode == 0xCB){    
+    if(opcode == 0xCB){
+        printf("found opcode 0xCB!\n");
+        printf("Data & 0x0f is: %02x\n", (data & 0x0f));
         if((data & 0x0f) >= 0x40 && (data & 0x0f) <= 0x70){
+            printf("Calling decode_bit(%02x)\n", data);
             decode_bit(data);
         }
         if((data & 0x0f) >= 0x80 && (data & 0x0f) <= 0xB0){

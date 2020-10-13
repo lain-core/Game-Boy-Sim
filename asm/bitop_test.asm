@@ -1,5 +1,6 @@
 INCLUDE "hardware.inc"
 SECTION "Header", ROM0
 EntryPoint:
-    ADD A,$C2
+    add a,$C2
+    bit 2,a ;Value should now be C3.
     halt
