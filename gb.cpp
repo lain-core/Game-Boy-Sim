@@ -1,4 +1,5 @@
 #include <iostream>
+#include <csignal>
 #include "gb.h"
 gb myGB;
 
