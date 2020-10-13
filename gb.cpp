@@ -34,6 +34,7 @@ int main(int argc, char** argv){
 	
 	//Primary Event Loop.
 	while(myGB.getStatus()){
+		printf("Calling decode(%04x)\n", myGB.getMemory().getWord(myGB.pc));
 		myGB.setStatus(myGB.decode(myGB.getMemory().getWord(myGB.pc++)));
 	}
 	myGB.trace();

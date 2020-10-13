@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "gb.h"
 #include "Sim.h"
+bool was8bit = false;
 
 /*
  * gb::decode(uint16_t)
@@ -13,12 +14,12 @@ bool gb::decode(uint16_t opcodewithdata){
     uint8_t opcode = (opcodewithdata & 0xFF00) >> 8;
     uint8_t data = (opcodewithdata & 0x00FF);
     //Update our status if we can find our opcode. If it passes every function without being found, it must be an illegal (or unimplemented) op.
-    bool stat = decode_misc(opcode, data);
-    //FIXME: This is bad. We need a better way to discern if an operation was 16-bits or not.
-    bool was_16_bit = false;
-    if(!stat) stat = decode_math(opcode, data);
-    if(!stat) stat = decode_bitops(opcode, data);
-    return stat;
+    bool found = decode_misc(opcode, data);
+    if(!found) found = decode_math(opcode, data);
+    if(!found) found = decode_bitops(opcode, data);
+    if(!was8bit) pc++;
+    if(found && getStatus()) return found; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
+    else return !found;
 }
 
 /*
@@ -30,32 +31,39 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
     switch(opcode){
         case 0x00: //nop
             nop();
+            was8bit = true;
             break;
         case 0x76: //halt
             halt();
-            found_inst = false;
+            was8bit = true;
             break;
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
             if(data == 0x00) stop();
-            found_inst = false;
+            else found_inst = false;
             break;
         case 0x37: //scf
             scf();
+            was8bit = true;
             break;
         case 0x3F: //ccf
             ccf();
+            was8bit = true;
             break;
         case 0xF3: //di
             di();
+            was8bit = true;
             break;
         case 0xFB: //ei
             ei();
+            was8bit = true;
             break;
         case 0x2F: //cpl
             cpl();
+            was8bit = true;
             break;
         case 0x27: //daa
             daa();
+            was8bit = true;
             break;
         default:
             found_inst = false;
