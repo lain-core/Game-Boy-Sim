@@ -64,6 +64,8 @@ void gb::set(int bit, int reg8){
     uint8_t src = getRegisters().getReg8(reg8);
     uint8_t mask = 1 << bit;
 
+    printf("bit is %d, reg8 is %d, mask is 0x%x, new value is: %x\n", bit, reg8, mask, (src | mask));
+
     getRegisters().setReg8(reg8, (src | mask));
 }
 

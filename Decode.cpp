@@ -82,75 +82,99 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
     switch(opcode){
         case 0x04:
             inc(B);
+            was8bit = true;
             break;
         case 0x14:
             inc(D);
+            was8bit = true;
             break;
         case 0x24:
             inc(H);
+            was8bit = true;
             break;
         case 0x34:
             inc_hl();
+            was8bit = true;
             break;
         case 0x05:
             dec(B);
+            was8bit = true;
             break;
         case 0x15:
             dec(D);
+            was8bit = true;
             break;
         case 0x25:
             dec(H);
+            was8bit = true;
             break;
         case 0x35:
             dec_hl();
+            was8bit = true;
             break;
         case 0x0C:
             inc(C);
+            was8bit = true;
             break;
         case 0x1C:
             inc(E);
+            was8bit = true;
             break;
         case 0x2C:
             inc(L);
+            was8bit = true;
             break;
         case 0x3C:
             inc(A);
+            was8bit = true;
             break;
         case 0x0D:
             dec(C);
+            was8bit = true;
             break;
         case 0x1D:
             dec(E);
+            was8bit = true;
             break;
         case 0x2D:
             dec(L);
+            was8bit = true;
             break;
         case 0x3D:
             dec(A);
+            was8bit = true;
             break;
         case 0xC6:
             add_n(data);
+            was8bit = true;
             break;
         case 0xD6:
             sub_n(data);
+            was8bit = true;
             break;
         case 0xE6:
             op_and_n(data);
+            was8bit = true;
             break;
         case 0xF6:
             op_or_n(data);
+            was8bit = true;
             break;
         case 0xCE:
             adc_n(data);
+            was8bit = true;
             break;
         case 0xDE:
             sbc_n(data);
+            was8bit = true;
             break;
         case 0xEE:
             op_xor_n(data);
+            was8bit = true;
             break;
         case 0xFE:
             cp_n(data);
+            was8bit = true;
             break;
         default:
             found_inst = false;
@@ -217,15 +241,14 @@ bool gb::decode_bitops(uint8_t opcode, uint8_t data){
     bool found_inst = true;
     if(opcode == 0xCB){
         printf("found opcode 0xCB!\n");
-        printf("Data & 0x0f is: %02x\n", (data & 0x0f));
-        if((data & 0x0f) >= 0x40 && (data & 0x0f) <= 0x70){
-            printf("Calling decode_bit(%02x)\n", data);
+        if((data & 0xf0) >= 0x40 && (data & 0xf0) <= 0x70){
+            printf("calling bit(%02x)\n", data);
             decode_bit(data);
         }
-        if((data & 0x0f) >= 0x80 && (data & 0x0f) <= 0xB0){
+        if((data & 0xf0) >= 0x80 && (data & 0xf0) <= 0xB0){
             decode_res(data);
         }
-        if((data & 0x0f) >= 0xC0 && (data & 0x0f) <= 0xF0){
+        if((data & 0xf0) >= 0xC0 && (data & 0xf0) <= 0xF0){
             decode_set(data);
         }
         switch(data){
@@ -452,6 +475,8 @@ bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
     //Cases 0xB0 - 0xB7 are of the form OR r8,A.
     //Cases 0xB8 - 0xBF are of the form CP r8,A.
     //Case 0xB6 and 0xBE are using [HL] rather than an r8.
+    int reg_num = get_regnum(data);
+    printf("called or. reg num is: %x\n", reg_num);
     switch(opcode){
         case 0xB0:
             op_or(B);
@@ -508,62 +533,14 @@ bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
     return found_inst;
 }
 
-//TODO: decode_bit, decode_res, decode_set all reuse code, we can probably afford to crunch them together.
-
 /*
  * decode_bit(uint8_t)
  * Determines the bit numbers and register numbers and calls out to BIT with the appropriate parameters.
  */
 bool gb::decode_bit(uint8_t data){
     bool inst_found = true;
-    int bit_num = (data & 0xf0) >> 4;
-    int reg_num = (data & 0x0f);
-
-    switch(bit_num){
-        case 4:
-            if(reg_num <= 7) bit_num = 0;
-            if(reg_num >= 8) bit_num = 1;
-            break;
-        case 5:
-            if(reg_num <= 7) bit_num = 2;
-            if(reg_num >= 8) bit_num = 3;
-            break;
-        case 6:
-            if(reg_num <= 7) bit_num = 4;
-            if(reg_num >= 8) bit_num = 5;
-            break;
-        case 7:
-            if(reg_num <= 7) bit_num = 6;
-            if(reg_num >= 8) bit_num = 7;
-            break;  
-    }
-
-    switch(reg_num % 8){
-        case 0:
-            reg_num = B;
-            break;
-        case 1:
-            reg_num = C;
-            break;
-        case 2:
-            reg_num = D;
-            break;
-        case 3:
-            reg_num = E;
-            break;
-        case 4:
-            reg_num = H;
-            break;
-        case 5:
-            reg_num = L;
-            break;
-        case 7:
-            reg_num = A;
-            break;
-        default:
-            reg_num = 8;
-            break;
-    }
+    int bit_num = get_bitnum(data);
+    int reg_num = get_regnum(data);
     if(reg_num != 8) bit(bit_num, reg_num);
     else bit_hl(bit_num);
     return inst_found;
@@ -575,54 +552,8 @@ bool gb::decode_bit(uint8_t data){
  */
 bool gb::decode_res(uint8_t data){
     bool inst_found = true;
-    int bit_num = (data & 0xf0) >> 4;
-    int reg_num = (data & 0x0f);
-
-    switch(bit_num){
-        case 4:
-            if(reg_num <= 7) bit_num = 0;
-            if(reg_num >= 8) bit_num = 1;
-            break;
-        case 5:
-            if(reg_num <= 7) bit_num = 2;
-            if(reg_num >= 8) bit_num = 3;
-            break;
-        case 6:
-            if(reg_num <= 7) bit_num = 4;
-            if(reg_num >= 8) bit_num = 5;
-            break;
-        case 7:
-            if(reg_num <= 7) bit_num = 6;
-            if(reg_num >= 8) bit_num = 7;
-            break;  
-    }
-
-    switch(reg_num % 8){
-        case 0:
-            reg_num = B;
-            break;
-        case 1:
-            reg_num = C;
-            break;
-        case 2:
-            reg_num = D;
-            break;
-        case 3:
-            reg_num = E;
-            break;
-        case 4:
-            reg_num = H;
-            break;
-        case 5:
-            reg_num = L;
-            break;
-        case 7:
-            reg_num = A;
-            break;
-        default:
-            reg_num = 8;
-            break;
-    }
+    int bit_num = get_bitnum(data);
+    int reg_num = get_regnum(data);
     if(reg_num != 8) res(bit_num, reg_num);
     else res_hl(bit_num);
     return inst_found;
@@ -634,28 +565,16 @@ bool gb::decode_res(uint8_t data){
  */
 bool gb::decode_set(uint8_t data){
     bool inst_found = true;
-    int bit_num = (data & 0xf0) >> 4;
-    int reg_num = (data & 0x0f);
+    int bit_num = get_bitnum(data);
+    int reg_num = get_regnum(data);
+    printf("Bit num is: %d, Reg num is: %d\n", bit_num, reg_num);
+    if(reg_num != 8) set(bit_num, reg_num);
+    else set_hl(bit_num);
+    return inst_found;
+} 
 
-    switch(bit_num){
-        case 4:
-            if(reg_num <= 7) bit_num = 0;
-            if(reg_num >= 8) bit_num = 1;
-            break;
-        case 5:
-            if(reg_num <= 7) bit_num = 2;
-            if(reg_num >= 8) bit_num = 3;
-            break;
-        case 6:
-            if(reg_num <= 7) bit_num = 4;
-            if(reg_num >= 8) bit_num = 5;
-            break;
-        case 7:
-            if(reg_num <= 7) bit_num = 6;
-            if(reg_num >= 8) bit_num = 7;
-            break;  
-    }
-
+int gb::get_regnum(uint8_t data){
+    uint8_t reg_num = (data & 0x0f);
     switch(reg_num % 8){
         case 0:
             reg_num = B;
@@ -682,7 +601,30 @@ bool gb::decode_set(uint8_t data){
             reg_num = 8;
             break;
     }
-    if(reg_num != 8) set(bit_num, reg_num);
-    else set_hl(bit_num);
-    return inst_found;
-} 
+    return reg_num;
+}
+
+int gb::get_bitnum(uint8_t data){
+    uint8_t bit_num = (data & 0xf0) >> 4;
+    uint8_t reg_num = (data & 0x0f);
+    printf("data: %x, bitnum: %x, regnum: %x\n", data, bit_num, reg_num);
+    switch(bit_num % 4){
+        case 0:
+            if(reg_num <= 7) bit_num = 0;
+            if(reg_num >= 8) bit_num = 1;
+            break;
+        case 1:
+            if(reg_num <= 7) bit_num = 2;
+            if(reg_num >= 8) bit_num = 3;
+            break;
+        case 2:
+            if(reg_num <= 7) bit_num = 4;
+            if(reg_num >= 8) bit_num = 5;
+            break;
+        case 3:
+            if(reg_num <= 7) bit_num = 6;
+            if(reg_num >= 8) bit_num = 7;
+            break;            
+    }
+    return bit_num;
+}

@@ -53,6 +53,8 @@ class gb{
     bool decode_bit(uint8_t);
     bool decode_res(uint8_t);
     bool decode_set(uint8_t);
+    int get_bitnum(uint8_t);
+    int get_regnum(uint8_t);
 
     /* Miscellaneous Opcodes */
     void ccf(void);
