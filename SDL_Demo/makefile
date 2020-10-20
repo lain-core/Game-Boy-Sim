@@ -17,8 +17,8 @@ endif
 pixelmod:
 	$(CC) $(CFLAGS) pixelmod.cpp -o pixelmod $(SDL)
 
-present2:
-	$(CC) $(CFLAGS) present2.cpp -o present2 $(SDL)
+write:
+	$(CC) $(CFLAGS) writePixel.cpp -o writePixel $(SDL)
 
 clean:
-	rm $(OBJ) present2 pixelmod keyInputTest a.out || true
+	rm $(OBJ) writePixel pixelmod keyInputTest a.out || true
