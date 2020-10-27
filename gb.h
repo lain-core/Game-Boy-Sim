@@ -103,16 +103,27 @@ class gb{
     /* Arithmetic Opcode Helpers */
     void update_on_add(uint8_t, uint8_t); //Updates flags for ADD funcs.
 
+    /* Load Opcode Helpers */
+    void gb::ld(int, int);
+    void gb::ld_n(int, uint8_t);
+    void gb::ld_r16(int, uint16_t);
+    void gb::ld_hlr(int);
+    void gb::ld_hln(uint8_t);
+    void gb::ld_rhl(int);
+    void gb::ld_r16A(int);
+    void gb::ld_n16A(uint16_t);
+    void gb::ldh_n16A(uint16_t);
+    
     /* Bit Operations Opcodes */
     //Not to be confused with bit shifting.
     void bit(int, int); //BIT u3,r8
-    void bit_hl(int); //BIT u3,[HL]
+    void bit_hl(int);   //BIT u3,[HL]
     void res(int, int); //RES u3,r8
-    void res_hl(int); //RES u3,[HL]
+    void res_hl(int);   //RES u3,[HL]
     void set(int, int); //SET u3,r8
-    void set_hl(int); //SET u3,[HL]
-    void swap(int);//SWAP r8
-    void swap_hl(void);//SWAP [HL]
+    void set_hl(int);   //SET u3,[HL]
+    void swap(int);     //SWAP r8
+    void swap_hl(void); //SWAP [HL]
 };
 
 #endif
