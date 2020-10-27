@@ -127,30 +127,30 @@ class gb{
     void ld_r16(int, uint16_t);//LD r16,n16
 
     /* Jump Opcodes */
-    call(uint16_t)          //CALL n16
-    call_cc(bool, uint16_t) //CALL cc,n16
-    jp_hl(void)             //JP HL
-    jp(uint16_t)            //JP n16
-    jr_cc_16(bool, uint16_t)//JR cc,n16
-    jr_cc_8(bool, uint8_t)  //JR cc,e8  
-    jr(uint8_t)             //JR e8
-    ret_cc(bool)            //RET cc
-    ret(void)               //RET
-    reti(void)              //RETI
-    rst(uint16_t)       //RST vec
+    void call(uint16_t);          //CALL n16
+    void call_cc(bool, uint16_t); //CALL cc,n16
+    void jp_hl(void);             //JP HL
+    void jp(uint16_t);            //JP n16
+    void jr_cc_16(bool, uint16_t);//JR cc,n16
+    void jr_cc_8(bool, uint8_t);  //JR cc,e8  
+    void jr(uint8_t);             //JR e8
+    void ret_cc(bool);            //RET cc
+    void ret(void);               //RET
+    void reti(void);              //RETI
+    void rst(uint16_t);       //RST vec
 
     /* Stack Opcodes */
-    void add_hl_sp(void)    //ADD HL,SP
-    void add_sp_e8(uint8_t) //ADD SP,e8
-    void dec_sp(void)       //DEC SP
-    void inc_sp(void)       //INC SP
-    void ld_sp_n(uint16_t)  //LD SP,n16
-    void ld_hl_sp_e8(uint8_t)//LD HL,SP+e8
-    void ld_sp_hl(void)     //LD SP,HL
-    void pop(void)          //POP AF
-    void pop_r16(int)      //POP r16
-    void push(void)         //PUSH AF
-    void push_r16(int)      //PUSH r16
+    void add_hl_sp(void);    //ADD HL,SP
+    void add_sp_e8(uint8_t); //ADD SP,e8
+    void dec_sp(void);       //DEC SP
+    void inc_sp(void);       //INC SP
+    void ld_sp_n(uint16_t);  //LD SP,n16
+    void ld_hl_sp_e8(uint8_t);//LD HL,SP+e8
+    void ld_sp_hl(void);     //LD SP,HL
+    void pop(void);          //POP AF
+    void pop_r16(int);      //POP r16
+    void push(void);         //PUSH AF
+    void push_r16(int);      //PUSH r16
 
     /* Miscellaneous Opcodes */
     void ccf(void);
