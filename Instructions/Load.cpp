@@ -20,6 +20,6 @@ void gb::ld_n(int reg8, uint8_t value){
  * gb::ld_r16 // LD r16, n16
  * Load value n16 into register r16.
  */
-void gb::ld_r16(int reg, uint16_t value){
-    getRegisters().setReg16(reg, value);
+void gb::ld_r16(int reg16, uint16_t value){
+    getRegisters().setReg16(reg16, value);
 }
