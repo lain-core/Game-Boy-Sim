@@ -20,7 +20,7 @@ uint32_t amask = 0x000000ff;
 
 void init();
 void loadMedia();
-uint8_t *getTileColor(uint16_t *row);
+uint32_t * getTileColor(uint16_t row);
 uint32_t intToRGB(uint8_t color);
 
 SDL_Window* window = NULL;
@@ -40,7 +40,7 @@ void loadMedia(){
 }
 
 int main(){
-    uint32_t colors[8] = {0};
+    uint32_t colors[8];
     // uint32_t *pixels = (unsigned int *)stretchSurface->pixels;
 	// convert bytearray to rgb values
 	uint16_t smileyTile[8] = {0xFF00, 0xFF00,
@@ -52,11 +52,11 @@ int main(){
     // uint16_t testTile[8] = {0x0000, 0x0000, 0x0000, 0x0000, 
     //                         0x0000, 0x0000, 0x0000, 0x0000};
 
-    colors = getTileColor(smileyTile[1]);
+    *colors = *getTileColor(smileyTile[1]);
 
-   for (int i = 0; i < 8; i++){
-       printf("%x ", colors[i]);
-   } printf("\n");
+//    for (int i = 0; i < 8; i++){
+//        printf("%d ", getTileColor(0xFF00)[i]);
+//    } printf("\n");
 }
 
 uint32_t intToRGB(uint8_t color){
@@ -85,7 +85,7 @@ uint32_t intToRGB(uint8_t color){
 }
 
 uint32_t * getTileColor(uint16_t row){
-        uint32_t colorArray[8] = {0};
+        uint32_t colorArray[8];
         uint16_t byte1 = (row & 0xFF00) >> 8; // grab high order byte out of the 2
         uint16_t byte2 = (row & 0x00FF);      // grab low order byte
         uint16_t mask = 0x01;
