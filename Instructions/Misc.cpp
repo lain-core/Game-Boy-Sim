@@ -1,3 +1,4 @@
+#include "../Sim.h"
 #include "../gb.h"
 
 /*
@@ -29,7 +30,7 @@ void gb::stop(){
 
 /*
  * scf
- * Sets the carry flag.
+ * Sets the carry flag. Clears N and H flags.
  */
 void gb::scf(){
     std::cout << "scf" << std::endl;
@@ -40,16 +41,16 @@ void gb::scf(){
 
 /*
  * ccf
- * Complements the carry flag.
+ * Complements the carry flag. Clears N and H flags.
  */
 void gb::ccf(){
     std::cout << "ccf" << std::endl;
-    getRegisters().clearFlag(FLAG_N);
-    getRegisters().clearFlag(FLAG_H);
     if(getRegisters().getFlag(FLAG_C)){
         getRegisters().clearFlag(FLAG_C);
     }
     else getRegisters().setFlag(FLAG_C);
+    getRegisters().clearFlag(FLAG_N);
+    getRegisters().clearFlag(FLAG_H);
 }
 
 /*
@@ -77,7 +78,8 @@ void gb::ei(){
 void gb::cpl(){
     std::cout << "cpl" << std::endl;
     getRegisters().setReg8(A, (~getRegisters().getReg8(A)));
-    getRegisters().clearFlag(FLAG_H);
+    getRegisters().setFlag(FLAG_N);
+    getRegisters().setFlag(FLAG_H);
 }
 
 /*
@@ -112,4 +114,5 @@ void gb::daa(){
     if(newAcc) getRegisters().clearFlag(FLAG_Z); 
     else getRegisters().setFlag(FLAG_Z);
     getRegisters().clearFlag(FLAG_H); // h flag is always cleared
+    getRegisters().setReg8(A, newAcc);
 }

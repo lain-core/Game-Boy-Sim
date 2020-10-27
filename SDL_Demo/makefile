@@ -14,11 +14,11 @@ ifeq ($(PLATFORM),Linux)
     SDL = $(LINUX_SDL)
 endif
 
-keyInputTest:
-	$(CC) $(CFLAGS) keyInputTest.cpp -o keyInputTest $(SDL)
-
 pixelmod:
 	$(CC) $(CFLAGS) pixelmod.cpp -o pixelmod $(SDL)
 
+write:
+	$(CC) $(CFLAGS) writePixel.cpp -o writePixel $(SDL)
+
 clean:
-	rm $(OBJ) pixelmod keyInputTest a.out || true
+	rm $(OBJ) writePixel pixelmod keyInputTest a.out || true
