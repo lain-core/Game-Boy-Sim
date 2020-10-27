@@ -56,16 +56,6 @@ class gb{
     int get_bitnum(uint8_t);
     int get_regnum(uint8_t);
 
-    /* Miscellaneous Opcodes */
-    void ccf(void);
-    void cpl(void);
-    void daa(void);
-    void di(void);
-    void ei(void);
-    void halt(void);
-    void nop(void);
-    void scf(void);
-    void stop(void);
 
     /* Arithmetic Opcodes */
     void adc(int);          //ADC A,r8
@@ -100,19 +90,82 @@ class gb{
     void op_xor_n(uint8_t); //XOR A,n8
     void op_xor_hl(void);   //XOR A,HL
 
+    /* Bit Operations Opcodes */
+    //Not to be confused with bit shifting.
+    void bit(int, int);     //BIT u3,r8
+    void bit_hl(int);       //BIT u3,[HL]
+    void res(int, int);     //RES u3,r8
+    void res_hl(int);       //RES u3,[HL]
+    void set(int, int);     //SET u3,r8
+    void set_hl(int);       //SET u3,[HL]
+    void swap(int);         //SWAP r8
+    void swap_hl(void);     //SWAP [HL]
+    
+    /* Bit Shift Opcodes */
+    void rl(int);           //RL r8
+    void rl_hl(void);       //RL [HL]
+    void rla(void);         //RLA
+    void rlc(int);          //RLC r8
+    void rlc_hl(void);      //RLC [HL]
+    void rlca(void);        //RLCA
+    void rr(int);           //RR r8
+    void rr_hl();           //RR [HL]
+    void rra(void);         //RRA
+    void rrc(int);          //RRC r8
+    void rrc_hl(void);      //RRC [HL]
+    void rrca(void);        //RRCA
+    void sla(int);          //SLA r8
+    void sla_hl(void);      //SLA [HL]
+    void sra(int);          //SRA r8
+    void sra_hl();          //SRA [HL]
+    void srl(int);          //SRL r8
+    void srl_hl(void);      //SRL [HL]
+
+    /* Load Opcodes */
+    void ld(int, int);      //LD r8,r8
+    void ld_n(int, uint8_t);//LD r8,n8
+    void ld_r16(int, uint16_t);//LD r16,n16
+
+    /* Jump Opcodes */
+    call(uint16_t)          //CALL n16
+    call_cc(bool, uint16_t) //CALL cc,n16
+    jp_hl(void)             //JP HL
+    jp(uint16_t)            //JP n16
+    jr_cc_16(bool, uint16_t)//JR cc,n16
+    jr_cc_8(bool, uint8_t)  //JR cc,e8  
+    jr(uint8_t)             //JR e8
+    ret_cc(bool)            //RET cc
+    ret(void)               //RET
+    reti(void)              //RETI
+    rst(uint16_t)       //RST vec
+
+    /* Stack Opcodes */
+    void add_hl_sp(void)    //ADD HL,SP
+    void add_sp_e8(uint8_t) //ADD SP,e8
+    void dec_sp(void)       //DEC SP
+    void inc_sp(void)       //INC SP
+    void ld_sp_n(uint16_t)  //LD SP,n16
+    void ld_hl_sp_e8(uint8_t)//LD HL,SP+e8
+    void ld_sp_hl(void)     //LD SP,HL
+    void pop(void)          //POP AF
+    void pop_r16(int)      //POP r16
+    void push(void)         //PUSH AF
+    void push_r16(int)      //PUSH r16
+
+    /* Miscellaneous Opcodes */
+    void ccf(void);
+    void cpl(void);
+    void daa(void);
+    void di(void);
+    void ei(void);
+    void halt(void);
+    void nop(void);
+    void scf(void);
+    void stop(void);
+
     /* Arithmetic Opcode Helpers */
     void update_on_add(uint8_t, uint8_t); //Updates flags for ADD funcs.
 
-    /* Bit Operations Opcodes */
-    //Not to be confused with bit shifting.
-    void bit(int, int); //BIT u3,r8
-    void bit_hl(int); //BIT u3,[HL]
-    void res(int, int); //RES u3,r8
-    void res_hl(int); //RES u3,[HL]
-    void set(int, int); //SET u3,r8
-    void set_hl(int); //SET u3,[HL]
-    void swap(int);//SWAP r8
-    void swap_hl(void);//SWAP [HL]
 };
 
 #endif
