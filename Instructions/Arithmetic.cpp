@@ -93,6 +93,7 @@ void gb::add(int reg8){
  * Add the immediate value n8 to A.
  */
 void gb::add_n(uint8_t value){
+	printf("ADD A,n8\n");
 	uint8_t dest = getRegisters().getReg8(A);
 	uint8_t newValue = value + dest;
 

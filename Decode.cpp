@@ -17,9 +17,22 @@ bool gb::decode(uint16_t opcodewithdata){
     bool found = decode_misc(opcode, data);
     if(!found) found = decode_math(opcode, data);
     if(!found) found = decode_bitops(opcode, data);
+    if(!found) found = decode_load(opcode, data);
     if(!was8bit) pc++;
     if(found && getStatus()) return found; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return !found;
+}
+
+bool gb::decode_load(uint8_t opcode, uint8_t data){
+    uint16_t bigdata = getMemory().getWord(pc + 1);
+    bool found_inst = true;
+    if(opcode == 0xEA){
+        printf("got a load smile");
+        printf("opcode: %02x data: %02x bigdata: %04x\n", opcode, data, bigdata);
+        ld_n16A(data);
+    }
+    else found_inst = false;
+    return found_inst;
 }
 
 /*
@@ -79,6 +92,7 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
 bool gb::decode_math(uint8_t opcode, uint8_t data){
     bool found_inst = true;
     //All 8-Bit relevant ops.
+    //TODO: fucked up 8-bit info; clean up.
     switch(opcode){
         case 0x04:
             inc(B);
@@ -146,7 +160,6 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
             break;
         case 0xC6:
             add_n(data);
-            was8bit = true;
             break;
         case 0xD6:
             sub_n(data);
@@ -541,6 +554,7 @@ bool gb::decode_bit(uint8_t data){
     bool inst_found = true;
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
+    printf("calling bit(%d, %d)\n", bit_num, reg_num);
     if(reg_num != 8) bit(bit_num, reg_num);
     else bit_hl(bit_num);
     return inst_found;
@@ -607,7 +621,6 @@ int gb::get_regnum(uint8_t data){
 int gb::get_bitnum(uint8_t data){
     uint8_t bit_num = (data & 0xf0) >> 4;
     uint8_t reg_num = (data & 0x0f);
-    printf("data: %x, bitnum: %x, regnum: %x\n", data, bit_num, reg_num);
     switch(bit_num % 4){
         case 0:
             if(reg_num <= 7) bit_num = 0;
@@ -626,5 +639,6 @@ int gb::get_bitnum(uint8_t data){
             if(reg_num >= 8) bit_num = 7;
             break;            
     }
+    printf("data: %x, bitnum: %x, regnum: %x\n", data, bit_num, reg_num);
     return bit_num;
 }

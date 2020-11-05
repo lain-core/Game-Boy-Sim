@@ -7,11 +7,11 @@
 void gb::bit(int bit, int reg8){
     uint8_t mask = 1 << bit;
     uint8_t newValue = (getRegisters().getReg8(reg8) & mask) >> bit;
+    printf("in bit(), mask is:%d, newValue is: %d\n", mask, newValue);
     
     //If new value is zero, set Z flag.
     if(newValue) getRegisters().clearFlag(FLAG_Z);
     else getRegisters().setFlag(FLAG_Z);
-
     //For BIT, always set: Flag N: 0, Flag H: 1, Flag C: Unchanged.
     getRegisters().clearFlag(FLAG_N);
     getRegisters().setFlag(FLAG_H);

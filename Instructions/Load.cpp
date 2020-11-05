@@ -65,6 +65,7 @@ void gb::ld_r16A(int r16){
  * Store value in register A into byte n16.
  */
 void gb::ld_n16A(uint16_t immediate){
+    std::cout << "LD [n16], A" << std::endl;
     uint8_t value = getMemory().getByte(getRegisters().getReg8(A));
     getMemory().putByte(getMemory().getByte(immediate), value);
 }
@@ -79,3 +80,8 @@ void gb::ldh_n16A(uint16_t immediate){
         getMemory().putByte(getMemory().getByte(immediate), value);
     }
 }
+
+/*
+ * gb::ldh_c // LDH [C],A
+ * Store value in register A into byte at address $FF00+C.
+ */

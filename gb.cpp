@@ -37,8 +37,9 @@ int main(int argc, char** argv){
 	while(myGB.getStatus()){
 		printf("Calling decode(%04x)\n", myGB.getMemory().getWord(myGB.pc));
 		myGB.setStatus(myGB.decode(myGB.getMemory().getWord(myGB.pc++)));
+		myGB.trace();
 	}
-	myGB.trace();
+	//myGB.trace();
 }
 
 /*
