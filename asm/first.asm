@@ -8,4 +8,5 @@ EntryPoint:
     ei 
     nop
     daa
+    daa
     halt

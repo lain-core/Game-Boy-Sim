@@ -1,0 +1,134 @@
+Loading asm/bitop_test.gbFile loaded successfully: 1
+Calling decode(cbf8)
+found opcode 0xCB!
+data: f8, bitnum: 7, regnum: 8
+Bit num is: 7, Reg num is: 3
+bit is 7, reg8 is 3, mask is 0x80, new value is: 80
+-----------------------------------------------------------
+Program Counter is at: 0x0101, which contains: 0xf8
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x00
+B: 0x80 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0000, BC: 0x8000, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 0, C: 0, N: 0, Z: 0
+Memory Error: 0
+Last used Memory location: 0x0101, which contains: f8
+-----------------------------------------------------------
+Calling decode(f8cb)
+-----------------------------------------------------------
+Program Counter is at: 0x0102, which contains: 0xcb
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x00
+B: 0x80 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0000, BC: 0x8000, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 0, C: 0, N: 0, Z: 0
+Memory Error: 0
+Last used Memory location: 0x0102, which contains: cb
+-----------------------------------------------------------
+Calling decode(cb30)
+found opcode 0xCB!
+-----------------------------------------------------------
+Program Counter is at: 0x0103, which contains: 0x30
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x80
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0080, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 0, C: 0, N: 0, Z: 1
+Memory Error: 0
+Last used Memory location: 0x0103, which contains: 30
+-----------------------------------------------------------
+Calling decode(30cb)
+-----------------------------------------------------------
+Program Counter is at: 0x0104, which contains: 0xcb
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x80
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0080, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 0, C: 0, N: 0, Z: 1
+Memory Error: 0
+Last used Memory location: 0x0104, which contains: cb
+-----------------------------------------------------------
+Calling decode(cb78)
+found opcode 0xCB!
+calling bit(78)
+data: 78, bitnum: 7, regnum: 8
+calling bit(7, 3)
+in bit(), mask is:128, newValue is: 0
+-----------------------------------------------------------
+Program Counter is at: 0x0105, which contains: 0x78
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0xa0
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x00a0, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 1, C: 0, N: 0, Z: 1
+Memory Error: 0
+Last used Memory location: 0x0105, which contains: 78
+-----------------------------------------------------------
+Calling decode(78cb)
+-----------------------------------------------------------
+Program Counter is at: 0x0106, which contains: 0xcb
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0xa0
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x00a0, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 1, C: 0, N: 0, Z: 1
+Memory Error: 0
+Last used Memory location: 0x0106, which contains: cb
+-----------------------------------------------------------
+Calling decode(cb58)
+found opcode 0xCB!
+calling bit(58)
+data: 58, bitnum: 3, regnum: 8
+calling bit(3, 3)
+in bit(), mask is:8, newValue is: 1
+-----------------------------------------------------------
+Program Counter is at: 0x0107, which contains: 0x58
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x20
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0020, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 1, C: 0, N: 0, Z: 0
+Memory Error: 0
+Last used Memory location: 0x0107, which contains: 58
+-----------------------------------------------------------
+Calling decode(5876)
+-----------------------------------------------------------
+Program Counter is at: 0x0108, which contains: 0x76
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x20
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0020, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 1, C: 0, N: 0, Z: 0
+Memory Error: 0
+Last used Memory location: 0x0108, which contains: 76
+-----------------------------------------------------------
+Calling decode(7600)
+in halt :)
+-----------------------------------------------------------
+Program Counter is at: 0x0109, which contains: 0x00
+The contents of the 8- and 16-bit registers are:
+A: 0x00 F: 0x20
+B: 0x08 C: 0x00
+D: 0x00 E: 0x00
+H: 0x00 L: 0x00
+AF: 0x0020, BC: 0x0800, DE: 0x0000, HL: 0x0000, SP: 0x0000
+Flag state: H: 1, C: 0, N: 0, Z: 0
+Memory Error: 0
+Last used Memory location: 0x0109, which contains: 00
+-----------------------------------------------------------

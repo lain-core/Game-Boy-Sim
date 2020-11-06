@@ -4,7 +4,6 @@
 #include <cstdint>
 #include "gb.h"
 #include "Sim.h"
-bool was8bit = false;
 
 /*
  * gb::decode(uint16_t)
@@ -18,7 +17,6 @@ bool gb::decode(uint16_t opcodewithdata){
     if(!found) found = decode_math(opcode, data);
     if(!found) found = decode_bitops(opcode, data);
     if(!found) found = decode_load(opcode, data);
-    if(!was8bit) pc++;
     if(found && getStatus()) return found; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return !found;
 }
@@ -44,39 +42,34 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
     switch(opcode){
         case 0x00: //nop
             nop();
-            was8bit = true;
             break;
         case 0x76: //halt
             halt();
-            was8bit = true;
             break;
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
-            if(data == 0x00) stop();
+            if(data == 0x00){
+                stop();
+                pc++;
+            }
             else found_inst = false;
             break;
         case 0x37: //scf
             scf();
-            was8bit = true;
             break;
         case 0x3F: //ccf
             ccf();
-            was8bit = true;
             break;
         case 0xF3: //di
             di();
-            was8bit = true;
             break;
         case 0xFB: //ei
             ei();
-            was8bit = true;
             break;
         case 0x2F: //cpl
             cpl();
-            was8bit = true;
             break;
         case 0x27: //daa
             daa();
-            was8bit = true;
             break;
         default:
             found_inst = false;
@@ -96,98 +89,83 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
     switch(opcode){
         case 0x04:
             inc(B);
-            was8bit = true;
             break;
         case 0x14:
             inc(D);
-            was8bit = true;
             break;
         case 0x24:
             inc(H);
-            was8bit = true;
             break;
         case 0x34:
             inc_hl();
-            was8bit = true;
             break;
         case 0x05:
             dec(B);
-            was8bit = true;
             break;
         case 0x15:
             dec(D);
-            was8bit = true;
             break;
         case 0x25:
             dec(H);
-            was8bit = true;
             break;
         case 0x35:
             dec_hl();
-            was8bit = true;
             break;
         case 0x0C:
             inc(C);
-            was8bit = true;
             break;
         case 0x1C:
             inc(E);
-            was8bit = true;
             break;
         case 0x2C:
             inc(L);
-            was8bit = true;
             break;
         case 0x3C:
             inc(A);
-            was8bit = true;
             break;
         case 0x0D:
             dec(C);
-            was8bit = true;
             break;
         case 0x1D:
             dec(E);
-            was8bit = true;
             break;
         case 0x2D:
             dec(L);
-            was8bit = true;
             break;
         case 0x3D:
             dec(A);
-            was8bit = true;
             break;
         case 0xC6:
             add_n(data);
+            pc++;
             break;
         case 0xD6:
             sub_n(data);
-            was8bit = true;
+            pc++;
             break;
         case 0xE6:
             op_and_n(data);
-            was8bit = true;
+            pc++;
             break;
         case 0xF6:
             op_or_n(data);
-            was8bit = true;
+            pc++;
             break;
         case 0xCE:
             adc_n(data);
-            was8bit = true;
+            pc++;
             break;
         case 0xDE:
             sbc_n(data);
-            was8bit = true;
+            pc++;
             break;
         case 0xEE:
             op_xor_n(data);
-            was8bit = true;
+            pc++;
             break;
         case 0xFE:
             cp_n(data);
-            was8bit = true;
+            pc++;
             break;
         default:
             found_inst = false;
@@ -258,41 +236,18 @@ bool gb::decode_bitops(uint8_t opcode, uint8_t data){
             printf("calling bit(%02x)\n", data);
             decode_bit(data);
         }
-        if((data & 0xf0) >= 0x80 && (data & 0xf0) <= 0xB0){
+        else if((data & 0xf0) >= 0x80 && (data & 0xf0) <= 0xB0){
             decode_res(data);
         }
-        if((data & 0xf0) >= 0xC0 && (data & 0xf0) <= 0xF0){
+        else if((data & 0xf0) >= 0xC0 && (data & 0xf0) <= 0xF0){
             decode_set(data);
         }
-        switch(data){
-            case 0x30:
-                swap(B);
-                break;
-            case 0x31:
-                swap(C);
-                break;
-            case 0x32:
-                swap(D);
-                break;
-            case 0x33:
-                swap(E);
-                break;
-            case 0x34:
-                swap(H);
-                break;
-            case 0x35:
-                swap(L);
-                break;
-            case 0x36:
-                swap_hl();
-                break;
-            case 0x37:
-                swap(A);
-                break;
-            default:
-                found_inst = false;
-                break;
+        else if(data >= 0x30 && data <= 0x37){
+            int reg_num = get_regnum(data);
+            if(reg_num != NOT_AN_8BIT) swap(reg_num);
+            else swap_hl();
         }
+        else found_inst = false;
     }
     else found_inst = false;
     return found_inst;
