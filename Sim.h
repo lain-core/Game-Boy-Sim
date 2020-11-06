@@ -47,6 +47,7 @@
 #define E 4
 #define H 7
 #define L 6
+#define NOT_AN_8BIT 8
 
 /* 16-bit Program Register Values */
 #define NUM_16REGISTERS 5

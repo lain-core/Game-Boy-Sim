@@ -307,11 +307,11 @@ bool gb::decode_add(uint8_t opcode, uint8_t data){
     //Case 0x86 and 0x8E are using [HL] rather than an r8.
     int reg_num = get_regnum(data);
     if(data >= 0x80 && data <= 0x87){
-        if(reg_num != HL) add(reg_num);
+        if(reg_num != NOT_AN_8BIT) add(reg_num);
         else add_hl();
     }
     else if(data >= 0x88 && data <= 0x8F){
-        if(reg_num != HL) adc(reg_num);
+        if(reg_num != NOT_AN_8BIT) adc(reg_num);
         else adc_hl();
     }
     else found_inst = false;
@@ -325,11 +325,11 @@ bool gb::decode_sub(uint8_t opcode, uint8_t data){
     //Case 0x96 and 0x9E are using [HL] rather than an r8.
     int reg_num = get_regnum(data);
     if(data >= 0x90 && data <= 0x97){
-        if(reg_num != HL) sub(reg_num);
+        if(reg_num != NOT_AN_8BIT) sub(reg_num);
         else sub_hl();
     }
     else if(data >= 0x98 && data <= 0x9F){
-        if(reg_num != HL) sub(reg_num);
+        if(reg_num != NOT_AN_8BIT) sub(reg_num);
         else sub_hl();
     }
     else found_inst = false;
@@ -343,11 +343,11 @@ bool gb::decode_and_xor(uint8_t opcode, uint8_t data){
     //Case 0xA6 and 0xAE are using [HL] rather than an r8.
     int reg_num = get_regnum(data);
     if(data >= 0xA0 && data <= 0xA7){
-        if(reg_num != HL) op_and(reg_num);
+        if(reg_num != NOT_AN_8BIT) op_and(reg_num);
         else op_and_hl();
     }
     else if(data >= 0xA8 && data <= 0xAF){
-        if(reg_num != HL) op_xor(reg_num);
+        if(reg_num != NOT_AN_8BIT) op_xor(reg_num);
         else op_xor_hl();
     }
     else found_inst = false;
@@ -362,11 +362,11 @@ bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
     int reg_num = get_regnum(data);
     printf("called or. reg num is: %x\n", reg_num);
     if(data >= 0xB0 && data <= 0xB7){
-        if(reg_num != HL) op_or(reg_num);
+        if(reg_num != NOT_AN_8BIT) op_or(reg_num);
         else op_or_hl();
     }
     else if(data >= 0xB8 && data <= 0xBF){
-        if(reg_num != HL) cp(reg_num);
+        if(reg_num != NOT_AN_8BIT) cp(reg_num);
         else cp_hl();
     }
     else found_inst = false;
@@ -382,7 +382,7 @@ bool gb::decode_bit(uint8_t data){
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
     printf("calling bit(%d, %d)\n", bit_num, reg_num);
-    if(reg_num != 8) bit(bit_num, reg_num);
+    if(reg_num != NOT_AN_8BIT) bit(bit_num, reg_num);
     else bit_hl(bit_num);
     return inst_found;
 }
@@ -395,7 +395,7 @@ bool gb::decode_res(uint8_t data){
     bool inst_found = true;
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
-    if(reg_num != 8) res(bit_num, reg_num);
+    if(reg_num != NOT_AN_8BIT) res(bit_num, reg_num);
     else res_hl(bit_num);
     return inst_found;
 }
@@ -409,7 +409,7 @@ bool gb::decode_set(uint8_t data){
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
     printf("Bit num is: %d, Reg num is: %d\n", bit_num, reg_num);
-    if(reg_num != 8) set(bit_num, reg_num);
+    if(reg_num != NOT_AN_8BIT) set(bit_num, reg_num);
     else set_hl(bit_num);
     return inst_found;
 } 
@@ -439,7 +439,7 @@ int gb::get_regnum(uint8_t data){
             reg_num = A;
             break;
         default:
-            reg_num = 8;
+            reg_num = NOT_AN_8BIT;
             break;
     }
     return reg_num;
