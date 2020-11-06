@@ -132,6 +132,15 @@ class gb{
     void ld_r16A(int);              //LD [r16], A
     void ld_n16A(uint16_t);         //LD [n16], A
     void ldh_n16A(uint16_t);        //LDH [n16], A
+    void ldh_c(uint8_t);            //LDH [C], A
+    void ldh_c_a(uint8_t);          //LDH A,[C]
+    void ld_r16(int);               //LD A,[r16]
+    void ld_n16(uint16_t);          //LD A,[n16]
+    void ldh_n16(uint16_t);         //LDH A,[n16]
+    void ld_hli(void);              //LD [HLI],A
+    void ld_hld(void);              //LD [HLD],A
+    void ld_hld_a(void);            //LD A,[HLD]
+    void ld_hli_a(void);            //LD A,[HLI]
 
     /* Jump Opcodes */
     void call(uint16_t);          //CALL n16
@@ -147,7 +156,7 @@ class gb{
     void rst(uint16_t);       //RST vec
 
     /* Stack Opcodes */
-    void add_hl_sp(void);    //ADD HL,SP
+    void add_sp_hl(void);    //ADD HL,SP
     void add_sp_e8(uint8_t); //ADD SP,e8
     void dec_sp(void);       //DEC SP
     void inc_sp(void);       //INC SP

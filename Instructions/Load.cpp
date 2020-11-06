@@ -82,6 +82,95 @@ void gb::ldh_n16A(uint16_t immediate){
 }
 
 /*
- * gb::ldh_c // LDH [C],A
+ * gb::ldh_c(int) // LDH [C],A
  * Store value in register A into byte at address $FF00+C.
  */
+void gb::ldh_c(uint8_t offset){
+    uint16_t final_addr = 0xFF00 + offset;
+    getMemory().putByte(final_addr, getRegisters().getReg8(A));
+}
+
+/*
+ * gb::ld_r16(int) // LD A,[r16]
+ * Load value in register A from byte pointed to by register r16
+ */
+void gb::ld_r16(int reg16){
+    uint8_t value = getMemory().getByte(getRegisters().getReg16(reg16));
+    getRegisters().setReg8(A, value);
+}
+
+/*
+ * gb::ld_n16(uint16_t) // LD A,[n16]
+ * Load value in register A from byte at address n16.
+ */
+void gb::ld_n16(uint16_t address){
+    uint16_t value = getMemory().getByte(address);
+    getRegisters().setReg8(A, value);
+}
+
+/*
+ * gb::ldh_n16(uint16_t) // LDH A,[n16]
+ * Load value in register A from byte at address n16, provided it is b/w 0xFF00 and 0xFFFF.
+ */
+void gb::ldh_n16(uint16_t address){
+    uint8_t value = getMemory().getByte(address);
+    getRegisters().setReg8(A, value);
+}
+
+/*
+ * gb::ldh_c(int) // LDH A,[C]
+ * Load value in register A from byte at address 0xFF00+c.
+ */
+void gb::ldh_c_a(uint8_t offset){
+    uint16_t address = 0xFF00 + offset;
+    uint8_t value = getMemory().getByte(address);
+    getRegisters().setReg8(A, value);
+}
+
+/*
+ * gb::ld_hli(void) // LD [HLI],A
+ * Store value in register A into byte pointed to by HL and then increment HL.
+ */
+void gb::ld_hli(){
+    uint16_t address = getRegisters().getReg16(HL);
+    uint8_t value = getRegisters().getReg8(A);
+    getMemory().putByte(address, value);
+    address++;
+    getRegisters().setReg16(HL, address);
+}
+
+/*
+ * gb::ld_hld(void) // LD [HLD],A
+ * Store value in register A into byte pointed to by HL and then decrement HL.
+ */
+void gb::ld_hld(){
+    uint16_t address = getRegisters().getReg16(HL);
+    uint8_t value = getRegisters().getReg8(A);
+    getMemory().putByte(address, value);
+    address--;
+    getRegisters().setReg16(HL, address);
+}
+
+/*
+ * gb::ld_hld_a(void) // LD A,[HLD]
+ * Load value into register A from byte pointed to by HL and decrement HL after.
+ */
+void gb::ld_hld_a(){
+    uint16_t address = getRegisters().getReg16(HL);
+    uint8_t value = getMemory().getByte(address);
+    getRegisters().setReg8(A, value);
+    address--;
+    getRegisters().setReg16(HL, address);
+}
+
+/*
+ * gb::ld_hli_a(void) // LD A,[HLI]
+ * Load value into Register A from byte pointed to by HL and increment HL after.
+ */
+void gb::ld_hli_a(){
+    uint16_t address = getRegisters().getReg16(HL);
+    uint8_t value = getMemory().getByte(address);
+    getRegisters().setReg8(A, value);
+    address++;
+    getRegisters().setReg16(HL, address);
+}
