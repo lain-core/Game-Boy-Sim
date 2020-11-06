@@ -302,62 +302,19 @@ bool gb::decode_bitops(uint8_t opcode, uint8_t data){
 
 bool gb::decode_add(uint8_t opcode, uint8_t data){
     bool found_inst = true;
-    switch(opcode){
-        //Cases 0x80 - 0x87 are of the form ADD r8,A.
-        //Cases 0x88 - 0x8F are of the form ADC r8,A.
-        //Case 0x86 and 0x8E are using [HL] rather than an r8.
-        case 0x80:
-            add(B); 
-            break;
-        case 0x81:
-            add(C);
-            break;
-        case 0x82:
-            add(D);
-            break;
-        case 0x83:
-            add(E);
-            break;
-        case 0x84:
-            add(H);
-            break;
-        case 0x85:
-            add(L);
-            break;
-        case 0x86:
-            add_hl();
-            break;
-        case 0x87:
-            add(A);
-            break;
-        case 0x88:
-            adc(B);
-            break;
-        case 0x89:
-            adc(C);
-            break;
-        case 0x8A:
-            adc(D);
-            break;
-        case 0x8B:
-            adc(E);
-            break;
-        case 0x8C:
-            adc(H);
-            break;
-        case 0x8D:
-            adc(L);
-            break;
-        case 0x8E:
-            adc_hl();
-            break;
-        case 0x8F:
-            adc(A);
-            break;
-        default:
-            found_inst = false;
-            break;
+    //Cases 0x80 - 0x87 are of the form ADD r8,A.
+    //Cases 0x88 - 0x8F are of the form ADC r8,A.
+    //Case 0x86 and 0x8E are using [HL] rather than an r8.
+    int reg_num = get_regnum(data);
+    if(data >= 0x80 && data <= 0x87){
+        if(reg_num != HL) add(reg_num);
+        else add_hl();
     }
+    else if(data >= 0x88 && data <= 0x8F){
+        if(reg_num != HL) adc(reg_num);
+        else adc_hl();
+    }
+    else found_inst = false;
     return found_inst;
 }
 
@@ -366,59 +323,16 @@ bool gb::decode_sub(uint8_t opcode, uint8_t data){
     //Cases 0x90 - 0x97 are of the form SUB r8,A.
     //Cases 0x98 - 0x9F are of the form SBC r8,A.
     //Case 0x96 and 0x9E are using [HL] rather than an r8.
-    switch(opcode){
-        case 0x90:
-            sub(B);
-            break;
-        case 0x91:
-            sub(C);
-            break;
-        case 0x92:
-            sub(D);
-            break;
-        case 0x93:
-            sub(E);
-            break;
-        case 0x94:
-            sub(H);
-            break;
-        case 0x95:
-            sub(L);
-            break;
-        case 0x96:
-            sub_hl();
-            break;
-        case 0x97:
-            sub(A);
-            break;
-        case 0x98:
-            sbc(B);
-            break;
-        case 0x99:
-            sbc(C);
-            break;
-        case 0x9A:
-            sbc(D);
-            break;
-        case 0x9B:
-            sbc(E);
-            break;
-        case 0x9C:
-            sbc(H);
-            break;
-        case 0x9D:
-            sbc(L);
-            break;
-        case 0x9E:
-            sbc_hl();
-            break;
-        case 0x9F:
-            sbc(A);
-            break;
-        default:
-            found_inst = false;
-            break;
+    int reg_num = get_regnum(data);
+    if(data >= 0x90 && data <= 0x97){
+        if(reg_num != HL) sub(reg_num);
+        else sub_hl();
     }
+    else if(data >= 0x98 && data <= 0x9F){
+        if(reg_num != HL) sub(reg_num);
+        else sub_hl();
+    }
+    else found_inst = false;
     return found_inst;
 }
 
