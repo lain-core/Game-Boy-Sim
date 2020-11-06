@@ -427,59 +427,16 @@ bool gb::decode_and_xor(uint8_t opcode, uint8_t data){
     //Cases 0xA0 - 0xA7 are of the form AND r8,A.
     //Cases 0xA8 - 0xAF are of the form XOR r8,A.
     //Case 0xA6 and 0xAE are using [HL] rather than an r8.
-    switch(opcode){
-        case 0xA0:
-            op_and(B);
-            break;
-        case 0xA1:
-            op_and(C);
-            break;
-        case 0xA2:
-            op_and(D);
-            break;
-        case 0xA3:
-            op_and(E);
-            break;
-        case 0xA4:
-            op_and(H);
-            break;
-        case 0xA5:
-            op_and(L);
-            break;
-        case 0xA6:
-            op_and_hl();
-            break;
-        case 0xA7:
-            op_and(A);
-            break;
-        case 0xA8:
-            op_xor(B);
-            break;
-        case 0xA9:
-            op_xor(C);
-            break;
-        case 0xAA:
-            op_xor(D);
-            break;
-        case 0xAB:
-            op_xor(E);
-            break;
-        case 0xAC:
-            op_xor(H);
-            break;
-        case 0xAD:
-            op_xor(L);
-            break;
-        case 0xAE:
-            op_xor_hl();
-            break;
-        case 0xAF:
-            op_xor(A);
-            break;
-        default:
-            found_inst = false;
-            break;
+    int reg_num = get_regnum(data);
+    if(data >= 0xA0 && data <= 0xA7){
+        if(reg_num != HL) op_and(reg_num);
+        else op_and_hl();
     }
+    else if(data >= 0xA8 && data <= 0xAF){
+        if(reg_num != HL) op_xor(reg_num);
+        else op_xor_hl();
+    }
+    else found_inst = false;
     return found_inst;
 }
 
@@ -490,59 +447,15 @@ bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
     //Case 0xB6 and 0xBE are using [HL] rather than an r8.
     int reg_num = get_regnum(data);
     printf("called or. reg num is: %x\n", reg_num);
-    switch(opcode){
-        case 0xB0:
-            op_or(B);
-            break;
-        case 0xB1:
-            op_or(C);
-            break;
-        case 0xB2:
-            op_or(D);
-            break;
-        case 0xB3:
-            op_or(E);
-            break;
-        case 0xB4:
-            op_or(H);
-            break;
-        case 0xB5:
-            op_or(L);
-            break;
-        case 0xB6:
-            op_or_hl();
-            break;
-        case 0xB7:
-            op_or(A);
-            break;
-        case 0xB8:
-            cp(B);
-            break;
-        case 0xB9:
-            cp(C);
-            break;
-        case 0xBA:
-            cp(D);
-            break;
-        case 0xBB:
-            cp(E);
-            break;
-        case 0xBC:
-            cp(H);
-            break;
-        case 0xBD:
-            cp(L);
-            break;
-        case 0xBE:
-            cp_hl();
-            break;
-        case 0xBF:
-            cp(A);
-            break;
-        default:
-            found_inst = false;
-            break;
+    if(data >= 0xB0 && data <= 0xB7){
+        if(reg_num != HL) op_or(reg_num);
+        else op_or_hl();
     }
+    else if(data >= 0xB8 && data <= 0xBF){
+        if(reg_num != HL) cp(reg_num);
+        else cp_hl();
+    }
+    else found_inst = false;
     return found_inst;
 }
 
