@@ -21,7 +21,8 @@ bool gb::decode(uint16_t opcode){
 
 bool gb::decode_load(uint8_t opcode){
 	bool found_inst = true;
-	int regnum = get_regnum(opcode);
+    uint16_t address = 0;
+    int regnum = get_regnum(opcode);
 	//All LD r8s fall within range 0x40 - 0x7F
 	if((opcode & 0xF0) >= 0x40 && (opcode & 0xF0) <= 0x47){
 		if(opcode == 0x46) ld_hl_r8(B);
@@ -53,13 +54,13 @@ bool gb::decode_load(uint8_t opcode){
 	}
 	else if((opcode & 0xF0) >= 0x78 && (opcode & 0xF0) <= 0x7F){
 		if(opcode == 0x7E) ld_hl_r8(A);
-		else ld(regnum, A)
+		else ld(regnum, A);
 	}
     else found_inst = false;
     
 	switch(opcode){
 		case 0x02:
-			ld_r16A(BC)
+			ld_r16A(BC);
 			break;
 		case 0x12:
 			ld_r16A(DE);
@@ -74,6 +75,73 @@ bool gb::decode_load(uint8_t opcode){
 			ld_n(B, getData());
 			pc++;
 			break;
+        case 0x16:
+            ld_n(D, getData());
+            pc++;
+            break;
+        case 0x26:
+            ld_n(H, getData());
+            pc++;
+            break;
+        case 0x36:
+            ld_hln(getData());
+            pc++;
+            break;
+        case 0x0A:
+            ld_r16(BC);
+            break;
+        case 0x1A:
+            ld_r16(DE);
+            break;
+        case 0x2A:
+            ld_hli_a();
+            break;
+        case 0x3A:
+            ld_hld_a();
+            break;
+        case 0x0E:
+            ld_n(C, getData());
+            pc++;
+            break;
+        case 0x1E:
+            ld_n(E, getData());
+            pc++;
+            break;
+        case 0x2E:
+            ld_n(L, getData());
+            pc++;
+            break;
+        case 0x3E:
+            ld_n(A, getData());
+            pc++;
+        case 0xE0:
+            address = getMemory().getWord(pc);
+            ldh_n16A(address);
+            pc+=2;
+            break;
+        case 0xF0:
+            address = getMemory().getWord(pc);
+            ldh_n16(address);
+            pc+=2;
+            break;
+        case 0xE2:
+            //FIXME: listed as 1 byte???
+            ldh_c(getData());
+            break;
+        case 0xF2:
+            //FIXME: "
+            ldh_c_a(getData());
+            break;
+        case 0xEA:
+            address = getMemory().getWord(pc);
+            ld_n16A(address);
+            pc+=2;
+            break;
+        case 0xFA:
+            address = getMemory().getWord(pc);
+            ld_n16(address);
+            pc+=2;
+            break;
 		default:
 			found_inst = false;
 			break;
