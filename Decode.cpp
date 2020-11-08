@@ -9,22 +9,22 @@
  * gb::decode(uint16_t)
  * Using a byte passed by gb, we parse out into groups of opcodes to do further work.
  */
-bool gb::decode(uint16_t opcodewithdata){
-    uint8_t opcode = (opcodewithdata & 0xFF00) >> 8;
-    uint8_t data = (opcodewithdata & 0x00FF);
+bool gb::decode(uint16_t opcode){
     //Update our status if we can find our opcode. If it passes every function without being found, it must be an illegal (or unimplemented) op.
-    bool found = decode_misc(opcode, data);
-    if(!found) found = decode_math(opcode, data);
-    if(!found) found = decode_bitops(opcode, data);
-    if(!found) found = decode_load(opcode, data);
+    bool found = decode_misc(opcode);
+    if(!found) found = decode_math(opcode);
+    if(!found) found = decode_bitops(opcode);
+    if(!found) found = decode_load(opcode);
     if(found && getStatus()) return found; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return !found;
 }
 
-bool gb::decode_load(uint8_t opcode, uint8_t data){
+bool gb::decode_load(uint8_t opcode){
     uint16_t bigdata = getMemory().getWord(pc + 1);
     bool found_inst = true;
     if(opcode == 0xEA){
+        uint8_t data = getData();
+        pc++;
         printf("got a load smile");
         printf("opcode: %02x data: %02x bigdata: %04x\n", opcode, data, bigdata);
         ld_n16A(data);
@@ -37,7 +37,7 @@ bool gb::decode_load(uint8_t opcode, uint8_t data){
  * gb::decode_misc(uint8_t, uint8_t)
  * Decode miscellaneous instructions (nop, halt, etc.)
  */
-bool gb::decode_misc(uint8_t opcode, uint8_t data){
+bool gb::decode_misc(uint8_t opcode){
     bool found_inst = true;
     switch(opcode){
         case 0x00: //nop
@@ -47,7 +47,7 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
             halt();
             break;
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
-            if(data == 0x00){
+            if(getData() == 0x00){
                 stop();
                 pc++;
             }
@@ -82,7 +82,7 @@ bool gb::decode_misc(uint8_t opcode, uint8_t data){
  * gb::decode_math(uint8_t, uint8_t)
  * Decode all Math ops (ADD, SUB, AND, OR, XOR, etc.)
  */
-bool gb::decode_math(uint8_t opcode, uint8_t data){
+bool gb::decode_math(uint8_t opcode){
     bool found_inst = true;
     //All 8-Bit relevant ops.
     //TODO: fucked up 8-bit info; clean up.
@@ -136,35 +136,35 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
             dec(A);
             break;
         case 0xC6:
-            add_n(data);
+            add_n(getData());
             pc++;
             break;
         case 0xD6:
-            sub_n(data);
+            sub_n(getData());
             pc++;
             break;
         case 0xE6:
-            op_and_n(data);
+            op_and_n(getData());
             pc++;
             break;
         case 0xF6:
-            op_or_n(data);
+            op_or_n(getData());
             pc++;
             break;
         case 0xCE:
-            adc_n(data);
+            adc_n(getData());
             pc++;
             break;
         case 0xDE:
-            sbc_n(data);
+            sbc_n(getData());
             pc++;
             break;
         case 0xEE:
-            op_xor_n(data);
+            op_xor_n(getData());
             pc++;
             break;
         case 0xFE:
-            cp_n(data);
+            cp_n(getData());
             pc++;
             break;
         default:
@@ -172,7 +172,7 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
             break;
     }
 
-    //All 16-bit instructons.
+    //All instructions operating on 16-bit registers.
     if(!found_inst){
         switch(opcode){
         case 0x03:
@@ -217,10 +217,15 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
         }
     }
 
-    if((opcode & 0xf0) == 0x80) found_inst = decode_add(opcode, data);
-    if((opcode & 0xf0) == 0x90) found_inst = decode_sub(opcode, data);
-    if((opcode & 0xf0) == 0xA0) found_inst = decode_and_xor(opcode, data);
-    if((opcode & 0xf0) == 0xB0) found_inst = decode_or_cp(opcode, data);
+    uint8_t data = getData();
+    //ADD/ADC spans region 0x80 to 0x8F.
+    //SUB/SDC spans region 0x90 to 0x9F.
+    //AND/XOR spans region 0xA0 to 0xAF.
+    //OR/CP spans region 0xB0 to 0xBF.
+    if((opcode & 0xF0) == 0x80) found_inst = decode_add(opcode, data);
+    if((opcode & 0xF0) == 0x90) found_inst = decode_sub(opcode, data);
+    if((opcode & 0xF0) == 0xA0) found_inst = decode_and_xor(opcode, data);
+    if((opcode & 0xF0) == 0xB0) found_inst = decode_or_cp(opcode, data);
     return found_inst;
 }
 
@@ -228,25 +233,27 @@ bool gb::decode_math(uint8_t opcode, uint8_t data){
  *  gb::decode_bitops(uint8_t, uint8_t)
  * 
  */
-bool gb::decode_bitops(uint8_t opcode, uint8_t data){
+bool gb::decode_bitops(uint8_t opcode){
     bool found_inst = true;
+    //All bitop instructions are prefixed with CB.
     if(opcode == 0xCB){
-        printf("found opcode 0xCB!\n");
-        if((data & 0xf0) >= 0x40 && (data & 0xf0) <= 0x70){
-            printf("calling bit(%02x)\n", data);
-            decode_bit(data);
+        printf("found CB! :)\n");
+        uint8_t data = getData();
+        pc++;
+        printf("data: %02x\n", data);
+        //SWAP spans region 0x30 to 0x37.
+        //BIT spans region 0x40 to 0x7F.
+        //RES spans region 0x80 to 0xBF.
+        //SET spans region 0xC0 to 0xFF.
+        if(data >= 0x30 && data <= 0x37){
+            int regnum = get_regnum(data);
+            if(regnum < NOT_AN_8BIT) swap(regnum);
+            else if(regnum == NOT_AN_8BIT) swap_hl();
+            else found_inst = false;
         }
-        else if((data & 0xf0) >= 0x80 && (data & 0xf0) <= 0xB0){
-            decode_res(data);
-        }
-        else if((data & 0xf0) >= 0xC0 && (data & 0xf0) <= 0xF0){
-            decode_set(data);
-        }
-        else if(data >= 0x30 && data <= 0x37){
-            int reg_num = get_regnum(data);
-            if(reg_num != NOT_AN_8BIT) swap(reg_num);
-            else swap_hl();
-        }
+        else if((data & 0xf0) >= 0x40 && (data & 0xf0) <= 0x70) found_inst = decode_bit(data);
+        else if((data & 0xf0) >= 0x80 && (data & 0xf0) <= 0xB0) found_inst = decode_res(data);
+        else if((data & 0xf0) >= 0xC0 && (data & 0xf0) <= 0xF0) found_inst = decode_set(data);
         else found_inst = false;
     }
     else found_inst = false;
@@ -423,4 +430,8 @@ int gb::get_bitnum(uint8_t data){
     }
     printf("data: %x, bitnum: %x, regnum: %x\n", data, bit_num, reg_num);
     return bit_num;
+}
+
+uint8_t gb::getData(){
+    return getMemory().getByte(pc);
 }

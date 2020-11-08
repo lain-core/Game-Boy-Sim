@@ -41,10 +41,11 @@ class gb{
 
     /* Decode-Related Functions */
     bool decode(uint16_t);
-    bool decode_misc(uint8_t, uint8_t);
-    bool decode_math(uint8_t, uint8_t);
-    bool decode_load(uint8_t, uint8_t);
-    bool decode_bitops(uint8_t, uint8_t);
+    bool decode_misc(uint8_t);
+    bool decode_math(uint8_t);
+    bool decode_load(uint8_t);
+    bool decode_bitops(uint8_t);
+    uint8_t getData(void);
 
     /* Decode Math Helpers */
     bool decode_add(uint8_t, uint8_t);
