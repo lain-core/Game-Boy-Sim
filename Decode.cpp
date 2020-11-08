@@ -20,17 +20,66 @@ bool gb::decode(uint16_t opcode){
 }
 
 bool gb::decode_load(uint8_t opcode){
-    uint16_t bigdata = getMemory().getWord(pc + 1);
-    bool found_inst = true;
-    if(opcode == 0xEA){
-        uint8_t data = getData();
-        pc++;
-        printf("got a load smile");
-        printf("opcode: %02x data: %02x bigdata: %04x\n", opcode, data, bigdata);
-        ld_n16A(data);
-    }
+	bool found_inst = true;
+	int regnum = get_regnum(opcode);
+	//All LD r8s fall within range 0x40 - 0x7F
+	if((opcode & 0xF0) >= 0x40 && (opcode & 0xF0) <= 0x47){
+		if(opcode == 0x46) ld_hl_r8(B);
+		else ld(regnum, B);
+	}
+	else if((opcode & 0xF0) >= 0x48 && (opcode & 0xF0) <= 0x4F){
+		if(opcode == 0x4E) ld_hl_r8(C);
+		else ld(regnum, C);
+	}
+	else if((opcode & 0xF0) >= 0x50 && (opcode & 0xF0) <= 0x57){
+		if(opcode == 0x56) ld_hl_r8(D);
+		else ld(regnum, D);
+	}
+	else if((opcode & 0xF0) >= 0x58 && (opcode & 0xF0) < 0x5F){
+		if(opcode == 0x5E) ld_hl_r8(E);
+		else ld(regnum, E);
+	}
+	else if((opcode & 0xF0) >= 0x60 && (opcode & 0xF0) <= 0x67){
+		if(opcode == 0x66) ld_hl_r8(H);
+		else ld(regnum, H);
+	}
+	else if((opcode & 0xF0) >= 0x68 && (opcode & 0xF0) <= 0x6F){
+		if(opcode == 0x6E) ld_hl_r8(L);
+		else ld(regnum, L);
+	}
+	else if((opcode & 0xF0) >= 0x70 && (opcode & 0xF0) <= 0x77){
+		if(opcode == 0x76) found_inst = false;
+		else ld_hl(regnum);
+	}
+	else if((opcode & 0xF0) >= 0x78 && (opcode & 0xF0) <= 0x7F){
+		if(opcode == 0x7E) ld_hl_r8(A);
+		else ld(regnum, A)
+	}
     else found_inst = false;
-    return found_inst;
+    
+	switch(opcode){
+		case 0x02:
+			ld_r16A(BC)
+			break;
+		case 0x12:
+			ld_r16A(DE);
+			break;
+		case 0x22:
+			ld_hli();
+			break;
+		case 0x32:
+			ld_hld();
+			break;
+		case 0x06:
+			ld_n(B, getData());
+			pc++;
+			break;
+		default:
+			found_inst = false;
+			break;
+	}
+
+	return found_inst;
 }
 
 /*
@@ -221,7 +270,7 @@ bool gb::decode_math(uint8_t opcode){
     //ADD/ADC spans region 0x80 to 0x8F.
     //SUB/SDC spans region 0x90 to 0x9F.
     //AND/XOR spans region 0xA0 to 0xAF.
-    //OR/CP spans region 0xB0 to 0xBF.
+    //OR/CP spans region 0xB0 eto 0xBF.
     if((opcode & 0xF0) == 0x80) found_inst = decode_add(opcode, data);
     if((opcode & 0xF0) == 0x90) found_inst = decode_sub(opcode, data);
     if((opcode & 0xF0) == 0xA0) found_inst = decode_and_xor(opcode, data);
@@ -344,8 +393,9 @@ bool gb::decode_bit(uint8_t data){
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
     printf("calling bit(%d, %d)\n", bit_num, reg_num);
-    if(reg_num != NOT_AN_8BIT) bit(bit_num, reg_num);
-    else bit_hl(bit_num);
+    if(reg_num < NOT_AN_8BIT) bit(bit_num, reg_num);
+    else if(reg_num == NOT_AN_8BIT) bit_hl(bit_num);
+	else inst_found = false;
     return inst_found;
 }
 

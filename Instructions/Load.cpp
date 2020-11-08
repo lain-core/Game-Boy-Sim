@@ -29,7 +29,7 @@ void gb::ld_r16(int reg16, uint16_t value){
  * gb::ld_hlr // LD [HL], r8
  * Load value in r8 into byte pointed to by register HL.
  */
-void gb::ld_hlr(int r8){
+void gb::ld_hl(int r8){
     uint8_t value = getRegisters().getReg8(r8);
     getMemory().putByte(getRegisters().getReg16(HL), value);
 }
@@ -46,7 +46,7 @@ void gb::ld_hln(uint8_t value){
  * gb::ld_rhl // LD r8, [HL]
  * Load value into register r8 from byte pointed to by register HL.
  */
-void gb::ld_rhl(int r8){
+void gb::ld_hl_r8(int r8){
     uint8_t value = getMemory().getByte(getRegisters().getReg16(HL));
     getRegisters().setReg8(r8, value);
 }
