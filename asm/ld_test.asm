@@ -3,8 +3,9 @@ SECTION "Header", ROM0
 EntryPoint:
     ;LD r8,r8
     ;LD r8,n8
-    ld a, [$ff] ;A should contain 0xFF.
+    ld a, $ff ;A should now contain 0xFF.
     ;LD r16,n16
+    ld bc, $ffff ; BC should now contain 0xFFFF.
     ;LD [HL],r8
     ;LD [HL],n8
     ;LD r8,[HL]

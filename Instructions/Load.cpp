@@ -94,7 +94,7 @@ void gb::ldh_c(uint8_t offset){
  * gb::ld_r16(int) // LD A,[r16]
  * Load value in register A from byte pointed to by register r16
  */
-void gb::ld_r16(int reg16){
+void gb::ld_a_r16(int reg16){
     uint8_t value = getMemory().getByte(getRegisters().getReg16(reg16));
     getRegisters().setReg8(A, value);
 }

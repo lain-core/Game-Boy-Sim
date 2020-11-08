@@ -1,6 +1,6 @@
 ASM = rgbasm
 LINK = rgblink
-BIN = first bitop_test arith_test ld_test ld_test_2
+BIN = first bitop_test arith_test ld_test
 
 %.o: %.asm
 	$(ASM) $< -o $@
@@ -19,9 +19,6 @@ bitop_test: bitop_test.o
 ld_test: ld_test.o
 	$(LINK) ld_test.o -o ld_test.gb
 
-ld_test_2: ld_test_2.o
-	$(LINK) ld_test_2.o -o ld_test_2.gb
-
 first.o:
 
 arith_test.o:
@@ -29,8 +26,7 @@ arith_test.o:
 bitop_test.o:
 
 ld_test.o:
-
-ld_test_2.o:
+	$(ASM) ld_test.asm -L -o ld_test.o
 
 clean:
 	rm *.o *.gb || true

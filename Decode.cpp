@@ -59,6 +59,24 @@ bool gb::decode_load(uint8_t opcode){
     else found_inst = false;
     
 	switch(opcode){
+        case 0x01:
+            address = getMemory().getWord(pc);
+            ld_r16(BC, address);
+            pc+=2;
+            break;
+        case 0x11:
+            address = getMemory().getWord(pc);
+            ld_r16(DE, address);
+            pc+=2;
+            break;
+        case 0x21:
+            address = getMemory().getWord(pc);
+            ld_r16(HL, address);
+            pc+=2;
+            break;
+        case 0x31:
+            address = getMemory().getWord(pc);
+            ld_r16(SP, address);
 		case 0x02:
 			ld_r16A(BC);
 			break;
@@ -88,10 +106,10 @@ bool gb::decode_load(uint8_t opcode){
             pc++;
             break;
         case 0x0A:
-            ld_r16(BC);
+            ld_a_r16(BC);
             break;
         case 0x1A:
-            ld_r16(DE);
+            ld_a_r16(DE);
             break;
         case 0x2A:
             ld_hli_a();
@@ -113,7 +131,9 @@ bool gb::decode_load(uint8_t opcode){
             break;
         case 0x3E:
             ld_n(A, getData());
+            printf("calling ld_n with data: %02x\n", getData());
             pc++;
+            break;
         case 0xE0:
             address = getMemory().getWord(pc);
             ldh_n16A(address);
