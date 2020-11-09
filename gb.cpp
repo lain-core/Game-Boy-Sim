@@ -21,6 +21,7 @@ void sigint_handler(int signum){
 }
 
 int main(int argc, char** argv){
+	Memory mem;
 	signal(SIGINT, sigint_handler);
 	if(argc == 1){
 		printf("No rom specified, loading asm/first.gb (if it exists).\n");
@@ -39,6 +40,7 @@ int main(int argc, char** argv){
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
 		myGB.trace();
 	}
+	mem.dumpVRAM();
 	//myGB.trace();
 }
 

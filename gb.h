@@ -40,7 +40,7 @@ class gb{
         int pc = 0x0000;
 
     /* Decode-Related Functions */
-    bool decode(uint16_t);
+    bool decode(uint8_t);
     bool decode_misc(uint8_t);
     bool decode_math(uint8_t);
     bool decode_load(uint8_t);

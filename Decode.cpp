@@ -9,7 +9,7 @@
  * gb::decode(uint16_t)
  * Using a byte passed by gb, we parse out into groups of opcodes to do further work.
  */
-bool gb::decode(uint16_t opcode){
+bool gb::decode(uint8_t opcode){
     //Update our status if we can find our opcode. If it passes every function without being found, it must be an illegal (or unimplemented) op.
     bool found = decode_misc(opcode);
     if(!found) found = decode_math(opcode);

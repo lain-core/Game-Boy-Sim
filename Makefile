@@ -39,7 +39,7 @@ $(SUBDIRS):
 .PHONY: $(SUBDIRS)
 
 clean:
-	rm $(OBJ) $(INST_OBJ) gb || true
+	rm $(OBJ) $(INST_OBJ) *.out gb || true
 
 run:
 	make clean

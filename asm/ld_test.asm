@@ -1,19 +1,17 @@
 INCLUDE "hardware.inc"
 SECTION "Header", ROM0
 EntryPoint:
-    ld b, $04
-    ;LD r8,r8
-    ld a, b
-    ;LD r8,n8
-    ld a, $ff ;A should now contain 0xFF.
-    ;LD r16,n16
-    ld hl, $a000 ; HL should now contain 0xA000.
-    ;LD [HL],r8
-    ld [HL], a ; 0xA000 in memory should now contain 0xFF.
+    ld a, $f0       ;load ff into register a 
+    ld b,a          ;copy contents of register a into b
+    ; ld af, $000a    ;load ff into registers d and e
+    ld bc, $0b0c    ;load ff into registers d and e
+    ld de, $0d0e    ;load ff into registers d and e
+    ld hl, $8010    ;load ff into registers d and e
+    ld [hl], a      ;store value in register d into byte pointed to by register d
+    inc l 
+    ld [hl], $ab
     ;LD [HL],n8
-    ld [HL], $0A ; 0xA000 in memory should now contain 0x0A.
     ;LD r8,[HL]
-    ld b, [hl] ;B should now contain 0x0A.
     ;LD [r16],A
     ;LD [n16],A
     ;LDH [n16],A

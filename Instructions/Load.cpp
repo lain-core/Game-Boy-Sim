@@ -29,9 +29,12 @@ void gb::ld_r16(int reg16, uint16_t value){
  * gb::ld_hlr // LD [HL], r8
  * Load value in r8 into byte pointed to by register HL.
  */
+
+// FIXME:
 void gb::ld_hl(int r8){
     uint8_t value = getRegisters().getReg8(r8);
     getMemory().putByte(getRegisters().getReg16(HL), value);
+    printf("HL IS : %02x\nvalue is: %02x\n", getRegisters().getReg16(HL), value);
 }
 
 /*
@@ -39,6 +42,7 @@ void gb::ld_hl(int r8){
  * Load value n8 into byte pointed to by register HL.
  */
 void gb::ld_hln(uint8_t value){
+    printf("HL IS : %02x\nvalue is: %02x\n", getRegisters().getReg16(HL), value);
     getMemory().putByte(getRegisters().getReg16(HL), value);
 }
 
