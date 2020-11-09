@@ -58,7 +58,7 @@ void gb::ld_hl_r8(int r8){
  * Store value in register A into byte pointed to by register r16.
  */
 void gb::ld_r16A(int r16){
-    uint8_t value = getMemory().getByte(getRegisters().getReg8(A));
+    uint8_t value = getRegisters().getReg8(A);
     getMemory().putByte(getRegisters().getReg16(r16), value);
 }
 
@@ -67,9 +67,8 @@ void gb::ld_r16A(int r16){
  * Store value in register A into byte n16.
  */
 void gb::ld_n16A(uint16_t immediate){
-    std::cout << "LD [n16], A" << std::endl;
-    uint8_t value = getMemory().getByte(getRegisters().getReg8(A));
-    getMemory().putByte(getMemory().getByte(immediate), value);
+    uint8_t registerA = getRegisters().getReg8(A);
+    getMemory().putByte(immediate, registerA);
 }
 
 /*
@@ -77,10 +76,12 @@ void gb::ld_n16A(uint16_t immediate){
  * Store value in register A into byte n16, if it is within $FF00 and $FFFF
  */
 void gb::ldh_n16A(uint16_t immediate){
-    uint16_t value = getMemory().getByte(immediate);
-    if ((0xFF00 < value) && (value > 0xFFFF)){
-        getMemory().putByte(getMemory().getByte(immediate), value);
+    // uint16_t value = getMemory().getByte(immediate);
+    if ((0xFF00 < immediate) && (immediate > 0xFFFF)){
+        getMemory().putByte(getMemory().getByte(immediate), immediate);
     }
+    printf("\nimmediate: %02x\nvalue: %02x", immediate, getMemory().getByte(immediate));
+    printf("\nFFFE: %02x\n", getMemory().getWord(0xFFFE));
 }
 
 /*

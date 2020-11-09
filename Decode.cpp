@@ -140,7 +140,8 @@ bool gb::decode_load(uint8_t opcode){
             	break;
         	case 0xF0:
             	address = getWordData();
-            	ldh_n16(address);
+            	printf("\naddress: %02x\n", address);
+                ldh_n16(address);
             	pc+=2;
             	break;
         	case 0xE2:

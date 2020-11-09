@@ -39,7 +39,7 @@ int main(int argc, char** argv){
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
 		myGB.trace();
 	}
-	//myGB.getMemory().dumpVRAM();
+	myGB.getMemory().dumpVRAM();
 }
 
 /*
