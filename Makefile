@@ -33,6 +33,7 @@ $(INSTDIR)/Load.o: gb.h Sim.h
 gb.o: Tools.h Memory.h Registers.h Pixel.h
 
 $(SUBDIRS):
+	$(MAKE) -C $@ clean
 	$(MAKE) -C $@
 
 .PHONY: $(SUBDIRS)
