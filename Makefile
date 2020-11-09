@@ -10,7 +10,7 @@ SUBDIRS = asm
 
 gb: $(OBJ) $(INST_OBJ)
 
-Decode.o: gb.h Sim.h
+Decode.o: gb.h Sim.h Tools.h
 
 Tools.o: Tools.h
 

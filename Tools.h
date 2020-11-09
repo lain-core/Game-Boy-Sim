@@ -14,6 +14,7 @@ namespace Tools
     uint8_t setBits(unsigned low, unsigned high, uint8_t source);
     uint8_t clearBits(unsigned low, unsigned high, uint8_t source);
     uint8_t assignOneBit(unsigned bitNum, unsigned bitVal, uint8_t source);
+    uint16_t changeEndian(uint16_t);
     bool isNegative(uint8_t source);
     void clearBuffer(char *pbuf, int size);
 } // namespace Tools

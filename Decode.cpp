@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "gb.h"
 #include "Sim.h"
+#include "Tools.h"
 
 /*
  * gb::decode(uint16_t)
@@ -15,8 +16,8 @@ bool gb::decode(uint8_t opcode){
     if(!found) found = decode_math(opcode);
     if(!found) found = decode_bitops(opcode);
     if(!found) found = decode_load(opcode);
-    if(found && getStatus()) return found; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
-    else return !found;
+    if(found && getStatus()) return true; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
+    else return false;
 }
 
 bool gb::decode_load(uint8_t opcode){
@@ -56,117 +57,115 @@ bool gb::decode_load(uint8_t opcode){
 		if(opcode == 0x7E) ld_hl_r8(A);
 		else ld(regnum, A);
 	}
-    else found_inst = false;
-    
-	switch(opcode){
-        case 0x01:
-            address = getMemory().getWord(pc);
-            ld_r16(BC, address);
-            pc+=2;
-            break;
-        case 0x11:
-            address = getMemory().getWord(pc);
-            ld_r16(DE, address);
-            pc+=2;
-            break;
-        case 0x21:
-            address = getMemory().getWord(pc);
-            ld_r16(HL, address);
-            pc+=2;
-            break;
-        case 0x31:
-            address = getMemory().getWord(pc);
-            ld_r16(SP, address);
-		case 0x02:
-			ld_r16A(BC);
-			break;
-		case 0x12:
-			ld_r16A(DE);
-			break;
-		case 0x22:
-			ld_hli();
-			break;
-		case 0x32:
-			ld_hld();
-			break;
-		case 0x06:
-			ld_n(B, getData());
-			pc++;
-			break;
-        case 0x16:
-            ld_n(D, getData());
-            pc++;
-            break;
-        case 0x26:
-            ld_n(H, getData());
-            pc++;
-            break;
-        case 0x36:
-            ld_hln(getData());
-            pc++;
-            break;
-        case 0x0A:
-            ld_a_r16(BC);
-            break;
-        case 0x1A:
-            ld_a_r16(DE);
-            break;
-        case 0x2A:
-            ld_hli_a();
-            break;
-        case 0x3A:
-            ld_hld_a();
-            break;
-        case 0x0E:
-            ld_n(C, getData());
-            pc++;
-            break;
-        case 0x1E:
-            ld_n(E, getData());
-            pc++;
-            break;
-        case 0x2E:
-            ld_n(L, getData());
-            pc++;
-            break;
-        case 0x3E:
-            ld_n(A, getData());
-            printf("calling ld_n with data: %02x\n", getData());
-            pc++;
-            break;
-        case 0xE0:
-            address = getMemory().getWord(pc);
-            ldh_n16A(address);
-            pc+=2;
-            break;
-        case 0xF0:
-            address = getMemory().getWord(pc);
-            ldh_n16(address);
-            pc+=2;
-            break;
-        case 0xE2:
-            //FIXME: listed as 1 byte???
-            ldh_c(getData());
-            break;
-        case 0xF2:
-            //FIXME: "
-            ldh_c_a(getData());
-            break;
-        case 0xEA:
-            address = getMemory().getWord(pc);
-            ld_n16A(address);
-            pc+=2;
-            break;
-        case 0xFA:
-            address = getMemory().getWord(pc);
-            ld_n16(address);
-            pc+=2;
-            break;
-		default:
-			found_inst = false;
-			break;
+    else{
+		switch(opcode){
+        	case 0x01:
+            	address = getWordData();
+            	ld_r16(BC, address);
+            	pc+=2;
+            	break;
+        	case 0x11:
+            	address = getWordData();
+            	ld_r16(DE, address);
+            	pc+=2;
+            	break;
+        	case 0x21:
+            	address = getWordData();
+            	ld_r16(HL, address);
+            	pc+=2;
+            	break;
+        	case 0x31:
+            	address = getWordData();
+            	ld_r16(SP, address);
+			case 0x02:
+				ld_r16A(BC);
+				break;
+			case 0x12:
+				ld_r16A(DE);
+				break;
+			case 0x22:
+				ld_hli();
+				break;
+			case 0x32:
+				ld_hld();
+				break;
+			case 0x06:
+				ld_n(B, getData());
+				pc++;
+				break;
+        	case 0x16:
+            	ld_n(D, getData());
+            	pc++;
+            	break;
+        	case 0x26:
+            	ld_n(H, getData());
+            	pc++;
+            	break;
+        	case 0x36:
+            	ld_hln(getData());
+            	pc++;
+            	break;
+        	case 0x0A:
+            	ld_a_r16(BC);
+            	break;
+        	case 0x1A:
+            	ld_a_r16(DE);
+            	break;
+        	case 0x2A:
+            	ld_hli_a();
+            	break;
+        	case 0x3A:
+            	ld_hld_a();
+            	break;
+        	case 0x0E:
+            	ld_n(C, getData());
+            	pc++;
+            	break;
+        	case 0x1E:
+            	ld_n(E, getData());
+            	pc++;
+            	break;
+        	case 0x2E:
+            	ld_n(L, getData());
+            	pc++;
+            	break;
+        	case 0x3E:
+            	ld_n(A, getData());
+            	pc++;
+            	break;
+        	case 0xE0:
+            	address = getWordData();
+            	ldh_n16A(address);
+            	pc+=2;
+            	break;
+        	case 0xF0:
+            	address = getWordData();
+            	ldh_n16(address);
+            	pc+=2;
+            	break;
+        	case 0xE2:
+            	//FIXME: listed as 1 byte???
+            	ldh_c(getData());
+            	break;
+        	case 0xF2:
+            	//FIXME: "
+            	ldh_c_a(getData());
+            	break;
+        	case 0xEA:
+            	address = getWordData();
+            	ld_n16A(address);
+            	pc+=2;
+            	break;
+        	case 0xFA:
+            	address = getWordData();
+            	ld_n16(address);
+            	pc+=2;
+            	break;
+			default:
+				found_inst = false;
+				break;
+		}
 	}
-
 	return found_inst;
 }
 
@@ -572,4 +571,8 @@ int gb::get_bitnum(uint8_t data){
 
 uint8_t gb::getData(){
     return getMemory().getByte(pc);
+}
+
+uint16_t gb::getWordData(){
+	return Tools::changeEndian(getMemory().getWord(pc));
 }

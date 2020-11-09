@@ -135,4 +135,14 @@ namespace Tools
         return;
     }
 
+/*------------------------------------------------------------------------------------------------
+    changeEndian
+    flips the endianness of a 16-bit value.
+-------------------------------------------------------------------------------------------------*/
+    uint16_t changeEndian(uint16_t value){
+        uint16_t temp = (value & 0xFF00) >> 8;
+        value = (value << 8) | temp;
+        return value;
+    }
+
 } // namespace Tools

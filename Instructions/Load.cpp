@@ -30,12 +30,10 @@ void gb::ld_r16(int reg16, uint16_t value){
  * Load value in r8 into byte pointed to by register HL.
  */
 
-// FIXME:
 void gb::ld_hl(int r8){
     uint8_t value = getRegisters().getReg8(r8);
-    getMemory().putByte(getRegisters().getReg16(HL), value);
-    printf("HL IS : %02x\nvalue is: %02x\n", getRegisters().getReg16(HL), value);
-}
+    uint16_t address = getRegisters().getReg16(HL);
+    getMemory().putByte(address, value);}
 
 /*
  * gb::ld_hln // LD [HL], n8
