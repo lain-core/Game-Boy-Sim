@@ -143,11 +143,11 @@ bool gb::decode_load(uint8_t opcode){
                 break;
         	case 0xE2:
             	//FIXME: listed as 1 byte???
-            	ldh_c(getData());
+            	ldh_c();
             	break;
         	case 0xF2:
             	//FIXME: "
-            	ldh_c_a(getData());
+            	ldh_c_a();
             	break;
         	case 0xEA:
             	address = getWordData();

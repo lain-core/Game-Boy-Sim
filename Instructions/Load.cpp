@@ -90,7 +90,6 @@ void gb::ldh_n16A(uint8_t offset){
 void gb::ldh_c(){
     uint16_t final_addr = 0xFF00 + getRegisters().getReg8(C);
     getMemory().putByte(final_addr, getRegisters().getReg8(A));
-    printf("\naddress: %04x\nvalue: %02x\n", final_addr, getRegisters().getReg8(A));
 }
 
 /*
@@ -127,10 +126,13 @@ void gb::ldh_n16(uint8_t offset){
  * gb::ldh_c(int) // LDH A,[C]
  * Load value in register A from byte at address 0xFF00+c.
  */
-void gb::ldh_c_a(uint8_t offset){
-    uint16_t address = 0xFF00 + offset;
-    uint8_t value = getMemory().getByte(address);
+void gb::ldh_c_a(){
+    uint16_t final_addr = 0xFF00 + getRegisters().getReg8(C);
+    uint8_t value = getMemory().getByte(final_addr);
     getRegisters().setReg8(A, value);
+
+    printf("\naddress: %04x\nvalue: %02x\n", final_addr, getRegisters().getReg8(C));
+    printf("FFFF:%02x\n",getMemory().getByte(0xFFFE));
 }
 
 /*
