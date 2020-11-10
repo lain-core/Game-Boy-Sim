@@ -50,8 +50,8 @@ void gb::res(int bit, int reg8){
  * Set bit u3 in the byte pointed to by HL to 0.
  */
 void gb::res_hl(int bit){
-    uint8_t src = getMemory().getByte(getRegisters().getReg8(HL));
-    uint8_t mask = 0 << bit;
+    uint8_t src = getMemory().getByte(getRegisters().getReg16(HL));
+    uint8_t mask = ~(1 << bit);
 
     getMemory().putByte(getRegisters().getReg16(HL), (src & mask));
 }
