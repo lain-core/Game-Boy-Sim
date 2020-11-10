@@ -14,18 +14,20 @@ EntryPoint:
 ;       LDH A, [n16]    ldh a, [$FFFE]
 ;       LDH [C], A      ld [$FF00+C], a 
 ;       LDH A,[C]       ld a, [$FF00+C]
-
+;       LD A,[r16]      ld a, [bc]
+;       LD A,[n16]      ld a, [$8000]
+;       LD [HLI],A      ld [hli], a
+;       LD A,[HLI]      ld a, [hli]
+;       LD [HLD],A      ld [hld], a
+;       LD A,[HLD]      ld a, [hld]
     ; commands not tested yet
 
-    ;LD A,[r16]
-    ;LD A,[n16]
-    ;LD [HLI],A
-    ;LD [HLD],A
-    ;LD A,[HLI]
-    ;LD A,[HLD]
 
-    ; testing - ld [r16], A
-    ld a, $f5
-    ld c, $fe
-     ld a, [$FF00+C]
-    halt
+    ; ; testing - ld [r16], A
+    ; ld a, $f5
+    ; ld hl, $8003
+    ; ld [hl], $55    
+    ; ld a, [hld]
+    ; ld [hl], $66
+    ; ld a, [hld]
+    ; halt
