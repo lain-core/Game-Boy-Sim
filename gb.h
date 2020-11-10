@@ -145,17 +145,17 @@ class gb{
     void ld_hli_a(void);            //LD A,[HLI]
 
     /* Jump Opcodes */
-    void call(uint16_t);          //CALL n16
-    void call_cc(bool, uint16_t); //CALL cc,n16
-    void jp_hl(void);             //JP HL
-    void jp(uint16_t);            //JP n16
-    void jr_cc_16(bool, uint16_t);//JR cc,n16
-    void jr_cc_8(bool, uint8_t);  //JR cc,e8  
-    void jr(uint8_t);             //JR e8
-    void ret_cc(bool);            //RET cc
-    void ret(void);               //RET
-    void reti(void);              //RETI
-    void rst(uint16_t);       //RST vec
+    void call(uint16_t);            //CALL n16
+    void call_cc(bool, uint16_t);   //CALL cc,n16 
+    void jp_hl(void);               //JP HL
+    void jp(uint16_t);              //JP n16
+    void jp_cc(bool, uint16_t);     //JP cc,n16
+    void jr(uint8_t);               //JR e8
+    void jr_cc(bool, uint8_t);      //JR cc,e8
+    void ret_cc(bool);              //RET cc
+    void ret(void);                 //RET
+    void reti(void);                //RETI
+    void vec(uint8_t);              //RST vec
 
     /* Stack Opcodes */
     void add_sp_hl(void);    //ADD HL,SP

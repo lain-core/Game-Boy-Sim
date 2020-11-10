@@ -7,9 +7,12 @@ Registers::Registers(){
 }
 
 void Registers::reset(){
+	//Initialize all registers to zero.
 	for(int i = 0; i < NUM_16REGISTERS; i++){
 		regs.reg16[i] = 0;
 	}
+	//Initialize Stack Pointer.
+	regs.reg16[SP] = 0xFFFE;
 }
 
 /*
