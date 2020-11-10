@@ -72,25 +72,25 @@ void gb::ld_n16A(uint16_t immediate){
 }
 
 /*
- * gb::ldh_n16A // LDH [n16], A
- * Store value in register A into byte n16, if it is within $FF00 and $FFFF
+ * gb::ldh_n16A // LDH [n16], A AKA: LDH (a8), A
+ * Store value in register A into byte n16, using 0xFF00 as a base, and taking in an offset.
  */
-void gb::ldh_n16A(uint16_t immediate){
-    // uint16_t value = getMemory().getByte(immediate);
-    if ((0xFF00 < immediate) && (immediate > 0xFFFF)){
-        getMemory().putByte(getMemory().getByte(immediate), immediate);
+void gb::ldh_n16A(uint8_t offset){
+    uint16_t address = 0xFF00 + offset;
+    uint8_t value = getRegisters().getReg8(A);
+    if ((address >= 0xFF00) && (address <= MEMORY_SIZE)){
+        getMemory().putByte(address, value);
     }
-    printf("\nimmediate: %02x\nvalue: %02x", immediate, getMemory().getByte(immediate));
-    printf("\nFFFE: %02x\n", getMemory().getWord(0xFFFE));
 }
 
 /*
  * gb::ldh_c(int) // LDH [C],A
  * Store value in register A into byte at address $FF00+C.
  */
-void gb::ldh_c(uint8_t offset){
-    uint16_t final_addr = 0xFF00 + offset;
+void gb::ldh_c(){
+    uint16_t final_addr = 0xFF00 + getRegisters().getReg8(C);
     getMemory().putByte(final_addr, getRegisters().getReg8(A));
+    printf("\naddress: %04x\nvalue: %02x\n", final_addr, getRegisters().getReg8(A));
 }
 
 /*
@@ -112,12 +112,15 @@ void gb::ld_n16(uint16_t address){
 }
 
 /*
- * gb::ldh_n16(uint16_t) // LDH A,[n16]
- * Load value in register A from byte at address n16, provided it is b/w 0xFF00 and 0xFFFF.
+ * gb::ldh_n16(uint16_t) // LDH A,[n16] AKA LDH A, (a8)
+ * Load value in register A from byte at address n16, using 0xFF00 plus an offset.
  */
-void gb::ldh_n16(uint16_t address){
-    uint8_t value = getMemory().getByte(address);
-    getRegisters().setReg8(A, value);
+void gb::ldh_n16(uint8_t offset){
+    uint16_t address = 0xFF00 + offset;
+    if(address >= 0xFF00 && address <= MEMORY_SIZE){
+        uint8_t value = getMemory().getByte(address);
+        getRegisters().setReg8(A, value);
+    }
 }
 
 /*

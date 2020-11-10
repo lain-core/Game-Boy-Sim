@@ -133,12 +133,12 @@ class gb{
     void ld_hl_r8(int);               //LD r8, [HL]
     void ld_r16A(int);              //LD [r16], A
     void ld_n16A(uint16_t);         //LD [n16], A
-    void ldh_n16A(uint16_t);        //LDH [n16], A
+    void ldh_n16A(uint8_t);        //LDH [n16], A
     void ldh_c(uint8_t);            //LDH [C], A
     void ldh_c_a(uint8_t);          //LDH A,[C]
     void ld_a_r16(int);               //LD A,[r16]
     void ld_n16(uint16_t);          //LD A,[n16]
-    void ldh_n16(uint16_t);         //LDH A,[n16]
+    void ldh_n16(uint8_t);         //LDH A,[n16]
     void ld_hli(void);              //LD [HLI],A
     void ld_hld(void);              //LD [HLD],A
     void ld_hld_a(void);            //LD A,[HLD]

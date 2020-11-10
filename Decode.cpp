@@ -134,16 +134,13 @@ bool gb::decode_load(uint8_t opcode){
             	pc++;
             	break;
         	case 0xE0:
-            	address = getWordData();
-            	ldh_n16A(address);
-            	pc+=2;
+            	ldh_n16A(getData());
+            	pc++;
             	break;
         	case 0xF0:
-            	address = getWordData();
-            	printf("\naddress: %02x\n", address);
-                ldh_n16(address);
-            	pc+=2;
-            	break;
+            	ldh_n16(getData());
+                pc++;
+                break;
         	case 0xE2:
             	//FIXME: listed as 1 byte???
             	ldh_c(getData());
