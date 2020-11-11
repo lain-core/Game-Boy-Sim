@@ -47,6 +47,8 @@ class gb{
     bool decode_math(uint8_t);
     bool decode_load(uint8_t);
     bool decode_bitops(uint8_t);
+    bool decode_stackops(uint8_t);
+    bool decode_jump(uint8_t);
     uint8_t getData(void);
     uint16_t getWordData(void);
 

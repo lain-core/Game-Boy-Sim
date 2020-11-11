@@ -1,6 +1,6 @@
 ASM = rgbasm
 LINK = rgblink
-BIN = first bitop_test arith_test ld_test
+BIN = first bitop_test arith_test ld_test stack_test jump_test
 
 %.o: %.asm
 	$(ASM) $< -o $@
