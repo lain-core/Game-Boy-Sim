@@ -450,7 +450,38 @@ bool gb::decode_stackops(uint8_t opcode){
 
 bool gb::decode_jump(uint8_t opcode){
     bool found_inst = true;
+    bool cc = false;
+    uint16_t data = 0;
     switch(opcode){
+        case 0xC4:
+            cc = !(getRegisters().getFlag(FLAG_Z));
+            data = getWordData();
+            pc+=2;
+            call_cc(cc, data);
+            break;
+        case 0xD4:
+            cc = !(getRegisters().getFlag(FLAG_C));
+            data = getWordData();
+            pc+=2;
+            call_cc(cc, data);
+            break;
+        case 0xCC:
+            cc = getRegisters().getFlag(FLAG_Z);
+            data = getWordData();
+            pc+=2;
+            call_cc(cc, data);
+            break;
+        case 0xDC:
+            cc = getRegisters().getFlag(FLAG_C);
+            data = getWordData();
+            pc+=2;
+            call_cc(cc, data);
+            break;
+        case 0xCD:
+            data = getWordData();
+            pc+=2;
+            call(data);
+            break;
         default:
             found_inst = false;
             break;

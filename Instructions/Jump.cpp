@@ -13,8 +13,7 @@ void gb::call(uint16_t address){
  * call_cc(bool, uint16_t) / CALL cc,n16
  * Call address n16 if condition cc is met.
  */
-void gb::call_cc(int flagnum, uint16_t address){
-    bool flag = getRegisters().getFlag(flagnum);
+void gb::call_cc(bool flag, uint16_t address){
     if(flag){
         push(pc+1);
         pc = address;
@@ -41,8 +40,7 @@ void gb::jp(uint16_t address){
  * jp_cc(int, uint16_t) / JP cc,n16
  * Jump to address n16 if condition cc is met.
  */
-void gb::jp_cc(int flagnum, uint16_t address){
-    bool flag = getRegisters().getFlag(flagnum);
+void gb::jp_cc(bool flag, uint16_t address){
     if(flag){
         pc = address;
     }
@@ -62,8 +60,7 @@ void gb::jr(uint8_t offset){
  * jr_cc(int, uint8_t) / JR cc,e8
  * Relative Jump by adding e8 to the current address if condition cc is met.
  */
-void gb::jr_cc(int flagnum, uint8_t offset){
-    bool flag = getRegisters().getFlag(flagnum);
+void gb::jr_cc(bool flag, uint8_t offset){
     if(flag){
         uint16_t newPC = (pc + 1) + offset;
         pc = newPC;
@@ -94,8 +91,7 @@ void gb::ret(){
  * ret_cc(int) / RET cc
  * Return from subroutine if condition cc is met.
  */
-void gb::ret_cc(int flagnum){
-    bool flag = getRegisters().getFlag(flagnum);
+void gb::ret_cc(bool flag){
     if(flag){
         //Grab the stack pointer.
         uint16_t stackptr = getRegisters().getReg16(SP);

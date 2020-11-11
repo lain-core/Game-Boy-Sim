@@ -150,13 +150,13 @@ class gb{
 
     /* Jump Opcodes */
     void call(uint16_t);            //CALL n16
-    void call_cc(int, uint16_t);   //CALL cc,n16 
+    void call_cc(bool, uint16_t);   //CALL cc,n16 
     void jp_hl(void);               //JP HL
     void jp(uint16_t);              //JP n16
-    void jp_cc(int, uint16_t);     //JP cc,n16
+    void jp_cc(bool, uint16_t);     //JP cc,n16
     void jr(uint8_t);               //JR e8
-    void jr_cc(int, uint8_t);      //JR cc,e8
-    void ret_cc(int);              //RET cc
+    void jr_cc(bool, uint8_t);      //JR cc,e8
+    void ret_cc(bool);              //RET cc
     void ret(void);                 //RET
     void reti(void);                //RETI
     void rst(uint8_t);              //RST vec
