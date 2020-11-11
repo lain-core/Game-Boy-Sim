@@ -13,11 +13,11 @@
 bool gb::decode(uint8_t opcode){
     //Update our status if we can find our opcode. If it passes every function without being found, it must be an illegal (or unimplemented) op.
     bool found = decode_misc(opcode);
-    if(!found) found = decode_math(opcode);
-    if(!found) found = decode_bitops(opcode);
-    if(!found) found = decode_load(opcode);
-    if(!found) found = decode_stackops(opcode);
-    if(!found) found = decode_jump(opcode);
+    if(!found){ printf("entering decode_math\n"); found = decode_math(opcode); }
+    if(!found){ printf("entering decode_bitops\n"); found = decode_bitops(opcode); }
+    if(!found){ printf("entering decode_load\n"); found = decode_load(opcode); }
+    if(!found){ printf("entering decode_stackops\n"); found = decode_stackops(opcode); }
+    if(!found){ found = decode_jump(opcode); }
     if(found && getStatus()) return true; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return false;
 }
@@ -76,9 +76,6 @@ bool gb::decode_load(uint8_t opcode){
             	ld_r16(HL, address);
             	pc+=2;
             	break;
-        	case 0x31:
-            	address = getWordData();
-            	ld_r16(SP, address);
 			case 0x02:
 				ld_r16A(BC);
 				break;
@@ -320,9 +317,6 @@ bool gb::decode_math(uint8_t opcode){
         case 0x23:
             inc_r16(HL);
             break;
-        case 0x33:
-            inc_r16(SP);
-            break;
         case 0x09:
             add_r16(BC);
             break;
@@ -343,9 +337,6 @@ bool gb::decode_math(uint8_t opcode){
             break;
         case 0x2B:
             dec_r16(HL);
-            break;
-        case 0x3B:
-            dec_r16(SP);
             break;
         default:
             found_inst = false;
@@ -397,7 +388,64 @@ bool gb::decode_bitops(uint8_t opcode){
 }
 
 bool gb::decode_stackops(uint8_t opcode){
-    return false;
+    printf("stackop is: %02x\n", opcode);
+    bool found_inst = true;
+    uint16_t address = 0;
+    switch(opcode){
+        case 0x39:
+            add_hl_sp();
+            break;
+        case 0x3B:
+            dec_sp();
+            break;
+        case 0x33:
+            inc_sp();
+            break;
+        case 0x31:
+            address = getWordData();
+            pc+=2;
+            ld_sp(address);
+            break;
+        case 0x08:
+            address = getWordData();
+            pc+=2;
+            ld_n_sp(address);
+            break;
+        case 0xF8: //LD HL,SP+8
+            found_inst = false;
+            break;
+        case 0xF9:
+            ld_sp_hl();
+            break;
+        case 0xC1:
+            pop(BC);
+            break;
+        case 0xD1:
+            pop(DE);
+            break;
+        case 0xE1:
+            pop(HL);
+            break;
+        case 0xF1:
+            pop(AF);
+            break;
+        case 0xC5:
+            push(BC);
+            break;
+        case 0xD5:
+            push(DE);
+            break;
+        case 0xE5:
+            push(HL);
+            break;
+        case 0xF5:
+            push(AF);
+            break;
+        default:
+            found_inst = false;
+            break;
+    }
+    return found_inst;
 }
 
 bool gb::decode_jump(uint8_t opcode){

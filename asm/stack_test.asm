@@ -6,7 +6,7 @@ EntryPoint:
     ;ADD SP,e8
     ;needs to be done
     ;DEC SP
-    dec sp          ;SP should now contain $FFFD.
+    dec sp         ;SP should now contain $FFFD.
     ;INC SP
     inc sp          ;SP should now contain $FFFE.
     ;LD SP,n16

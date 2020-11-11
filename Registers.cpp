@@ -45,7 +45,6 @@ void Registers::setReg8(int reg, uint8_t regVal){
  */
 void Registers::setReg16(int reg, uint16_t regVal){
 	regs.reg16[reg] = regVal;
-	printf("\nregVal: %04x\n", regVal);
 }
 
 /*

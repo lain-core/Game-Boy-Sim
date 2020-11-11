@@ -36,7 +36,6 @@ int main(int argc, char** argv){
 	while(myGB.getStatus()){
 		printf("Calling decode(%04x) (passing only one byte)\n", myGB.getMemory().getWord(myGB.pc));
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
-		printf("value in memory at 0x8010 is: %02x\n", myGB.getMemory().getByte(0x8010));
 		myGB.trace();
 	}
 	// myGB.getMemory().dumpVRAM();
