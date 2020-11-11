@@ -563,6 +563,7 @@ void gb::sbc_hl(){
  * Subtract the value in r8 from A.
  */
 void gb::sub(int reg8){
+	printf("\nWE HERE\n");
 	uint8_t source = getRegisters().getReg8(reg8);
 	uint8_t dest = getRegisters().getReg8(A);
 	uint8_t newValue = dest - source;
@@ -689,6 +690,8 @@ void gb::op_xor_n(uint8_t value){
  * XOR the value of the byte pointed to by HL with A.
  */
 void gb::op_xor_hl(){
+	printf("\n\n\n\n\nWE HERE !!\n\n\n");
+
 	uint8_t source = getMemory().getByte(getRegisters().getReg16(HL));
 	uint8_t dest = getRegisters().getReg8(A);
 	uint8_t newValue = source ^ dest;

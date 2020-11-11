@@ -39,7 +39,7 @@ int main(int argc, char** argv){
 		printf("value in memory at 0x8010 is: %02x\n", myGB.getMemory().getByte(0x8010));
 		myGB.trace();
 	}
-	myGB.getMemory().dumpVRAM();
+	// myGB.getMemory().dumpVRAM();
 }
 
 /*

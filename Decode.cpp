@@ -353,15 +353,15 @@ bool gb::decode_math(uint8_t opcode){
         }
     }
 
-    uint8_t data = getData();
+    // uint8_t data = getData();
     //ADD/ADC spans region 0x80 to 0x8F.
     //SUB/SDC spans region 0x90 to 0x9F.
     //AND/XOR spans region 0xA0 to 0xAF.
     //OR/CP spans region 0xB0 eto 0xBF.
-    if((opcode & 0xF0) == 0x80) found_inst = decode_add(opcode, data);
-    if((opcode & 0xF0) == 0x90) found_inst = decode_sub(opcode, data);
-    if((opcode & 0xF0) == 0xA0) found_inst = decode_and_xor(opcode, data);
-    if((opcode & 0xF0) == 0xB0) found_inst = decode_or_cp(opcode, data);
+    if((opcode & 0xF0) == 0x80) found_inst = decode_add(opcode);
+    if((opcode & 0xF0) == 0x90) found_inst = decode_sub(opcode);
+    if((opcode & 0xF0) == 0xA0) found_inst = decode_and_xor(opcode);
+    if((opcode & 0xF0) == 0xB0) found_inst = decode_or_cp(opcode);
     return found_inst;
 }
 
@@ -406,17 +406,17 @@ bool gb::decode_jump(uint8_t opcode){
 
 /* Helper Functions */
 
-bool gb::decode_add(uint8_t opcode, uint8_t data){
+bool gb::decode_add(uint8_t opcode){
     bool found_inst = true;
     //Cases 0x80 - 0x87 are of the form ADD r8,A.
     //Cases 0x88 - 0x8F are of the form ADC r8,A.
     //Case 0x86 and 0x8E are using [HL] rather than an r8.
-    int reg_num = get_regnum(data);
-    if(data >= 0x80 && data <= 0x87){
+    int reg_num = get_regnum(opcode);
+    if(opcode >= 0x80 && opcode <= 0x87){
         if(reg_num != NOT_AN_8BIT) add(reg_num);
         else add_hl();
     }
-    else if(data >= 0x88 && data <= 0x8F){
+    else if(opcode >= 0x88 && opcode <= 0x8F){
         if(reg_num != NOT_AN_8BIT) adc(reg_num);
         else adc_hl();
     }
@@ -424,17 +424,18 @@ bool gb::decode_add(uint8_t opcode, uint8_t data){
     return found_inst;
 }
 
-bool gb::decode_sub(uint8_t opcode, uint8_t data){
+bool gb::decode_sub(uint8_t opcode){
     bool found_inst = true;
     //Cases 0x90 - 0x97 are of the form SUB r8,A.
     //Cases 0x98 - 0x9F are of the form SBC r8,A.
     //Case 0x96 and 0x9E are using [HL] rather than an r8.
-    int reg_num = get_regnum(data);
-    if(data >= 0x90 && data <= 0x97){
+    int reg_num = get_regnum(opcode);
+    if(opcode >= 0x90 && opcode <= 0x97){
         if(reg_num != NOT_AN_8BIT) sub(reg_num);
         else sub_hl();
     }
-    else if(data >= 0x98 && data <= 0x9F){
+    else if (opcode >= 0x98 && opcode <= 0x9F)
+    {
         if(reg_num != NOT_AN_8BIT) sub(reg_num);
         else sub_hl();
     }
@@ -442,36 +443,40 @@ bool gb::decode_sub(uint8_t opcode, uint8_t data){
     return found_inst;
 }
 
-bool gb::decode_and_xor(uint8_t opcode, uint8_t data){
+bool gb::decode_and_xor(uint8_t opcode){
     bool found_inst = true;
     //Cases 0xA0 - 0xA7 are of the form AND r8,A.
     //Cases 0xA8 - 0xAF are of the form XOR r8,A.
     //Case 0xA6 and 0xAE are using [HL] rather than an r8.
-    int reg_num = get_regnum(data);
-    if(data >= 0xA0 && data <= 0xA7){
+    int reg_num = get_regnum(opcode);
+    if (opcode >= 0xA0 && opcode <= 0xA7)
+    {
         if(reg_num != NOT_AN_8BIT) op_and(reg_num);
         else op_and_hl();
     }
-    else if(data >= 0xA8 && data <= 0xAF){
-        if(reg_num != NOT_AN_8BIT) op_xor(reg_num);
+    else if (opcode >= 0xA8 && opcode <= 0xAF)
+    {
+        if(reg_num < NOT_AN_8BIT) op_xor(reg_num);
         else op_xor_hl();
     }
     else found_inst = false;
     return found_inst;
 }
 
-bool gb::decode_or_cp(uint8_t opcode, uint8_t data){
+bool gb::decode_or_cp(uint8_t opcode){
     bool found_inst = true;
     //Cases 0xB0 - 0xB7 are of the form OR r8,A.
     //Cases 0xB8 - 0xBF are of the form CP r8,A.
     //Case 0xB6 and 0xBE are using [HL] rather than an r8.
-    int reg_num = get_regnum(data);
+    int reg_num = get_regnum(opcode);
     printf("called or. reg num is: %x\n", reg_num);
-    if(data >= 0xB0 && data <= 0xB7){
+    if (opcode >= 0xB0 && opcode <= 0xB7)
+    {
         if(reg_num != NOT_AN_8BIT) op_or(reg_num);
         else op_or_hl();
     }
-    else if(data >= 0xB8 && data <= 0xBF){
+    else if (opcode >= 0xB8 && opcode <= 0xBF)
+    {
         if(reg_num != NOT_AN_8BIT) cp(reg_num);
         else cp_hl();
     }

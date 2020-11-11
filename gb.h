@@ -53,10 +53,10 @@ class gb{
     uint16_t getWordData(void);
 
     /* Decode Math Helpers */
-    bool decode_add(uint8_t, uint8_t);
-    bool decode_sub(uint8_t, uint8_t);
-    bool decode_and_xor(uint8_t, uint8_t);
-    bool decode_or_cp(uint8_t, uint8_t);
+    bool decode_add(uint8_t);
+    bool decode_sub(uint8_t);
+    bool decode_and_xor(uint8_t);
+    bool decode_or_cp(uint8_t);
     bool decode_bit(uint8_t);
     bool decode_res(uint8_t);
     bool decode_set(uint8_t);
