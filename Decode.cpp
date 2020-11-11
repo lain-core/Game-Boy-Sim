@@ -13,11 +13,11 @@
 bool gb::decode(uint8_t opcode){
     //Update our status if we can find our opcode. If it passes every function without being found, it must be an illegal (or unimplemented) op.
     bool found = decode_misc(opcode);
-    if(!found){ printf("entering decode_math\n"); found = decode_math(opcode); }
-    if(!found){ printf("entering decode_bitops\n"); found = decode_bitops(opcode); }
-    if(!found){ printf("entering decode_load\n"); found = decode_load(opcode); }
-    if(!found){ printf("entering decode_stackops\n"); found = decode_stackops(opcode); }
-    if(!found){ found = decode_jump(opcode); }
+    if(!found){ found = decode_math(opcode); }
+    if(!found){ found = decode_bitops(opcode); }
+    if(!found){ found = decode_load(opcode); }
+    if(!found){ found = decode_stackops(opcode); }
+    if(!found){ printf("entering decode_jump\n"); found = decode_jump(opcode); }
     if(found && getStatus()) return true; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return false;
 }
@@ -449,7 +449,13 @@ bool gb::decode_stackops(uint8_t opcode){
 }
 
 bool gb::decode_jump(uint8_t opcode){
-    return false;
+    bool found_inst = true;
+    switch(opcode){
+        default:
+            found_inst = false;
+            break;
+    }
+    return found_inst;
 }
 
 /* Helper Functions */
