@@ -5,6 +5,7 @@
 #define SIM_H
 
 #define MEMORY_SIZE 0xFFFF //bytes
+#define NUM_VECTORS 8
 
 /* Important Memory Locations */
 #define RSI                 0x0000 //RSI is ReStart and Interrupt Vectors.
@@ -21,10 +22,6 @@
 #define BG_DATA_1_END       0x9BFF
 #define BG_DATA_2           0x9C00
 #define BG_DATA_2_END       0x9FFF
-#define COLOR3              0x0F380F // closest to black
-#define COLOR2              0x306230
-#define COLOR1              0x8bac0f
-#define COLOR0              0x9bbc0f  // closest to white
 #define CART_RAM            0xA000 //Some carts contain their own RAM.
 #define CART_RAM_END        0xBFFF
 #define RAM_BANK0           0xC000 //Internal ram Bank 0
@@ -64,6 +61,12 @@
 #define FLAG_H   5 //Half Carry Flag
 #define FLAG_N   6 //Add/Sub-Flag
 #define FLAG_Z   7 //Zero Flag
+
+/* Color Macros */
+#define COLOR3              0x0F380F // closest to black
+#define COLOR2              0x306230
+#define COLOR1              0x8bac0f
+#define COLOR0              0x9bbc0f  // closest to white
 
 /* Major Opcodes */
 

@@ -12,6 +12,8 @@ class gb{
     int cycles;
     Memory          memory;
     Registers       regs;
+    //GB RST vectors.
+    uint8_t vectors[8] = {0x00, 0x08, 0x10, 0x18, 0x20, 0x28, 0x30, 0x38};
 
     /* Private Member Functions */
 
@@ -155,20 +157,21 @@ class gb{
     void ret_cc(int);              //RET cc
     void ret(void);                 //RET
     void reti(void);                //RETI
-    void vec(uint8_t);              //RST vec
+    void rst(uint8_t);              //RST vec
 
     /* Stack Opcodes */
-    void add_sp_hl(void);    //ADD HL,SP
+    void add_hl_sp(void);    //ADD HL,SP
     void add_sp_e8(uint8_t); //ADD SP,e8
     void dec_sp(void);       //DEC SP
     void inc_sp(void);       //INC SP
-    void ld_sp_n(uint16_t);  //LD SP,n16
-    void ld_hl_sp_e8(uint8_t);//LD HL,SP+e8
+    void ld_sp(uint16_t);    //LD SP,n16
+    void ld_n_sp(uint16_t);  //LD [n16], SP
+    void ld_hl_e8(int8_t);  //LD HL,SP+e8
     void ld_sp_hl(void);     //LD SP,HL
     void pop(void);          //POP AF
-    void pop_r16(int);      //POP r16
+    void pop(int);           //POP r16
     void push(void);         //PUSH AF
-    void push(int);      //PUSH r16
+    void push(int);          //PUSH r16
 
     /* Miscellaneous Opcodes */
     void ccf(void);
