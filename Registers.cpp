@@ -12,7 +12,7 @@ void Registers::reset(){
 		regs.reg16[i] = 0;
 	}
 	//Initialize Stack Pointer.
-	regs.reg16[SP] = 0xFFFE;
+	regs.reg16[SP] = STACK_START;
 }
 
 /*

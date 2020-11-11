@@ -146,13 +146,13 @@ class gb{
 
     /* Jump Opcodes */
     void call(uint16_t);            //CALL n16
-    void call_cc(bool, uint16_t);   //CALL cc,n16 
+    void call_cc(int, uint16_t);   //CALL cc,n16 
     void jp_hl(void);               //JP HL
     void jp(uint16_t);              //JP n16
-    void jp_cc(bool, uint16_t);     //JP cc,n16
+    void jp_cc(int, uint16_t);     //JP cc,n16
     void jr(uint8_t);               //JR e8
-    void jr_cc(bool, uint8_t);      //JR cc,e8
-    void ret_cc(bool);              //RET cc
+    void jr_cc(int, uint8_t);      //JR cc,e8
+    void ret_cc(int);              //RET cc
     void ret(void);                 //RET
     void reti(void);                //RETI
     void vec(uint8_t);              //RST vec
@@ -168,7 +168,7 @@ class gb{
     void pop(void);          //POP AF
     void pop_r16(int);      //POP r16
     void push(void);         //PUSH AF
-    void push_r16(int);      //PUSH r16
+    void push(int);      //PUSH r16
 
     /* Miscellaneous Opcodes */
     void ccf(void);
@@ -181,8 +181,9 @@ class gb{
     void scf(void);
     void stop(void);
 
-    /* Arithmetic Opcode Helpers */
+    /* Opcode Helpers */
     void update_on_add(uint8_t, uint8_t); //Updates flags for ADD funcs.
+    void push(uint16_t); //Pushes a value onto the stack. NOT an opcode.
 
 };
 

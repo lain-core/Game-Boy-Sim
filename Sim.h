@@ -35,6 +35,7 @@
 #define OAM_END             0xFE9F //Object Attribute Memory
 #define HWIO_START          0xFF00 //Hardware I/O Registers.
 #define HWIO_END            0xFF7F
+#define STACK_START         0xFFFE
 #define INTERRUPT_FLAG      0xFFFF
 
 /* 8-bit Program Register Values */
