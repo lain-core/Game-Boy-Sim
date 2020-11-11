@@ -70,19 +70,68 @@ void gb::jr_cc(int flagnum, uint8_t offset){
     }
 }
 
-//RET       *** BIG DEAL
+/*
+ * ret() / RET
+ * Return from subroutine. This is basically a POP PC.
+ */
 void gb::ret(){
+    //Grab the stack pointer.
+    uint16_t stackptr = getRegisters().getReg16(SP);
+    //Grab the high byte.
+    uint8_t high = getMemory().getByte(stackptr);
+    stackptr++;
+    //Grab the low byte.
+    uint8_t low = getMemory().getByte(stackptr);
+    stackptr++;
+    uint16_t value = ((high << 8) | low);
+    //Put the value into our PC.
+    getRegisters().setReg16(pc, value);
+    //Set SP to the new stack pointer we've calculated.
+    getRegisters().setReg16(SP, stackptr);
 }
 
-//RET cc
+/*
+ * ret_cc(int) / RET cc
+ * Return from subroutine if condition cc is met.
+ */
 void gb::ret_cc(int flagnum){
-
+    bool flag = getRegisters().getFlag(flagnum);
+    if(flag){
+        //Grab the stack pointer.
+        uint16_t stackptr = getRegisters().getReg16(SP);
+        //Grab the high byte.
+        uint8_t high = getMemory().getByte(stackptr);
+        stackptr++;
+        //Grab the low byte.
+        uint8_t low = getMemory().getByte(stackptr);
+        stackptr++;
+        uint16_t value = ((high << 8) | low);
+        //Put the value into our PC.
+        getRegisters().setReg16(pc, value);
+        //Set SP to the new stack pointer we've calculated.
+        getRegisters().setReg16(SP, stackptr);
+    }
 }
-//RETI
+
+/*
+ * reti() / RETI
+ * Return from subroutine and enable interrupts. This is basically equivalent to executing EI then RET.
+ */
 void gb::reti(){
-
+    ei();
+    ret();
 }
-//RST vec
-void gb::vec(uint8_t vec){
 
+/*
+ * rst(uint8_t) / RST vec
+ * Call address vec. This is a shorter and faster equivalent to CALL for suitable values of vec.
+ * Important note: 0xFF is the opcode for RST 0x38, but we should NEVER execute opcode 0xFF.
+ */
+void gb::rst(uint8_t vec){
+    for(int i = 0; i < NUM_VECTORS; i++){
+        if(vec == vectors[i]){
+            push(pc+1);
+            pc = vec;
+        }
+    }
 }

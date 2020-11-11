@@ -16,6 +16,8 @@ bool gb::decode(uint8_t opcode){
     if(!found) found = decode_math(opcode);
     if(!found) found = decode_bitops(opcode);
     if(!found) found = decode_load(opcode);
+    if(!found) found = decode_stackops(opcode);
+    if(!found) found = decode_jump(opcode);
     if(found && getStatus()) return true; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return false;
 }
@@ -392,6 +394,14 @@ bool gb::decode_bitops(uint8_t opcode){
     }
     else found_inst = false;
     return found_inst;
+}
+
+bool gb::decode_stackops(uint8_t opcode){
+    return false;
+}
+
+bool gb::decode_jump(uint8_t opcode){
+    return false;
 }
 
 /* Helper Functions */

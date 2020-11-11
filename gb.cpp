@@ -31,7 +31,6 @@ int main(int argc, char** argv){
 		myGB.setStatus(myGB.load(argv[1]));
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
-	//myGB.getMemory().dumpROM();
 	
 	//Primary Event Loop.
 	while(myGB.getStatus()){
