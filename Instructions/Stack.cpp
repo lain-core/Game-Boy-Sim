@@ -26,6 +26,14 @@ void gb::add_hl_sp(){
 }
 
 /*
+ * add_sp_e8() // ADD SP,e8
+ * Add the signed value e8 to SP.
+ */
+void gb::add_sp_e8(int8_t value){
+    //TODO: confused
+}
+
+/*
  * dec_sp() / DEC SP
  * Decrement the value in register SP by 1.
  */
