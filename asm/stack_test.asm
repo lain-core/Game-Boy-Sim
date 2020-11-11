@@ -14,6 +14,7 @@ EntryPoint:
     ;LD [n16],SP
     ld [$8010], SP  ;0x8010 in memory should now contain $FFF0.  
     ;LD HL,SP+e8
+    ld hl, sp+-3
     ;needs to be done
     ;LD SP,HL
     scf             ;Sets carry flag.

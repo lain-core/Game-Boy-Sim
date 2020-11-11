@@ -29,7 +29,7 @@ void gb::add_hl_sp(){
  * add_sp_e8() // ADD SP,e8
  * Add the signed value e8 to SP.
  */
-void gb::add_sp_e8(int8_t value){
+void gb::add_sp_e8(uint8_t value){
     //TODO: confused
 }
 
@@ -80,7 +80,7 @@ void gb::ld_n_sp(uint16_t address){
  * ld_hl_e8 / LD HL,SP+e8
  * Add the signed value e8 to SP and store the result in HL.
  */
-void gb::ld_hl_e8(int8_t value){
+void gb::ld_hl_e8(uint8_t value){
     //TODO: me confuse
 }
 

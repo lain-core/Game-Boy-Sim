@@ -163,12 +163,12 @@ class gb{
 
     /* Stack Opcodes */
     void add_hl_sp(void);    //ADD HL,SP
-    void add_sp_e8(int8_t); //ADD SP,e8
+    void add_sp_e8(uint8_t); //ADD SP,e8
     void dec_sp(void);       //DEC SP
     void inc_sp(void);       //INC SP
     void ld_sp(uint16_t);    //LD SP,n16
     void ld_n_sp(uint16_t);  //LD [n16], SP
-    void ld_hl_e8(int8_t);  //LD HL,SP+e8
+    void ld_hl_e8(uint8_t);  //LD HL,SP+e8
     void ld_sp_hl(void);     //LD SP,HL
     void pop(void);          //POP AF
     void pop(int);           //POP r16
