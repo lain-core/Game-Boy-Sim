@@ -27,11 +27,11 @@ int main(int argc, char** argv){
 		myGB.setStatus(myGB.load("asm/first.gb"));
 	}
 	else{
-		printf("Loading %s", argv[1]);
+		printf("Loading %s\n", argv[1]);
 		myGB.setStatus(myGB.load(argv[1]));
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
-	
+
 	//Primary Event Loop.
 	while(myGB.getStatus()){
 		printf("Calling decode(%04x) (passing only one byte)\n", myGB.getMemory().getWord(myGB.pc));

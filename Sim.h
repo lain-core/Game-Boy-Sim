@@ -11,6 +11,11 @@
 #define RSI                 0x0000 //RSI is ReStart and Interrupt Vectors.
 #define RSI_END             0x00FF
 #define CART_HEADER         0x0100
+
+
+#define PC_START            0x0100  
+// change this later when we go to run the boot rom
+
 #define CART_HEADER_END     0x014F
 #define ROM                 0x0150
 #define ROM_END             0x3FFF

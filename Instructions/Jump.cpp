@@ -4,9 +4,10 @@
  * call(uint16_t) / CALL n16
  * Call address n16. This pushes the address of the instruction after the CALL on the stack, such that RET can pop it later; then, it executes an implicit JP n16.
  */
-void gb::call(uint16_t address){
+void gb::call(uint16_t offset){
+    printf("\ncalling to address: %04x\n", pc);
     push(pc+1);
-    pc = address;
+    pc = PC_START + offset;
 }
 
 /*

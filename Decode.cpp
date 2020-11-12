@@ -459,6 +459,10 @@ bool gb::decode_jump(uint8_t opcode){
             pc+=2;
             call_cc(cc, data);
             break;
+        case 0xC9:
+            printf("\nRET STATEMENT\n");
+            ret();
+            break;
         case 0xD4:
             cc = !(getRegisters().getFlag(FLAG_C));
             data = getWordData();
