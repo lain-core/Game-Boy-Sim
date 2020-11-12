@@ -154,8 +154,8 @@ class gb{
     void jp_hl(void);               //JP HL
     void jp(uint16_t);              //JP n16
     void jp_cc(bool, uint16_t);     //JP cc,n16
-    void jr(uint8_t);               //JR e8
-    void jr_cc(bool, uint8_t);      //JR cc,e8
+    void jr(int8_t);               //JR e8
+    void jr_cc(bool, int8_t);      //JR cc,e8
     void ret_cc(bool);              //RET cc
     void ret(void);                 //RET
     void reti(void);                //RETI
@@ -174,6 +174,7 @@ class gb{
     void pop(int);           //POP r16
     void push(void);         //PUSH AF
     void push(int);          //PUSH r16
+    
 
     /* Miscellaneous Opcodes */
     void ccf(void);
@@ -188,7 +189,7 @@ class gb{
 
     /* Opcode Helpers */
     void update_on_add(uint8_t, uint8_t); //Updates flags for ADD funcs.
-    void push(uint16_t); //Pushes a value onto the stack. NOT an opcode.
+    void push_val(uint16_t); //Pushes a value onto the stack. NOT an opcode.
 
 };
 

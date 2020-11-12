@@ -17,14 +17,13 @@ bool gb::decode(uint8_t opcode){
     if(!found){ found = decode_bitops(opcode); }
     if(!found){ found = decode_load(opcode); }
     if(!found){ found = decode_stackops(opcode); }
-    if(!found){ printf("entering decode_jump\n"); found = decode_jump(opcode); }
+    if(!found){ found = decode_jump(opcode); }
     if(found && getStatus()) return true; //If we found our instruction, but our instruction led to the state of the GB cpu being set to false, then quit.
     else return false;
 }
 
 bool gb::decode_load(uint8_t opcode){
 	bool found_inst = true;
-    uint16_t address = 0;
     int regnum = get_regnum(opcode);
 	//All LD r8s fall within range 0x40 - 0x7F
 	if((opcode & 0xF0) >= 0x40 && (opcode & 0xF0) <= 0x47){
@@ -62,20 +61,14 @@ bool gb::decode_load(uint8_t opcode){
     else{
 		switch(opcode){
         	case 0x01:
-            	address = getWordData();
-            	ld_r16(BC, address);
-            	pc+=2;
-            	break;
+                ld_r16(BC, getWordData());
+                break;
         	case 0x11:
-            	address = getWordData();
-            	ld_r16(DE, address);
-            	pc+=2;
-            	break;
+                ld_r16(DE, getWordData());
+                break;
         	case 0x21:
-            	address = getWordData();
-            	ld_r16(HL, address);
-            	pc+=2;
-            	break;
+                ld_r16(HL, getWordData());
+                break;
 			case 0x02:
 				ld_r16A(BC);
 				break;
@@ -90,19 +83,19 @@ bool gb::decode_load(uint8_t opcode){
 				break;
 			case 0x06:
 				ld_n(B, getData());
-				pc++;
+				
 				break;
         	case 0x16:
             	ld_n(D, getData());
-            	pc++;
+            	
             	break;
         	case 0x26:
             	ld_n(H, getData());
-            	pc++;
+            	
             	break;
         	case 0x36:
             	ld_hln(getData());
-            	pc++;
+            	
             	break;
         	case 0x0A:
             	ld_a_r16(BC);
@@ -118,27 +111,27 @@ bool gb::decode_load(uint8_t opcode){
             	break;
         	case 0x0E:
             	ld_n(C, getData());
-            	pc++;
+            	
             	break;
         	case 0x1E:
             	ld_n(E, getData());
-            	pc++;
+            	
             	break;
         	case 0x2E:
             	ld_n(L, getData());
-            	pc++;
+            	
             	break;
         	case 0x3E:
             	ld_n(A, getData());
-            	pc++;
+            	
             	break;
         	case 0xE0:
             	ldh_n16A(getData());
-            	pc++;
+            	
             	break;
         	case 0xF0:
             	ldh_n16(getData());
-                pc++;
+                
                 break;
         	case 0xE2:
             	//FIXME: listed as 1 byte???
@@ -149,14 +142,10 @@ bool gb::decode_load(uint8_t opcode){
             	ldh_c_a();
             	break;
         	case 0xEA:
-            	address = getWordData();
-            	ld_n16A(address);
-            	pc+=2;
+                ld_n16A(getWordData());
             	break;
         	case 0xFA:
-            	address = getWordData();
-            	ld_n16(address);
-            	pc+=2;
+            	ld_n16(getWordData());
             	break;
 			default:
 				found_inst = false;
@@ -182,7 +171,7 @@ bool gb::decode_misc(uint8_t opcode){
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
             if(getData() == 0x00){
                 stop();
-                pc++;
+                
             }
             else found_inst = false;
             break;
@@ -270,35 +259,35 @@ bool gb::decode_math(uint8_t opcode){
             break;
         case 0xC6:
             add_n(getData());
-            pc++;
+            
             break;
         case 0xD6:
             sub_n(getData());
-            pc++;
+            
             break;
         case 0xE6:
             op_and_n(getData());
-            pc++;
+            
             break;
         case 0xF6:
             op_or_n(getData());
-            pc++;
+            
             break;
         case 0xCE:
             adc_n(getData());
-            pc++;
+            
             break;
         case 0xDE:
             sbc_n(getData());
-            pc++;
+            
             break;
         case 0xEE:
             op_xor_n(getData());
-            pc++;
+            
             break;
         case 0xFE:
             cp_n(getData());
-            pc++;
+            
             break;
         default:
             found_inst = false;
@@ -366,7 +355,7 @@ bool gb::decode_bitops(uint8_t opcode){
     if(opcode == 0xCB){
         printf("found CB! :)\n");
         uint8_t data = getData();
-        pc++;
+        
         printf("data: %02x\n", data);
         //SWAP spans region 0x30 to 0x37.
         //BIT spans region 0x40 to 0x7F.
@@ -388,9 +377,7 @@ bool gb::decode_bitops(uint8_t opcode){
 }
 
 bool gb::decode_stackops(uint8_t opcode){
-    printf("stackop is: %02x\n", opcode);
     bool found_inst = true;
-    uint16_t address = 0;
     switch(opcode){
         case 0x39:
             add_hl_sp();
@@ -402,14 +389,10 @@ bool gb::decode_stackops(uint8_t opcode){
             inc_sp();
             break;
         case 0x31:
-            address = getWordData();
-            pc+=2;
-            ld_sp(address);
+            ld_sp(getWordData());
             break;
         case 0x08:
-            address = getWordData();
-            pc+=2;
-            ld_n_sp(address);
+            ld_n_sp(getWordData());
             break;
         case 0xF8: //LD HL,SP+8
             found_inst = false;
@@ -451,40 +434,51 @@ bool gb::decode_stackops(uint8_t opcode){
 bool gb::decode_jump(uint8_t opcode){
     bool found_inst = true;
     bool cc = false;
-    uint16_t data = 0;
     switch(opcode){
         case 0xC4:
             cc = !(getRegisters().getFlag(FLAG_Z));
-            data = getWordData();
-            pc+=2;
-            call_cc(cc, data);
+            call_cc(cc, getWordData());
             break;
         case 0xC9:
-            printf("\nRET STATEMENT\n");
             ret();
             break;
         case 0xD4:
             cc = !(getRegisters().getFlag(FLAG_C));
-            data = getWordData();
-            pc+=2;
-            call_cc(cc, data);
+            call_cc(cc, getWordData());
             break;
         case 0xCC:
             cc = getRegisters().getFlag(FLAG_Z);
-            data = getWordData();
-            pc+=2;
-            call_cc(cc, data);
+            call_cc(cc, getWordData());
             break;
         case 0xDC:
             cc = getRegisters().getFlag(FLAG_C);
-            data = getWordData();
-            pc+=2;
-            call_cc(cc, data);
+            call_cc(cc, getWordData());
             break;
         case 0xCD:
-            data = getWordData();
-            pc+=2;
-            call(data);
+            call(getWordData());
+            break;
+        case 0xD9:
+            reti();
+            break;
+        case 0x18: //JR r8
+            printf("pc before call is: %04x\n", pc);
+            jr(getData());
+            break;
+        case 0x28: //JR Z,r8
+            cc = getRegisters().getFlag(FLAG_Z);
+            jr_cc(cc, getData());
+            break;
+        case 0x38: //JR C,r8
+            cc = getRegisters().getFlag(FLAG_C);
+            jr_cc(cc, getData());
+            break;
+        case 0x20: //JR NZ,r8
+            cc = !(getRegisters().getFlag(FLAG_Z));
+            jr_cc(cc, getData());
+            break;
+        case 0x30: //JR NC,r8
+            cc = !(getRegisters().getFlag(FLAG_C));
+            jr_cc(cc, getData());
             break;
         default:
             found_inst = false;
@@ -558,7 +552,7 @@ bool gb::decode_or_cp(uint8_t opcode){
     //Cases 0xB8 - 0xBF are of the form CP r8,A.
     //Case 0xB6 and 0xBE are using [HL] rather than an r8.
     int reg_num = get_regnum(opcode);
-    printf("called or. reg num is: %x\n", reg_num);
+    // printf("called or. reg num is: %x\n", reg_num);
     if (opcode >= 0xB0 && opcode <= 0xB7)
     {
         if(reg_num != NOT_AN_8BIT) op_or(reg_num);
@@ -581,7 +575,7 @@ bool gb::decode_bit(uint8_t data){
     bool inst_found = true;
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
-    printf("calling bit(%d, %d)\n", bit_num, reg_num);
+    // printf("calling bit(%d, %d)\n", bit_num, reg_num);
     if(reg_num < NOT_AN_8BIT) bit(bit_num, reg_num);
     else if(reg_num == NOT_AN_8BIT) bit_hl(bit_num);
 	else inst_found = false;
@@ -609,7 +603,7 @@ bool gb::decode_set(uint8_t data){
     bool inst_found = true;
     int bit_num = get_bitnum(data);
     int reg_num = get_regnum(data);
-    printf("Bit num is: %d, Reg num is: %d\n", bit_num, reg_num);
+    // printf("Bit num is: %d, Reg num is: %d\n", bit_num, reg_num);
     if(reg_num != NOT_AN_8BIT) set(bit_num, reg_num);
     else set_hl(bit_num);
     return inst_found;
@@ -667,14 +661,18 @@ int gb::get_bitnum(uint8_t data){
             if(reg_num >= 8) bit_num = 7;
             break;            
     }
-    printf("data: %x, bitnum: %x, regnum: %x\n", data, bit_num, reg_num);
+    // printf("data: %x, bitnum: %x, regnum: %x\n", data, bit_num, reg_num);
     return bit_num;
 }
 
 uint8_t gb::getData(){
-    return getMemory().getByte(pc);
+    uint8_t val = getMemory().getByte(pc);
+    pc++;
+    return val;
 }
 
 uint16_t gb::getWordData(){
-	return Tools::changeEndian(getMemory().getWord(pc));
+	uint16_t val = Tools::changeEndian(getMemory().getWord(pc));
+    pc+=2;
+    return val;
 }

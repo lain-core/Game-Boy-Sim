@@ -5,8 +5,7 @@
  * Call address n16. This pushes the address of the instruction after the CALL on the stack, such that RET can pop it later; then, it executes an implicit JP n16.
  */
 void gb::call(uint16_t offset){
-    printf("\ncalling to address: %04x\n", pc);
-    push(pc+1);
+    push_val(pc);
     pc = PC_START + offset;
 }
 
@@ -14,10 +13,10 @@ void gb::call(uint16_t offset){
  * call_cc(bool, uint16_t) / CALL cc,n16
  * Call address n16 if condition cc is met.
  */
-void gb::call_cc(bool flag, uint16_t address){
+void gb::call_cc(bool flag, uint16_t offset){
     if(flag){
-        push(pc+1);
-        pc = address;
+        push_val(pc);
+        pc = PC_START + offset;
     }
 }
 
@@ -52,19 +51,20 @@ void gb::jp_cc(bool flag, uint16_t address){
  * jr(uint8_t) / JR e8
  * Relative Jump by adding e8 to the address of the instruction following the JR. To clarify, an operand of 0 is equivalent to no jumping.
  */
-void gb::jr(uint8_t offset){
-    uint16_t newPC = (pc + 1) + offset;
-    pc = newPC;
+void gb::jr(int8_t offset){
+    printf("pc in jr is: %04x\n", pc);
+    printf("\noffset: %02x\n", offset);
+    pc += offset;
 }
 
 /*
  * jr_cc(int, uint8_t) / JR cc,e8
  * Relative Jump by adding e8 to the current address if condition cc is met.
  */
-void gb::jr_cc(bool flag, uint8_t offset){
+void gb::jr_cc(bool flag, int8_t offset){
+    printf("\noffset: %02x\n", offset);
     if(flag){
-        uint16_t newPC = (pc + 1) + offset;
-        pc = newPC;
+        pc += offset;
     }
 }
 
@@ -73,17 +73,21 @@ void gb::jr_cc(bool flag, uint8_t offset){
  * Return from subroutine. This is basically a POP PC.
  */
 void gb::ret(){
+    printf("pc entering RET is: %04x\n", pc);
+    printf("sp entering RET is: %04x\n", getRegisters().getReg16(SP));
     //Grab the stack pointer.
     uint16_t stackptr = getRegisters().getReg16(SP);
     //Grab the high byte.
-    uint8_t high = getMemory().getByte(stackptr);
-    stackptr++;
-    //Grab the low byte.
     uint8_t low = getMemory().getByte(stackptr);
     stackptr++;
-    uint16_t value = ((high << 8) | low);
+    //Grab the low byte.
+    uint8_t high = getMemory().getByte(stackptr);
+    stackptr++;
+    uint16_t offset = ((high << 8) | low);
+
     //Put the value into our PC.
-    getRegisters().setReg16(pc, value);
+    pc = PC_START + offset;
+    printf("new pc after RET is: %04x\n", pc);
     //Set SP to the new stack pointer we've calculated.
     getRegisters().setReg16(SP, stackptr);
 }

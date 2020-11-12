@@ -67,7 +67,6 @@ void gb::di(){
  * Enables interrupts by setting the Interrupt Master Enable flag.
  */
 void gb::ei(){
-    std::cout << "ei" << std::endl;
     ime = true;
 }
 

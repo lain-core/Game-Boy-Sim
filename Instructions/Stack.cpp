@@ -120,7 +120,7 @@ void gb::pop(int reg16){
  * For sake of simplicity, we re-use this for PUSH AF.
  */
 void gb::push(int reg16){
-    printf("In push for register %d\n", reg16);
+    // printf("In push for register %d\n", reg16);
     //Grab the stack pointer.
     uint16_t stackptr = getRegisters().getReg16(SP);
     //Grab the value out of our register and split it into hi and lo.
@@ -139,10 +139,11 @@ void gb::push(int reg16){
   * push(uint16_t) / NONE
   * Push the value n16 onto the stack.
   */
-void gb::push(uint16_t value){
+void gb::push_val(uint16_t value){
     uint16_t stackptr = getRegisters().getReg16(SP);
     uint8_t high_val = (value & 0xF0) >> 8;
     uint8_t low_val = (value & 0x0F);
+    // printf("high val: %02x\nlow_val: %02x", high_val, low_val);
     stackptr--;
     getMemory().putByte(stackptr, high_val);
     stackptr--;
