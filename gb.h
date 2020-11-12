@@ -57,6 +57,7 @@ class gb{
     bool decode_sub(uint8_t);
     bool decode_and_xor(uint8_t);
     bool decode_or_cp(uint8_t);
+    bool decode_rl_rr(uint8_t);
     bool decode_bit(uint8_t);
     bool decode_res(uint8_t);
     bool decode_set(uint8_t);
@@ -126,7 +127,7 @@ class gb{
     void sra(int);          //SRA r8
     void sra_hl();          //SRA [HL]
     void srl(int);          //SRL r8
-    void srl_hl(void);      //SRL [HL]
+    void srl_hl(void);      //SRL [HL]   
 
     /* Load Opcodes */
     void ld(int, int);              //LD r8,r8
@@ -174,7 +175,6 @@ class gb{
     void pop(int);           //POP r16
     void push(void);         //PUSH AF
     void push(int);          //PUSH r16
-    
 
     /* Miscellaneous Opcodes */
     void ccf(void);

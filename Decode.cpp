@@ -367,12 +367,21 @@ bool gb::decode_bitops(uint8_t opcode){
             else if(regnum == NOT_AN_8BIT) swap_hl();
             else found_inst = false;
         }
+        //else if((data & 0xf0) >= 0x00 && (data & 0xf0) <= 0x1F) found_inst = decode_rlc_rrc(data);
+        else if((data & 0xf0) >= 0x10 && (data & 0xf0) <= 0x1F) found_inst = decode_rl_rr(data);
         else if((data & 0xf0) >= 0x40 && (data & 0xf0) <= 0x70) found_inst = decode_bit(data);
         else if((data & 0xf0) >= 0x80 && (data & 0xf0) <= 0xB0) found_inst = decode_res(data);
         else if((data & 0xf0) >= 0xC0 && (data & 0xf0) <= 0xF0) found_inst = decode_set(data);
         else found_inst = false;
     }
-    else found_inst = false;
+    else switch(opcode){
+        case 0x17:
+            rla();
+            break;
+        default:
+            found_inst = false;
+            break;
+    }
     return found_inst;
 }
 
@@ -565,6 +574,23 @@ bool gb::decode_or_cp(uint8_t opcode){
     }
     else found_inst = false;
     return found_inst;
+}
+
+/*
+ * decode_rl_rr(uint8_t)
+ * Decodes opcodes dedicated to Left and Right rotates.
+ */
+bool gb::decode_rl_rr(uint8_t opcode){
+    bool found_inst = true;
+    int regnum = get_regnum(opcode);
+    //RL occupies 0x10 - 0x17.
+    //0x16 calls RL [HL] rather than RL r8.
+    if(opcode <= 0x17){
+        if(regnum < NOT_AN_8BIT) rl(regnum);
+    }
+    else found_inst = false;
+    return found_inst;
+    
 }
 
 /*
