@@ -31,9 +31,11 @@ class gb{
         //void clock();
         //uint8_t getStat(void)
         bool load   (std::string);
+        void run(void);
         bool readFile(std::string);
         void trace(void);
         void sigint_handler(int);
+        int getCycles(){return cycles;}
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
         bool getStatus(){return status;}
