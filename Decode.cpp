@@ -62,90 +62,103 @@ bool gb::decode_load(uint8_t opcode){
 		switch(opcode){
         	case 0x01:
                 ld_r16(BC, getWordData());
+                cycles += 3;
                 break;
         	case 0x11:
                 ld_r16(DE, getWordData());
+                cycles += 3;
                 break;
         	case 0x21:
                 ld_r16(HL, getWordData());
+                cycles += 3;
                 break;
 			case 0x02:
 				ld_r16A(BC);
+                cycles += 2;
 				break;
 			case 0x12:
 				ld_r16A(DE);
+                cycles += 2;
 				break;
 			case 0x22:
 				ld_hli();
+                cycles += 2;
 				break;
 			case 0x32:
 				ld_hld();
+                cycles += 2;
 				break;
+        	case 0x3E:
+            	ld_n(A, getData());
+                cycles += 2;
+            	break;
 			case 0x06:
 				ld_n(B, getData());
-				
+                cycles += 2;
 				break;
-        	case 0x16:
-            	ld_n(D, getData());
-            	
-            	break;
-        	case 0x26:
-            	ld_n(H, getData());
-            	
-            	break;
-        	case 0x36:
-            	ld_hln(getData());
-            	
-            	break;
-        	case 0x0A:
-            	ld_a_r16(BC);
-            	break;
-        	case 0x1A:
-            	ld_a_r16(DE);
-            	break;
-        	case 0x2A:
-            	ld_hli_a();
-            	break;
-        	case 0x3A:
-            	ld_hld_a();
-            	break;
         	case 0x0E:
             	ld_n(C, getData());
-            	
+                cycles += 2;
+            	break;
+        	case 0x16:
+            	ld_n(D, getData());
+                cycles += 2;
             	break;
         	case 0x1E:
             	ld_n(E, getData());
-            	
+                cycles += 2;
+            	break;
+        	case 0x26:
+            	ld_n(H, getData());
+                cycles += 2;
             	break;
         	case 0x2E:
             	ld_n(L, getData());
-            	
+                cycles += 2;
             	break;
-        	case 0x3E:
-            	ld_n(A, getData());
-            	
+        	case 0x36:
+            	ld_hln(getData());
+                cycles += 3;
+            	break;
+        	case 0x0A:
+            	ld_a_r16(BC);
+                cycles += 2;
+            	break;
+        	case 0x1A:
+            	ld_a_r16(DE);
+                cycles += 2;
+            	break;
+        	case 0x2A:
+            	ld_hli_a();
+                cycles += 2;
+            	break;
+        	case 0x3A:
+            	ld_hld_a();
+                cycles += 2;
             	break;
         	case 0xE0:
             	ldh_n16A(getData());
-            	
-            	break;
-        	case 0xF0:
-            	ldh_n16(getData());
-                
-                break;
-        	case 0xE2:
-            	//FIXME: listed as 1 byte???
-            	ldh_c();
-            	break;
-        	case 0xF2:
-            	//FIXME: "
-            	ldh_c_a();
+                cycles += 3;
             	break;
         	case 0xEA:
                 ld_n16A(getWordData());
+                cycles += 3;
             	break;
         	case 0xFA:
             	ld_n16(getWordData());
+                cycles += 3;
+            	break;
+        	case 0xF0:
+            	ldh_n16(getData());
+                cycles += 4;
+                break;
+        	case 0xE2:
+            	ldh_c();
+                cycles += 2;
+            	break;
+        	case 0xF2:
+            	ldh_c_a();
+                cycles += 2;
             	break;
 			default:
 				found_inst = false;
