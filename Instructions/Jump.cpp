@@ -17,6 +17,7 @@ void gb::call_cc(bool flag, uint16_t offset){
     if(flag){
         push_val(pc);
         pc = PC_START + offset;
+        cycles += 3;
     }
 }
 
@@ -65,6 +66,7 @@ void gb::jr_cc(bool flag, int8_t offset){
     printf("\noffset: %02x\n", offset);
     if(flag){
         pc += offset;
+        cycles += 1;
     }
 }
 

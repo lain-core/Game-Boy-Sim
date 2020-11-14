@@ -209,85 +209,101 @@ bool gb::decode_math(uint8_t opcode){
     //All 8-Bit relevant ops.
     //TODO: fucked up 8-bit info; clean up.
     switch(opcode){
+        case 0x3C:
+            inc(A);
+            cycles++;
+            break;
         case 0x04:
             inc(B);
-            break;
-        case 0x14:
-            inc(D);
-            break;
-        case 0x24:
-            inc(H);
-            break;
-        case 0x34:
-            inc_hl();
-            break;
-        case 0x05:
-            dec(B);
-            break;
-        case 0x15:
-            dec(D);
-            break;
-        case 0x25:
-            dec(H);
-            break;
-        case 0x35:
-            dec_hl();
+            cycles++;
             break;
         case 0x0C:
             inc(C);
+            cycles++;
+            break;
+        case 0x14:
+            inc(D);
+            cycles++;
             break;
         case 0x1C:
             inc(E);
+            cycles++;
+            break;
+        case 0x24:
+            inc(H);
+            cycles++;
             break;
         case 0x2C:
             inc(L);
-            break;
-        case 0x3C:
-            inc(A);
-            break;
-        case 0x0D:
-            dec(C);
-            break;
-        case 0x1D:
-            dec(E);
-            break;
-        case 0x2D:
-            dec(L);
+            cycles++;
             break;
         case 0x3D:
             dec(A);
+            cycles++;
+            break;
+        case 0x05:
+            dec(B);
+            cycles++;
+            break;
+        case 0x0D:
+            dec(C);
+            cycles++;
+            break;
+        case 0x15:
+            dec(D);
+            cycles++;
+            break;
+        case 0x1D:
+            dec(E);
+            cycles++;
+            break;
+        case 0x25:
+            dec(H);
+            cycles++;
+            break;
+        case 0x2D:
+            dec(L);
+            cycles++;
+            break;
+        case 0x34:
+            inc_hl();
+            cycles += 3;
+            break;
+        case 0x35:
+            dec_hl();
+            cycles += 3;
             break;
         case 0xC6:
             add_n(getData());
-            
+            cycles += 2;
             break;
         case 0xD6:
             sub_n(getData());
-            
+            cycles += 2;
             break;
         case 0xE6:
             op_and_n(getData());
-            
+            cycles += 2; 
             break;
         case 0xF6:
             op_or_n(getData());
-            
-            break;
-        case 0xCE:
-            adc_n(getData());
-            
-            break;
-        case 0xDE:
-            sbc_n(getData());
-            
+            cycles += 2;
             break;
         case 0xEE:
             op_xor_n(getData());
-            
+            cycles += 2;
+            break;
+        case 0xCE:
+            adc_n(getData());
+            cycles ++;
+            break;
+        case 0xDE:
+            sbc_n(getData());
+            cycles += 2;
             break;
         case 0xFE:
             cp_n(getData());
-            
+            cycles += 2;
             break;
         default:
             found_inst = false;
@@ -299,33 +315,43 @@ bool gb::decode_math(uint8_t opcode){
         switch(opcode){
         case 0x03:
             inc_r16(BC);
+            cycles += 2;
             break;
         case 0x13:
             inc_r16(DE);
+            cycles += 2;
             break;
         case 0x23:
             inc_r16(HL);
+            cycles += 2;
             break;
         case 0x09:
             add_r16(BC);
+            cycles += 2;
             break;
         case 0x19:
             add_r16(DE);
+            cycles += 2;
             break;
         case 0x29:
             add_r16(HL);
+            cycles += 2;
             break;
         case 0x39:
             add_r16(SP);
+            cycles += 2;
             break;
         case 0x0B:
             dec_r16(BC);
+            cycles += 2;
             break;
         case 0x1B:
             dec_r16(DE);
+            cycles += 2;
             break;
         case 0x2B:
             dec_r16(HL);
+            cycles += 2;
             break;
         default:
             found_inst = false;
@@ -390,48 +416,62 @@ bool gb::decode_stackops(uint8_t opcode){
     switch(opcode){
         case 0x39:
             add_hl_sp();
-            break;
-        case 0x3B:
-            dec_sp();
+            cycles += 2;
             break;
         case 0x33:
             inc_sp();
+            cycles += 2;
+            break;
+        case 0x3B:
+            dec_sp();
+            cycles += 2;
             break;
         case 0x31:
             ld_sp(getWordData());
+            cycles += 3;
             break;
         case 0x08:
             ld_n_sp(getWordData());
-            break;
-        case 0xF8: //LD HL,SP+8
-            found_inst = false;
+            cycles += 5;
             break;
         case 0xF9:
             ld_sp_hl();
+            cycles += 2;
             break;
         case 0xC1:
             pop(BC);
+            cycles += 3;
             break;
         case 0xD1:
             pop(DE);
+            cycles += 3;
             break;
         case 0xE1:
             pop(HL);
+            cycles += 3;
             break;
         case 0xF1:
             pop(AF);
+            cycles += 3;
             break;
         case 0xC5:
             push(BC);
+            cycles += 3;
             break;
         case 0xD5:
             push(DE);
+            cycles += 3;
             break;
         case 0xE5:
             push(HL);
+            cycles += 3;
             break;
         case 0xF5:
             push(AF);
+            cycles += 4;
+            break;
+        case 0xF8: //LD HL,SP+8
+            found_inst = false;
             break;
         default:
             found_inst = false;
@@ -444,50 +484,61 @@ bool gb::decode_jump(uint8_t opcode){
     bool found_inst = true;
     bool cc = false;
     switch(opcode){
-        case 0xC4:
-            cc = !(getRegisters().getFlag(FLAG_Z));
-            call_cc(cc, getWordData());
-            break;
-        case 0xC9:
-            ret();
-            break;
-        case 0xD4:
-            cc = !(getRegisters().getFlag(FLAG_C));
-            call_cc(cc, getWordData());
-            break;
-        case 0xCC:
-            cc = getRegisters().getFlag(FLAG_Z);
-            call_cc(cc, getWordData());
+        case 0xCD:
+            call(getWordData());
+            cycles += 6;
             break;
         case 0xDC:
             cc = getRegisters().getFlag(FLAG_C);
             call_cc(cc, getWordData());
+            cycles += 3;
             break;
-        case 0xCD:
-            call(getWordData());
+        case 0xCC:
+            cc = getRegisters().getFlag(FLAG_Z);
+            call_cc(cc, getWordData());
+            cycles += 3;
             break;
-        case 0xD9:
-            reti();
+        case 0xC4:
+            cc = !(getRegisters().getFlag(FLAG_Z));
+            call_cc(cc, getWordData());
+            cycles += 3;
+            break;
+        case 0xD4:
+            cc = !(getRegisters().getFlag(FLAG_C));
+            call_cc(cc, getWordData());
+            cycles += 3;
             break;
         case 0x18: //JR r8
-            printf("pc before call is: %04x\n", pc);
             jr(getData());
+            cycles += 3;
             break;
         case 0x28: //JR Z,r8
             cc = getRegisters().getFlag(FLAG_Z);
             jr_cc(cc, getData());
+            cycles++;
             break;
         case 0x38: //JR C,r8
             cc = getRegisters().getFlag(FLAG_C);
             jr_cc(cc, getData());
+            cycles++;
             break;
         case 0x20: //JR NZ,r8
             cc = !(getRegisters().getFlag(FLAG_Z));
             jr_cc(cc, getData());
+            cycles++;
             break;
         case 0x30: //JR NC,r8
             cc = !(getRegisters().getFlag(FLAG_C));
             jr_cc(cc, getData());
+            cycles++;
+            break;
+        case 0xC9:
+            ret();
+            cycles += 4;
+            break;
+        case 0xD9:
+            reti();
+            cycles += 4;
             break;
         default:
             found_inst = false;
