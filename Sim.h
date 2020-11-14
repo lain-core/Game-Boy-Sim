@@ -6,6 +6,10 @@
 
 #define MEMORY_SIZE 0xFFFF //bytes
 #define NUM_VECTORS 8
+#define CYCLES_PER_SECOND 4194304 //Ref from pandocs
+#define FRAMES_PER_SECOND 60
+#define CYCLES_PER_FRAME  (CYCLES_PER_SECOND / FRAMES_PER_SECOND)
+
 
 /* Important Memory Locations */
 #define PC_START            0x0100  

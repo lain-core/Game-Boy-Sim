@@ -10,6 +10,7 @@ gb::gb(){
 void gb::reset(){
 	ime = false;
 	cycles = 0;
+	getMemory().putByte(0xFF47, 0xE4); //Initialize our color palette.
 	//FIXME: We are temporarily using 0x100 as our starting PC because we have not yet implemented the GB bootstrap rom.
 	pc = PC_START;
 }
@@ -36,7 +37,7 @@ int main(int argc, char** argv){
 	while(myGB.getStatus()){
 		printf("Calling decode(%04x) (passing only one byte)\n", myGB.getMemory().getWord(myGB.pc));
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
-		myGB.trace();
+		//myGB.trace();
 	}
 	// myGB.getMemory().dumpVRAM();
 }
