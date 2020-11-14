@@ -1,5 +1,7 @@
 #include <iostream>
 #include <csignal>
+#include <chrono>
+#include <thread>
 #include "gb.h"
 gb myGB;
 
@@ -32,14 +34,28 @@ int main(int argc, char** argv){
 		myGB.setStatus(myGB.load(argv[1]));
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
-
-	//Primary Event Loop.
+	//While GB is still running, run every 16ms (60 FPS).
 	while(myGB.getStatus()){
+		int frameCount = 0;
+		while(frameCount < FRAMES_PER_SECOND){
+			myGB.run();
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			frameCount++;
+		}
+	}
+}
+
+void gb::run(){
+	//Primary Event Loop.
+	while(((myGB.getCycles() % CYCLES_PER_FRAME) != 0 || myGB.getCycles() == 0) && myGB.getStatus()){
 		printf("Calling decode(%04x) (passing only one byte)\n", myGB.getMemory().getWord(myGB.pc));
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
-		//myGB.trace();
+		myGB.trace();
+		//update timers
+		//update graphics
+		//do interrupts
 	}
-	// myGB.getMemory().dumpVRAM();
+	//Update graphics.
 }
 
 /*
