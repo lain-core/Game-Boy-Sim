@@ -164,6 +164,7 @@ bool gb::decode_misc(uint8_t opcode){
     switch(opcode){
         case 0x00: //nop
             nop();
+            cycles++;
             break;
         case 0x76: //halt
             halt();
@@ -171,21 +172,24 @@ bool gb::decode_misc(uint8_t opcode){
         case 0x10: //stop is a 16-bit instruction, 0x1000. If we have data following our stop, it may be a different op!
             if(getData() == 0x00){
                 stop();
-                
             }
             else found_inst = false;
             break;
         case 0x37: //scf
             scf();
+            cycles++;
             break;
         case 0x3F: //ccf
             ccf();
+            cycles++;
             break;
         case 0xF3: //di
             di();
+            cycles++;
             break;
         case 0xFB: //ei
             ei();
+            cycles++;
             break;
         case 0x2F: //cpl
             cpl();
