@@ -1,19 +1,19 @@
-// Pixel.cpp
+// PPUnit.cpp
 // Authors: Hunter King, Joe Story
 
 #include <iostream>
 #include <iomanip>
-#include "Pixel.h"
+#include "PPUnit.h"
 
-Pixel::Pixel(){
+PPUnit::PPUnit(){
 }
 
 /*
  * getRowColor
- * Given two bytes, returns a pointer to an array of 8 pixels on screen with their associated color value (0-3).
+ * Given two bytes, returns a pointer to an array of 8 PPUnits on screen with their associated color value (0-3).
  * For example, the tile 0x5030 will return: [0, 1, 2, 3, 0, 0, 0, 0]
  */
-uint8_t * Pixel::getRowColor(uint16_t row){
+uint8_t * PPUnit::getRowColor(uint16_t row){
     uint16_t byte1 = (row & 0xFF00) >> 8; // grab high order byte out of the 2
     uint16_t byte2 = (row & 0x00FF);      // grab low order byte
     uint16_t mask = 0x01;

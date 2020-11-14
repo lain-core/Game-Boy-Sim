@@ -7,11 +7,10 @@
 #include "Sim.h"
 
 class PPUnit{
-
     uint8_t miniPix[8] = {0};
 
 public:
     PPUnit();
     uint8_t* getRowColor(uint16_t);
-};
+}; //End class PPUnit
 #endif
