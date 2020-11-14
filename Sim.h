@@ -73,6 +73,14 @@
 #define COLOR1              0x8bac0f
 #define COLOR0              0x9bbc0f  // closest to white
 
-/* Major Opcodes */
+/* LCD Control Register*/
+#define BG_DISPLAY          0   // draw background if enabled
+#define OBJ_DISPLAY         1   // draw sprites if enabled
+#define OBJ_SIZE            2   // size of sprites that need to draw 8x8 or 8x16
+#define BG_MAP_SELECT       3   // specifies range of tile set for background not window
+#define GB_WINDOW_SELECT    4   // specifies tile id number -> if signed and what range
+#define WIN_DISPLAY_ENABLE  5   // draw window if enabled
+#define WIN_TILE_SELECT     6   // specifies range of tile set for window drawing
+#define LCD_DISPLAY         7   // draw lcd if enabled 
 
 #endif
