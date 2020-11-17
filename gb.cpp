@@ -15,6 +15,8 @@ void gb::reset(){
 	getMemory().putByte(0xFF47, 0xE4); //Initialize our color palette.
 	//FIXME: We are temporarily using 0x100 as our starting PC because we have not yet implemented the GB bootstrap rom.
 	pc = PC_START;
+	//PPUnit updatedppu(memory);
+	//ppu = updatedppu;
 }
 
 void sigint_handler(int signum){
@@ -35,6 +37,8 @@ int main(int argc, char** argv){
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//While GB is still running, run every 16ms (60 FPS).
+	myGB.getMemory().putByte(SCROLL_Y, 0xFB);
+	//myGB.getPPU().render_tiles();
 	while(myGB.getStatus()){
 		int frameCount = 0;
 		while(frameCount < FRAMES_PER_SECOND){
@@ -48,9 +52,11 @@ int main(int argc, char** argv){
 void gb::run(){
 	//Primary Event Loop.
 	while(((myGB.getCycles() % CYCLES_PER_FRAME) != 0 || myGB.getCycles() == 0) && myGB.getStatus()){
-		printf("Calling decode(%04x) (passing only one byte)\n", myGB.getMemory().getWord(myGB.pc));
+		myGB.getMemory().putByte(0x0100, 0x76);
+		if(myGB.getMemory().getByte(pc) == 0x50) printf("last instruction in bootrom!\n");
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
 		myGB.trace();
+		//myGB.getMemory().dump(0x0134, 0x014D);
 		//update timers
 		//update graphics
 		//do interrupts
@@ -64,6 +70,7 @@ void gb::run(){
  */
 void gb::trace(){
 	printf("-----------------------------------------------------------\n");
+	printf("Current cycle: %d Status is: %d\n", myGB.getCycles(), myGB.getStatus());
 	printf("Program Counter is at: 0x%04x, which contains: 0x%02x\n", pc, getMemory().getByte(pc));
 	printf("The contents of the 8- and 16-bit registers are:\n");
 	printf("A: 0x%02x F: 0x%02x\nB: 0x%02x C: 0x%02x\nD: 0x%02x E: 0x%02x\nH: 0x%02x L: 0x%02x\n", getRegisters().getReg8(A), getRegisters().getReg8(F), getRegisters().getReg8(B), getRegisters().getReg8(C) , getRegisters().getReg8(D), getRegisters().getReg8(E), getRegisters().getReg8(H), getRegisters().getReg8(L));

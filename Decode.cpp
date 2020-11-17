@@ -322,14 +322,7 @@ bool gb::decode_math(uint8_t opcode){
             cp_n(getData());
             cycles += 2;
             break;
-        default:
-            found_inst = false;
-            break;
-    }
-
     //All instructions operating on 16-bit registers.
-    if(!found_inst){
-        switch(opcode){
         case 0x03:
             inc_r16(BC);
             cycles += 2;
@@ -373,7 +366,6 @@ bool gb::decode_math(uint8_t opcode){
         default:
             found_inst = false;
             break;
-        }
     }
 
     // uint8_t data = getData();

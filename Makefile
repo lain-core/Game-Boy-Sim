@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -g -c -Wall -std=c++17 -Og
 INSTDIR = Instructions
-OBJ = Tools.o Memory.o GBLoader.o Registers.o PPUnit.o Decode.o gb.o
+OBJ = Tools.o Memory.o GBLoader.o Registers.o PPUnit.o Decode.o gb.o PPUnit.o
 INST_OBJ = $(INSTDIR)/Misc.o $(INSTDIR)/Arithmetic.o $(INSTDIR)/BitOps.o $(INSTDIR)/BitShift.o $(INSTDIR)/Load.o $(INSTDIR)/Stack.o $(INSTDIR)/Jump.o 
 SUBDIRS = asm
 
@@ -20,7 +20,7 @@ Registers.o: Registers.h Sim.h
 
 GBLoader.o: gb.h
 
-PPUnit.o: Sim.h PPUnit.h
+PPUnit.o: Sim.h PPUnit.h Memory.h
 
 $(INSTDIR)/Misc.o: gb.h Sim.h
 

@@ -1,0 +1,7 @@
+1) Write Cycles for everything in decode.
+2) Research and Understand PPU -> ONLY WORKING ON BACKGROUND
+    a) Read through fancy website docks
+    b) Break PPU implementation into pieces
+    c) Understand how it operates with and in memory
+    
+3) Look into timers and how overall event time is going to work together

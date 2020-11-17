@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <iomanip>
-#include "PPUnit.h"
+#include "PPUnit.h" 
 
-PPUnit::PPUnit(){
+PPUnit::PPUnit(Memory arg_memory){
+    memory = arg_memory;
 }
+
 
 /*
  * getRowColor
@@ -28,4 +30,13 @@ uint8_t * PPUnit::getRowColor(uint16_t row){
     }
     
     return miniPix;
+}
+
+void PPUnit::render_tiles(){
+// where to draw the visual area and the window
+   uint8_t scrollY = memory.getByte(SCROLL_Y);
+   uint8_t scrollX = memory.getByte(SCROLL_X);
+   uint8_t windowY = memory.getByte(WINDOW_Y);
+   uint8_t windowX = memory.getByte(WINDOW_X) - 7;
+   printf("ScrollY: %02x\n", memory.getByte(SCROLL_Y));
 }

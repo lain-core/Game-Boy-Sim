@@ -92,7 +92,7 @@
 #define OBP0        0xFF48 //Obj palette 0 data -> assigns gray shades for sprite palette 0.
 #define OPB1        0xFF49 //Obj palette 1 data -> assigns gray shades for sprite palette 1.
 #define WINDOW_Y    0xFF4A //The Y position of VIEWING AREA to start drawing from.
-#define WINDOW_X    0xFF4B //The X position of VIEWING AREA to start drawing from.
+#define WINDOW_X    0xFF4B //The X position -7 of VIEWING AREA to start drawing from.
 
 /* Sound related Macros */
 /* Sound Channel 1 */

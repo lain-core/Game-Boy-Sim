@@ -5,12 +5,16 @@
 #include <cstdint> //fixed-width unsigned ints
 
 #include "Sim.h"
+#include "Memory.h"
 
 class PPUnit{
     uint8_t miniPix[8] = {0};
+    Memory memory;
+
 
 public:
-    PPUnit();
+    PPUnit(Memory);
     uint8_t* getRowColor(uint16_t);
+    void render_tiles();
 }; //End class PPUnit
 #endif
