@@ -25,6 +25,7 @@ class Memory{
 		void 		reset(void);
 		void 		dumpROM(void);
 		void 		dumpVRAM(void);
+		void 		dump(int, int);
 		uint16_t	trace(void);
 		bool		isMemError(void);
 };
