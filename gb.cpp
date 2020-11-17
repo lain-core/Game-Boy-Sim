@@ -28,8 +28,8 @@ void sigint_handler(int signum){
 int main(int argc, char** argv){
 	signal(SIGINT, sigint_handler);
 	if(argc == 1){
-		printf("No rom specified, loading asm/first.gb (if it exists).\n");
-		myGB.setStatus(myGB.load("asm/first.gb"));
+		printf("No rom specified, loading asm/DMG_ROM.bin (if it exists).\n");
+		myGB.setStatus(myGB.load("asm/DMG_ROM.bin"));
 	}
 	else{
 		printf("Loading %s\n", argv[1]);
@@ -52,7 +52,7 @@ int main(int argc, char** argv){
 void gb::run(){
 	//Primary Event Loop.
 	while(((myGB.getCycles() % CYCLES_PER_FRAME) != 0 || myGB.getCycles() == 0) && myGB.getStatus()){
-		myGB.getMemory().putByte(0x0100, 0x76);
+		//myGB.getMemory().putByte(0x0100, 0x76);
 		if(myGB.getMemory().getByte(pc) == 0x50) printf("last instruction in bootrom!\n");
 		myGB.setStatus(myGB.decode(myGB.getMemory().getByte(myGB.pc++)));
 		myGB.trace();

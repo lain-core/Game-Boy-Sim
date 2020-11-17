@@ -12,6 +12,7 @@
 
 
 /* Important Memory Locations */
+//#define PC_START            0x0000
 #define PC_START            0x0100  
 //FIXME: change this later when we go to run the boot rom
 #define RSI                 0x0000 //RSI is ReStart and Interrupt Vectors.
