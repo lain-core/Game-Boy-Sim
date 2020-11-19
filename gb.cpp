@@ -15,8 +15,7 @@ void gb::reset(){
 	getMemory().putByte(0xFF47, 0xE4); //Initialize our color palette.
 	//FIXME: We are temporarily using 0x100 as our starting PC because we have not yet implemented the GB bootstrap rom.
 	pc = PC_START;
-	//PPUnit updatedppu(memory);
-	//ppu = updatedppu;
+	ppu.addMem(&memory);
 }
 
 void sigint_handler(int signum){
@@ -38,7 +37,7 @@ int main(int argc, char** argv){
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//While GB is still running, run every 16ms (60 FPS).
 	myGB.getMemory().putByte(SCROLL_Y, 0xFB);
-	//myGB.getPPU().render_tiles();
+	myGB.getPPU().render_tiles();
 	while(myGB.getStatus()){
 		int frameCount = 0;
 		while(frameCount < FRAMES_PER_SECOND){

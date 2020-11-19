@@ -12,7 +12,7 @@ class gb{
     bool status;
     int cycles;
     Memory          memory;
-    //PPUnit          ppu;
+    PPUnit          ppu;
     Registers       regs;
     //GB RST vectors.
     uint8_t vectors[8] = {0x00, 0x08, 0x10, 0x18, 0x20, 0x28, 0x30, 0x38};
@@ -40,7 +40,7 @@ class gb{
         int getCycles(){return cycles;}
         Memory & getMemory(){return memory;}
         Registers & getRegisters(){return regs;}
-        //PPUnit & getPPU(){return ppu;}
+        PPUnit & getPPU(){return ppu;}
         bool getStatus(){return status;}
         void setStatus(bool newStatus){status = newStatus;}
         int getPC(){return pc;}
