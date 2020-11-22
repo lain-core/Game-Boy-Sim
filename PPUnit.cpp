@@ -29,32 +29,30 @@ uint32_t * PPUnit::getRowColor(uint16_t row){
             if (byte2 & (mask << i)) miniPix[7-i] += 2; // if byte 2's bit is on
     }
     
-    uint32_t * final_color;
-    
-    for (int i = 0; i < 4; i++){
-        switch (i)
+    uint32_t tileRowArray[TILE_WIDTH] = {0};
+    for (int i = 0; i < 8; i++){
+        switch(miniPix[i])
         {
         case 0:
-            final_color[i] = COLOR0;
+            tileRowArray[i] = COLOR0;
             break;
 
         case 1:
-            final_color[i] = COLOR1;
+            tileRowArray[i] = COLOR1;
             break;
 
         case 2:
-            final_color[i] = COLOR2;
+            tileRowArray[i] = COLOR2;
             break;
 
         case 3:
-            final_color[i] = COLOR3;
+            tileRowArray[i] = COLOR3;
             break;
-
         default:
             break;
         }
     }
-    return final_color;
+    return tileRowArray;
 }
 
 /*

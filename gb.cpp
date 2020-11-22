@@ -36,8 +36,12 @@ int main(int argc, char** argv){
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//While GB is still running, run every 16ms (60 FPS).
-	myGB.getMemory().putByte(SCROLL_Y, 0xFB);
-	myGB.getPPU().render_tiles();
+	//myGB.getPPU().render_tiles();
+	uint32_t * row = myGB.getPPU().getRowColor(0x5030);
+	for(int i = 0; i < 8; i++){
+		printf("Color %d: 0x%08x\n", i, row[i]);
+	}
+	/* Main loop
 	while(myGB.getStatus()){
 		int frameCount = 0;
 		while(frameCount < FRAMES_PER_SECOND){
@@ -45,7 +49,7 @@ int main(int argc, char** argv){
 			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 			frameCount++;
 		}
-	}
+	}*/
 }
 
 void gb::run(){

@@ -9,7 +9,6 @@
 
 class PPUnit{
     uint8_t miniPix[TILE_WIDTH] = {0};
-    uint32_t tileRowArray[TILE_WIDTH] = {0};
     uint32_t lcdArray[LCD_WIDTH] = {0}; 
     Memory * memory;
 
