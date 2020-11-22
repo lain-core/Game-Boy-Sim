@@ -46,6 +46,7 @@ int main(int argc, char** argv){
 			frameCount++;
 		}
 	}
+}
 
 void gb::run(){
 	//Primary Event Loop.

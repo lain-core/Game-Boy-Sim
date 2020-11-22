@@ -3,9 +3,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include "Sim.h"
 #include "PPUnit.h" 
-#include "gb.h"
-#include "gb.cpp"
 
 void PPUnit::addMem(Memory * arg_memory){
     memory = arg_memory;
