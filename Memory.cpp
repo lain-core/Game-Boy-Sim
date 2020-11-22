@@ -70,6 +70,20 @@ uint8_t * Memory::getTile(uint16_t baddy)
 	}
 }
 
+uint16_t Memory::getTileRow(uint16_t baddy){
+	lastUsed = baddy;
+	if(VRAM <= baddy && (baddy + 15) <= VRAM_END){
+		uint16_t final = 0;
+		final += mem[baddy];
+		final += (mem[baddy+1]) << 8;
+		return final;
+	}
+	else{
+		memError = true;
+		return 0;
+	}
+}
+
 /*
  * putByte
  * Puts a single byte into memory, given a 16-bit byte address.

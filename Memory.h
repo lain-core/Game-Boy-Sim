@@ -22,6 +22,7 @@ class Memory{
 		uint16_t	getWord(uint16_t byteAddress);
 		void 		putTile(uint16_t baddy, uint8_t arr[16]);
 		uint8_t *	getTile(uint16_t baddy);
+		uint16_t 	getTileRow(uint16_t baddy);
 		void 		reset(void);
 		void 		dumpROM(void);
 		void 		dumpVRAM(void);

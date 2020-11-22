@@ -12,8 +12,8 @@ void PPUnit::addMem(Memory * arg_memory){
 
 /*
  * getRowColor
- * Given two bytes, returns a pointer to an array of 8 PPUnits on screen with their associated color value (0-3).
- * For example, the tile 0x5030 will return: [0, 1, 2, 3, 0, 0, 0, 0]
+ * Given two bytes, returns a pointer to an array of 8 pixel color values as expected by SDL2 (ARGB_8888 / uint32_t).
+ * For example, the tile 0x5030 will return: [COLOR0, COLOR1, COLO2, COLOR3, COLOR0, COLOR0, COLOR0, COLOR0] where COLORX is macro'd in Sim.h.
  */
 uint32_t * PPUnit::getRowColor(uint16_t row){
     uint16_t byte1 = (row & 0xFF00) >> 8; // grab high order byte out of the 2
@@ -90,12 +90,11 @@ void PPUnit::render_tiles(){
     }
 
     // this block finds which tile data we are using
-    if (GB_WINDOW_SELECT) tileData = VRAM; // VRAM is 0x8000
-    else{
-        // this bit tells what range and if it is signed or not
-        tileData = 0x8000; 
+    if (GB_WINDOW_SELECT){
+        tileData = VRAM; // VRAM is 0x8000
         is_unsigned = false;
-    }
+    } 
+    else tileData = 0x8800;
 
     // this block finds which background data we are using
     if (inWindow){
@@ -126,20 +125,27 @@ void PPUnit::render_tiles(){
         if (is_unsigned) tileNum = (uint8_t) memory->getByte(tileAddress);
         else tileNum = (int8_t) memory->getByte(tileAddress);
 
-        // find where this tile id is memory
+        // find where this tile id is in memory
         uint16_t tileLocation = tileData;
         if (is_unsigned) tileLocation += (tileNum * 16);
         else tileLocation += ((tileNum + 128) * 16);
+
+        //For example, if we have our sample tile ROW 0x5030.
+        uint16_t tilepiece = memory->getTileRow(tileLocation);
+        uint32_t * row = getRowColor(tilepiece);
+	    for(int i = 0; i < 8; i++){
+		    printf("Color %d: 0x%08x\n", i, row[i]);
+	    }
 
         // find what vertical line of the tile we are on
         // this is to get correct tile data
         // FIXME: from here on out we use our own sdl and so on to find color and write pixels onto the screen
 
-        uint8_t line = (positionY  % 8) * 2; // each line of data takes 2 bytes
-        uint8_t data1 = memory->getByte(tileLocation + line);
-        uint8_t data2 = memory->getByte(tileLocation + line + 1);
-        uint16_t data = (data1 << 8) + data2;
-        if (i % 20 == 0) lcdArray[i] = *getRowColor(data);
+        //uint8_t line = (positionY  % 8) * 2; // each line of data takes 2 bytes
+        //uint8_t data1 = memory->getByte(tileLocation + line);
+        //uint8_t data2 = memory->getByte(tileLocation + line + 1);
+        //uint16_t data = (data1 << 8) + data2;
+        //if (i % 20 == 0) lcdArray[i] = *getRowColor(data);
    }
 
 

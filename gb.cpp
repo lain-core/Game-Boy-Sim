@@ -36,11 +36,11 @@ int main(int argc, char** argv){
 	}
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//While GB is still running, run every 16ms (60 FPS).
-	//myGB.getPPU().render_tiles();
-	uint32_t * row = myGB.getPPU().getRowColor(0x5030);
-	for(int i = 0; i < 8; i++){
-		printf("Color %d: 0x%08x\n", i, row[i]);
-	}
+	//FIXME: Check that Memory::getTileRow() is constructed correctly; Memory should be Little endian, so I think this is how this should go in.
+	myGB.getMemory().putByte(0x8800, 0x30);
+	myGB.getMemory().putByte(0x8801, 0x50);
+	myGB.getMemory().putByte(LCD_CONTROL, 0x81); //Sets the bits 0 and 7 (LCD_ENABLE and BG_DISPLAY)
+	myGB.getPPU().render_tiles();
 	/* Main loop
 	while(myGB.getStatus()){
 		int frameCount = 0;
