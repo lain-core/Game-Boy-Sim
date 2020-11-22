@@ -8,13 +8,16 @@
 #include "Memory.h"
 
 class PPUnit{
-    uint8_t miniPix[8] = {0};
+    uint8_t miniPix[TILE_WIDTH] = {0};
+    uint32_t tileRowArray[TILE_WIDTH] = {0};
+    uint32_t lcdArray[LCD_WIDTH] = {0}; 
     Memory * memory;
 
 
 public:
     void addMem(Memory *);
-    uint8_t *getRowColor(uint16_t);
+    uint32_t *getRowColor(uint16_t);
     void render_tiles();
-}; //End class PPUnit
+    void scan_line();
+    }; //End class PPUnit
 #endif

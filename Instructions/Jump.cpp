@@ -53,8 +53,8 @@ void gb::jp_cc(bool flag, uint16_t address){
  * Relative Jump by adding e8 to the address of the instruction following the JR. To clarify, an operand of 0 is equivalent to no jumping.
  */
 void gb::jr(int8_t offset){
-    printf("pc in jr is: %04x\n", pc);
-    printf("\noffset: %02x\n", offset);
+    // printf("pc in jr is: %04x\n", pc);
+    // printf("\noffset: %02x\n", offset);
     pc += offset;
 }
 
