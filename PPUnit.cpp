@@ -7,6 +7,19 @@
 #include "Sim.h"
 #include "PPUnit.h" 
 
+PPUnit::PPUnit(){
+    SDL_Init(SDL_INIT_VIDEO);
+    window = SDL_CreateWindow("Game Boy", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, GB_WIDTH, GB_HEIGHT, 0);
+    render = SDL_CreateRenderer(window, -1, 0);
+    texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC, GB_WIDTH, GB_HEIGHT);
+}
+
+PPUnit::~PPUnit(){
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(render);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
 
 void PPUnit::addMem(Memory * arg_memory){
     memory = arg_memory;
@@ -109,9 +122,6 @@ void PPUnit::render_tiles(){
     }
 
 
-   // find which of the 8 tile scanlines we are on
-   uint16_t tileRow = (((uint16_t) (positionY/8))*32);
-
    // draw 160 pixels on this scanline
    //However, we ARE grabbing an entire tile row so this only needs to run 20x.
    //FIXME: 20 * 18 is equal to Number of tiles wide X number of tiles high, but this is ugly.
@@ -123,6 +133,9 @@ void PPUnit::render_tiles(){
 
         printf("in Window posX: %d\n", positionX);
 
+
+        // find which of the 8 tile scanlines we are on
+        uint16_t tileRow = (((uint16_t) (positionY/8))*32);
         // which tile does the positionX fall within
         uint16_t tileCol = positionX / 8;
         int16_t tileNum;
@@ -146,13 +159,14 @@ void PPUnit::render_tiles(){
         }*/
         for(int j = 0; j < 8; j++){
             uint16_t tilepiece = memory->getTileRow(tileLocation + (j*2));
+            printf("tilepiece: %04x\n\n", tilepiece);
             getRowColor(tilepiece);
             for(int k = 0; k < 8; k++){
                 printf("Color %d for row %d is: %08x\n", k, j, tileRowArray[k]);
             }
         }
+        updateSDL();
    }
-            updateSDL();
 
 
 }
@@ -167,32 +181,11 @@ void PPUnit::updateSDL(){
         sdlPix[i] = tileRowArray[i];
     }
 
-
-    SDL_Init(SDL_INIT_VIDEO);
-
-    SDL_Window *window = SDL_CreateWindow("Game Boy", 
-        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, GB_WIDTH, GB_HEIGHT, 0);
-
-    SDL_Renderer * render = SDL_CreateRenderer(window, -1, 0);
-
-    SDL_Texture * texture = SDL_CreateTexture(render, 
-        SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC, GB_WIDTH, GB_HEIGHT);
-    
-    while(!quit){
-        switch(event.type){
-            case SDL_QUIT:
-                quit = true;
-                break;
-        }
-        SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
-        SDL_RenderClear(render);
-        SDL_RenderCopy(render, texture, NULL, NULL);
-        SDL_RenderPresent(render);
-    }
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(render);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
+    SDL_RenderClear(render);
+    SDL_RenderCopy(render, texture, NULL, NULL);
+    SDL_RenderPresent(render);
+    render_tiles();
 }
 
 void PPUnit::refresh(){

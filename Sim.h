@@ -49,9 +49,11 @@
 /* 8-bit Program Register Values */
 #define NUM_8REGISTERS 8
 #define F 0
-#define A 1
+const int A = 1;
+//#define A 1
 #define C 2
-#define B 3
+const int B = 3;
+//#define B 3
 #define E 4
 #define D 5
 #define L 6
