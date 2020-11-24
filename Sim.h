@@ -9,8 +9,8 @@
 #define CYCLES_PER_SECOND 4194304 //Ref from pandocs
 #define FRAMES_PER_SECOND 60
 #define CYCLES_PER_FRAME  (CYCLES_PER_SECOND / FRAMES_PER_SECOND)
-#define LCD_WIDTH 160
-#define LCD_HEIGHT 144
+#define GB_WIDTH 160
+#define GB_HEIGHT 144
 #define TILE_WIDTH 8
 #define TILE_HEIGHT 8
 

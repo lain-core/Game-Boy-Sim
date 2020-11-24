@@ -37,8 +37,16 @@ int main(int argc, char** argv){
 	printf("File loaded successfully: %d\n", myGB.getStatus());
 	//While GB is still running, run every 16ms (60 FPS).
 	//FIXME: Check that Memory::getTileRow() is constructed correctly; Memory should be Little endian, so I think this is how this should go in.
-	myGB.getMemory().putByte(0x8800, 0x30);
-	myGB.getMemory().putByte(0x8801, 0x50);
+	uint8_t smileyTile[16] = {0x00, 0xFF, 0x00,0xFF,
+							  0x24, 0xFF, 0x00,0xFF,
+							  0x42, 0xFF, 0x7E,0xFF,
+							  0x00, 0xFF, 0x00,0xFF};
+	for(int i = 0; i < 16; i++){
+		uint16_t baddy = 0x8800 + i;
+		myGB.getMemory().putByte(baddy, smileyTile[i]);
+		printf("memory at %04x is now: %02x\n", baddy, myGB.getMemory().getByte(baddy));
+	}
+	
 	myGB.getMemory().putByte(LCD_CONTROL, 0x81); //Sets the bits 0 and 7 (LCD_ENABLE and BG_DISPLAY)
 	myGB.getPPU().render_tiles();
 	/* Main loop

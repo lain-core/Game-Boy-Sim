@@ -1,14 +1,26 @@
 CC = g++
 CFLAGS = -g -c -Wall -std=c++17 -Og
 INSTDIR = Instructions
-OBJ = Tools.o Memory.o GBLoader.o Registers.o PPUnit.o Decode.o gb.o PPUnit.o
+OBJ = Tools.o Memory.o GBLoader.o Registers.o PPUnit.o Decode.o gb.o 
 INST_OBJ = $(INSTDIR)/Misc.o $(INSTDIR)/Arithmetic.o $(INSTDIR)/BitOps.o $(INSTDIR)/BitShift.o $(INSTDIR)/Load.o $(INSTDIR)/Stack.o $(INSTDIR)/Jump.o 
 SUBDIRS = asm
+MAC_SDL = -F/Library/Frameworks -framework SDL2
+LINUX_SDL = `pkg-config --cflags --libs sdl2`
+PLATFORM := $(shell uname)
+
+ifeq ($(PLATFORM),Darwin)
+    SDL = $(MAC_SDL)
+endif
+
+ifeq ($(PLATFORM),Linux)
+    SDL = $(LINUX_SDL)
+endif
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 
 gb: $(OBJ) $(INST_OBJ)
+	$(CC) $(CCFLAGS) $(OBJ) $(INST_OBJ) $(SDL) -o gb
 
 Decode.o: gb.h Sim.h Tools.h
 

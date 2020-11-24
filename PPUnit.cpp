@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <iomanip>
+#include <SDL2/SDL.h>
 #include "Sim.h"
 #include "PPUnit.h" 
+
 
 void PPUnit::addMem(Memory * arg_memory){
     memory = arg_memory;
@@ -15,23 +17,24 @@ void PPUnit::addMem(Memory * arg_memory){
  * Given two bytes, returns a pointer to an array of 8 pixel color values as expected by SDL2 (ARGB_8888 / uint32_t).
  * For example, the tile 0x5030 will return: [COLOR0, COLOR1, COLO2, COLOR3, COLOR0, COLOR0, COLOR0, COLOR0] where COLORX is macro'd in Sim.h.
  */
-uint32_t * PPUnit::getRowColor(uint16_t row){
+void PPUnit::getRowColor(uint16_t row){
+    uint8_t vramRow[8] = {0};
     uint16_t byte1 = (row & 0xFF00) >> 8; // grab high order byte out of the 2
     uint16_t byte2 = (row & 0x00FF);      // grab low order byte
     uint16_t mask = 0x01;
+    refresh();
 
-    std::cout << "our tile is: 0x" << std::hex << row << std::endl;
+    std::cout << "our row is: 0x" << std::hex << row << std::endl;
     std::cout << "our byte1 is: 0x" << std::hex << byte1 << std::endl;
     std::cout << "our byte2 is: 0x" << std::hex << byte2 << std::endl;
 
     for (int i = 0; i < 8; i++){
-            if (byte1 & (mask << i)) miniPix[7-i] += 1; // if byte 1's bit is on
-            if (byte2 & (mask << i)) miniPix[7-i] += 2; // if byte 2's bit is on
+            if (byte1 & (mask << i)) vramRow[7-i] += 1; // if byte 1's bit is on
+            if (byte2 & (mask << i)) vramRow[7-i] += 2; // if byte 2's bit is on
     }
     
-    uint32_t tileRowArray[TILE_WIDTH] = {0};
     for (int i = 0; i < 8; i++){
-        switch(miniPix[i])
+        switch(vramRow[i])
         {
         case 0:
             tileRowArray[i] = COLOR0;
@@ -52,7 +55,6 @@ uint32_t * PPUnit::getRowColor(uint16_t row){
             break;
         }
     }
-    return tileRowArray;
 }
 
 /*
@@ -111,10 +113,15 @@ void PPUnit::render_tiles(){
    uint16_t tileRow = (((uint16_t) (positionY/8))*32);
 
    // draw 160 pixels on this scanline
-   for (int i = 0; i < 160; i++){
+   //However, we ARE grabbing an entire tile row so this only needs to run 20x.
+   //FIXME: 20 * 18 is equal to Number of tiles wide X number of tiles high, but this is ugly.
+   for (int i = 0; i < (20 * 18); i++){
         positionX = i + scrollX;
+        printf("posX: %d\n", positionX);
         // translate the current positionX to window space if necessary
         if (inWindow && i >= windowX) positionX = i - windowX;
+
+        printf("in Window posX: %d\n", positionX);
 
         // which tile does the positionX fall within
         uint16_t tileCol = positionX / 8;
@@ -131,22 +138,66 @@ void PPUnit::render_tiles(){
         else tileLocation += ((tileNum + 128) * 16);
 
         //For example, if we have our sample tile ROW 0x5030.
-        uint16_t tilepiece = memory->getTileRow(tileLocation);
-        uint32_t * row = getRowColor(tilepiece);
-	    for(int i = 0; i < 8; i++){
-		    printf("Color %d: 0x%08x\n", i, row[i]);
-	    }
-
-        // find what vertical line of the tile we are on
-        // this is to get correct tile data
-        // FIXME: from here on out we use our own sdl and so on to find color and write pixels onto the screen
-
-        //uint8_t line = (positionY  % 8) * 2; // each line of data takes 2 bytes
-        //uint8_t data1 = memory->getByte(tileLocation + line);
-        //uint8_t data2 = memory->getByte(tileLocation + line + 1);
-        //uint16_t data = (data1 << 8) + data2;
-        //if (i % 20 == 0) lcdArray[i] = *getRowColor(data);
+        /*uint16_t tilepiece = memory->getTileRow(tileLocation);
+        uint32_t * row;
+        getRowColor(tilepiece);
+        for(int j = 0; j < 8; j++){
+            printf("Color %d: %08x\n", j, tileRowArray[j]);
+        }*/
+        for(int j = 0; j < 8; j++){
+            uint16_t tilepiece = memory->getTileRow(tileLocation + (j*2));
+            getRowColor(tilepiece);
+            for(int k = 0; k < 8; k++){
+                printf("Color %d for row %d is: %08x\n", k, j, tileRowArray[k]);
+            }
+        }
    }
+            updateSDL();
 
 
+}
+
+void PPUnit::updateSDL(){
+    bool quit = false;
+    SDL_Event event;
+    printf("attempting to accesss lcdArray.\n");
+
+
+    for (int i = 0; i < TILE_WIDTH; i++){
+        sdlPix[i] = tileRowArray[i];
+    }
+
+
+    SDL_Init(SDL_INIT_VIDEO);
+
+    SDL_Window *window = SDL_CreateWindow("Game Boy", 
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, GB_WIDTH, GB_HEIGHT, 0);
+
+    SDL_Renderer * render = SDL_CreateRenderer(window, -1, 0);
+
+    SDL_Texture * texture = SDL_CreateTexture(render, 
+        SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC, GB_WIDTH, GB_HEIGHT);
+    
+    while(!quit){
+        switch(event.type){
+            case SDL_QUIT:
+                quit = true;
+                break;
+        }
+        SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
+        SDL_RenderClear(render);
+        SDL_RenderCopy(render, texture, NULL, NULL);
+        SDL_RenderPresent(render);
+    }
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(render);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void PPUnit::refresh(){
+    //Clean up our tileRowArray before parsing in another tile.
+    for(int i = 0; i < TILE_WIDTH; i++){
+        tileRowArray[i] = 0;
+    }
 }

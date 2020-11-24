@@ -8,15 +8,17 @@
 #include "Memory.h"
 
 class PPUnit{
-    uint8_t miniPix[TILE_WIDTH] = {0};
-    uint32_t lcdArray[LCD_WIDTH] = {0}; 
+    uint32_t tileRowArray[TILE_WIDTH] = {0};
+    uint32_t sdlPix[(GB_WIDTH * GB_HEIGHT)] = {0};
     Memory * memory;
 
 
 public:
     void addMem(Memory *);
-    uint32_t *getRowColor(uint16_t);
+    void getRowColor(uint16_t);
     void render_tiles();
     void scan_line();
+    void updateSDL();
+    void refresh();
     }; //End class PPUnit
 #endif
