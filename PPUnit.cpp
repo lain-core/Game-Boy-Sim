@@ -7,9 +7,9 @@
 #include "Sim.h"
 #include "PPUnit.h"
 
-SDL_Window *window;
-SDL_Renderer *render;
-SDL_Texture *texture;
+SDL_Window *window = NULL;
+SDL_Renderer *render = NULL;
+SDL_Texture *texture = NULL;
 
 PPUnit::PPUnit(){
     SDL_Init(SDL_INIT_VIDEO);
@@ -155,22 +155,22 @@ void PPUnit::render_tiles(){
         else tileLocation += ((tileNum + 128) * 16);
 
         //For example, if we have our sample tile ROW 0x5030.
-        /*uint16_t tilepiece = memory->getTileRow(tileLocation);
+        uint16_t tilepiece = memory->getTileRow(tileLocation);
         uint32_t * row;
         getRowColor(tilepiece);
+        updateSDL();
         for(int j = 0; j < 8; j++){
             printf("Color %d: %08x\n", j, tileRowArray[j]);
-        }*/
-        for(int j = 0; j < 8; j++){
+        }
+        /*for(int j = 0; j < 8; j++){
             uint16_t tilepiece = memory->getTileRow(tileLocation + (j*2));
             printf("tilepiece: %04x\n\n", tilepiece);
             getRowColor(tilepiece);
             for(int k = 0; k < 8; k++){
                 printf("Color %d for row %d is: %08x\n", k, j, tileRowArray[k]);
             }
-        }
+        }*/
    }
-        updateSDL();
 
 }
 
