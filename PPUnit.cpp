@@ -5,7 +5,11 @@
 #include <iomanip>
 #include <SDL2/SDL.h>
 #include "Sim.h"
-#include "PPUnit.h" 
+#include "PPUnit.h"
+
+SDL_Window *window;
+SDL_Renderer *render;
+SDL_Texture *texture;
 
 PPUnit::PPUnit(){
     SDL_Init(SDL_INIT_VIDEO);
@@ -98,7 +102,7 @@ void PPUnit::render_tiles(){
     // if the window is enabled
     if (WIN_DISPLAY_ENABLE){
         // if the current scanline is within the windows y-position
-        if (windowY <= LY){
+        if (windowY <= memory->getByte(LY)){
             // then we are using the window
             inWindow = true;
         }
@@ -113,19 +117,19 @@ void PPUnit::render_tiles(){
 
     // this block finds which background data we are using
     if (inWindow){
-        positionY = LY + scrollY; // if we are in the window set current bounds, if we are outside fix it
+        positionY = memory->getByte(LY) + scrollY; // if we are in the window set current bounds, if we are outside fix it
         if (BG_MAP_SELECT) bgData = 0x9C00;
         else bgData = 0x9800;
     }
     else {
-        positionY = LY - windowY;
+        positionY = memory->getByte(LY) - windowY;
     }
 
 
    // draw 160 pixels on this scanline
    //However, we ARE grabbing an entire tile row so this only needs to run 20x.
    //FIXME: 20 * 18 is equal to Number of tiles wide X number of tiles high, but this is ugly.
-   for (int i = 0; i < (20 * 18); i++){
+   for (int i = 0; i < 20; i++){
         positionX = i + scrollX;
         printf("posX: %d\n", positionX);
         // translate the current positionX to window space if necessary
@@ -165,27 +169,26 @@ void PPUnit::render_tiles(){
                 printf("Color %d for row %d is: %08x\n", k, j, tileRowArray[k]);
             }
         }
-        updateSDL();
    }
-
+        updateSDL();
 
 }
 
 void PPUnit::updateSDL(){
     bool quit = false;
-    SDL_Event event;
+    //SDL_Event event;
     printf("attempting to accesss lcdArray.\n");
 
 
     for (int i = 0; i < TILE_WIDTH; i++){
         sdlPix[i] = tileRowArray[i];
     }
-
-    SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
-    SDL_RenderClear(render);
-    SDL_RenderCopy(render, texture, NULL, NULL);
-    SDL_RenderPresent(render);
-    render_tiles();
+    while(!quit){
+        SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
+        SDL_RenderClear(render);
+        SDL_RenderCopy(render, texture, NULL, NULL);
+        SDL_RenderPresent(render);
+    }
 }
 
 void PPUnit::refresh(){

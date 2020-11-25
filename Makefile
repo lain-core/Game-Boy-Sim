@@ -32,7 +32,7 @@ Registers.o: Registers.h Sim.h
 
 GBLoader.o: gb.h
 
-PPUnit.o: Sim.h PPUnit.h Memory.h
+PPUnit.o: Sim.h Memory.h PPUnit.h
 
 $(INSTDIR)/Misc.o: gb.h Sim.h
 
