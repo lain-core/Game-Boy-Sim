@@ -196,6 +196,7 @@ class gb{
     /* Opcode Helpers */
     void update_on_add(uint8_t, uint8_t); //Updates flags for ADD funcs.
     void push_val(uint16_t); //Pushes a value onto the stack. NOT an opcode.
+    uint16_t pop_val(void);  //Pops a value off of the stack. NOT an opcode.
 
 };
 

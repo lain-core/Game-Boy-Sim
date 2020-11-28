@@ -1,10 +1,13 @@
 #include "../gb.h"
 
+uint16_t ideal_return_address;
 /*
  * call(uint16_t) / CALL n16
  * Call address n16. This pushes the address of the instruction after the CALL on the stack, such that RET can pop it later; then, it executes an implicit JP n16.
  */
 void gb::call(uint16_t offset){
+    ideal_return_address = pc;
+    printf("calling, ret to pc value 0x%04x\n", ideal_return_address);
     push_val(pc);
     pc = PC_START + offset;
 }
@@ -53,8 +56,9 @@ void gb::jp_cc(bool flag, uint16_t address){
  * Relative Jump by adding e8 to the address of the instruction following the JR. To clarify, an operand of 0 is equivalent to no jumping.
  */
 void gb::jr(int8_t offset){
-    // printf("pc in jr is: %04x\n", pc);
-    // printf("\noffset: %02x\n", offset);
+    printf("pc in jr is: %04x\n", pc);
+    printf("offset: %02x\n", offset);
+    printf("final pc is: 0x%04x\n", (pc+offset));
     pc += offset;
 }
 
@@ -63,10 +67,11 @@ void gb::jr(int8_t offset){
  * Relative Jump by adding e8 to the current address if condition cc is met.
  */
 void gb::jr_cc(bool flag, int8_t offset){
-    printf("\noffset: %02x\n", offset);
     if(flag){
+        printf("pc in jr_cc is: %04x\n", pc);
+        printf("offset: %02x\n", offset);
+        printf("Final pc is: 0x%04x\n", (pc+offset));
         pc += offset;
-        cycles += 1;
     }
 }
 
@@ -76,22 +81,10 @@ void gb::jr_cc(bool flag, int8_t offset){
  */
 void gb::ret(){
     printf("pc entering RET is: %04x\n", pc);
-    printf("sp entering RET is: %04x\n", getRegisters().getReg16(SP));
-    //Grab the stack pointer.
-    uint16_t stackptr = getRegisters().getReg16(SP);
-    //Grab the high byte.
-    uint8_t low = getMemory().getByte(stackptr);
-    stackptr++;
-    //Grab the low byte.
-    uint8_t high = getMemory().getByte(stackptr);
-    stackptr++;
-    uint16_t offset = ((high << 8) | low);
-
-    //Put the value into our PC.
-    pc = PC_START + offset;
+    uint16_t newpc = pop_val();
+    pc = newpc;
     printf("new pc after RET is: %04x\n", pc);
-    //Set SP to the new stack pointer we've calculated.
-    getRegisters().setReg16(SP, stackptr);
+    printf("new pc SHOULD be 0x%04x\n", ideal_return_address);
 }
 
 /*
@@ -100,19 +93,12 @@ void gb::ret(){
  */
 void gb::ret_cc(bool flag){
     if(flag){
-        //Grab the stack pointer.
-        uint16_t stackptr = getRegisters().getReg16(SP);
-        //Grab the high byte.
-        uint8_t high = getMemory().getByte(stackptr);
-        stackptr++;
-        //Grab the low byte.
-        uint8_t low = getMemory().getByte(stackptr);
-        stackptr++;
-        uint16_t value = ((high << 8) | low);
-        //Put the value into our PC.
-        getRegisters().setReg16(pc, value);
+        uint16_t newpc = pop_val();
+        printf("pc entering RETI is: 0x%04x\n", pc);
+        pc = newpc;
+        printf("new pc after RETI is: %04x\n", pc);
+        printf("new pc SHOULD be 0x%04x\n", ideal_return_address);
         //Set SP to the new stack pointer we've calculated.
-        getRegisters().setReg16(SP, stackptr);
     }
 }
 

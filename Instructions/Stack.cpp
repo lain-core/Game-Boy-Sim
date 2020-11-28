@@ -102,12 +102,13 @@ void gb::pop(int reg16){
     //Grab the stack pointer.
     uint16_t stackptr = getRegisters().getReg16(SP);
     //Grab the high byte.
-    uint8_t high = getMemory().getByte(stackptr);
-    stackptr++;
-    //Grab the low byte.
     uint8_t low = getMemory().getByte(stackptr);
     stackptr++;
+    //Grab the low byte.
+    uint8_t high = getMemory().getByte(stackptr);
+    stackptr++;
     uint16_t value = ((high << 8) | low);
+    printf("in pop, the final value is: %04x\n", value);
     //Put the value into our register of choice.
     getRegisters().setReg16(reg16, value);
     //Set SP to the new stack pointer we've calculated.
@@ -125,8 +126,9 @@ void gb::push(int reg16){
     uint16_t stackptr = getRegisters().getReg16(SP);
     //Grab the value out of our register and split it into hi and lo.
     uint16_t reg_value = getRegisters().getReg16(reg16);
-    uint16_t high_val = reg_value & 0xF0;
-    uint16_t low_val = reg_value;
+    uint8_t high_val = (reg_value & 0xFF00) >> 8;
+    uint8_t low_val = reg_value & 0x00FF;
+    printf("In push, the high value is %02x, the low value is %02x\n", high_val, low_val);
     stackptr--;
     getMemory().putByte(stackptr, high_val);
     stackptr--;
@@ -136,17 +138,37 @@ void gb::push(int reg16){
 }
 
  /*
-  * push(uint16_t) / NONE
+  * push_val(uint16_t) / NONE
   * Push the value n16 onto the stack.
   */
 void gb::push_val(uint16_t value){
     uint16_t stackptr = getRegisters().getReg16(SP);
-    uint8_t high_val = (value & 0xF0) >> 8;
-    uint8_t low_val = (value & 0x0F);
-    // printf("high val: %02x\nlow_val: %02x", high_val, low_val);
+    uint8_t high_val = (value & 0xFF00) >> 8;
+    uint8_t low_val = (value & 0x00FF);
+    printf("high val: %02x\nlow_val: %02x", high_val, low_val);
     stackptr--;
     getMemory().putByte(stackptr, high_val);
     stackptr--;
     getMemory().putByte(stackptr, low_val);
     getRegisters().setReg16(SP, stackptr);
+}
+
+ /*
+  * pop_val(void)  / NONE
+  * Pop the value off the top of the stack.
+  */
+uint16_t gb::pop_val(){
+    //Grab the stack pointer.
+    uint16_t stackptr = getRegisters().getReg16(SP);
+    //Grab the high byte.
+    uint16_t high = getMemory().getByte(stackptr);
+    stackptr++;
+    //Grab the low byte.
+    uint16_t low = getMemory().getByte(stackptr) >> 8;
+    stackptr++;
+    uint16_t value = high + low;
+    //Set SP to the new stack pointer we've calculated.
+    getRegisters().setReg16(SP, stackptr);
+    //Return the value.
+    return value;
 }
