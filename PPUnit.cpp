@@ -179,16 +179,13 @@ void PPUnit::updateSDL(){
     //SDL_Event event;
     printf("attempting to accesss lcdArray.\n");
 
-
     for (int i = 0; i < TILE_WIDTH; i++){
         sdlPix[i] = tileRowArray[i];
     }
-    while(!quit){
-        SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
-        SDL_RenderClear(render);
-        SDL_RenderCopy(render, texture, NULL, NULL);
-        SDL_RenderPresent(render);
-    }
+    SDL_UpdateTexture(texture, NULL, sdlPix, GB_WIDTH * sizeof(uint32_t));
+    SDL_RenderClear(render);
+    SDL_RenderCopy(render, texture, NULL, NULL);
+    SDL_RenderPresent(render);
 }
 
 void PPUnit::refresh(){

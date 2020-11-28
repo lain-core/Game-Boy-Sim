@@ -17,6 +17,17 @@ bool gb::load(std::string filename){
     return status;
 }
 
+void gb::readBootRom(){
+    bool status = true;
+    std::ifstream file("asm/DMG_ROM.bin", std::ios::binary);
+    int baddy = PC_START;
+    int len = CART_HEADER - 1;
+    for(int i = 0; i <= len; i++){
+        getMemory().putByte((baddy + i), file.get());
+    }
+    file.close();
+}
+
 /*
  * readFile
  * Loads a file into Memory, by using successive calls to putByte().

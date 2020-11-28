@@ -35,6 +35,7 @@ class gb{
         bool load   (std::string);
         void run(void);
         bool readFile(std::string);
+        void readBootRom(void);
         void trace(void);
         void sigint_handler(int);
         int getCycles(){return cycles;}

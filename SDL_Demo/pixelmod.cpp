@@ -39,9 +39,8 @@ void init(){
                             SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 
                             SDL_WINDOW_SHOWN);
     renderma = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    // screenSurface = SDL_GetWindowSurface(window);
-//     texture = SDL_CreateTexture(renderma, SDL_PIXELFORMAT_ABGR8888, 
-//                             SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
+    screenSurface = SDL_GetWindowSurface(window);
+    texture = SDL_CreateTexture(renderma, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 // void loadMedia(){
@@ -140,7 +139,7 @@ void smiley(){
 
     for (int i = 0; i < 8; i++)
     {
-        pixels[i] = getRowColor(smileyTile[i]);
+        pixels[i] = getTileColor(smileyTile[i]);
         // for (int j = 0; j < 8; j++)
         //     printf("% 6x ", pixels[i][j]);
         // printf("\n");
