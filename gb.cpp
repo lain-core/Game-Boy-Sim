@@ -16,7 +16,7 @@ void gb::reset(){
 	//FIXME: We are temporarily using 0x100 as our starting PC because we have not yet implemented the GB bootstrap rom.
 	pc = PC_START;
 	myGB.readBootRom();
-	ppu.addMem(&memory);
+	//ppu.addMem(&memory);
 }
 
 void sigint_handler(int signum){
@@ -26,7 +26,7 @@ void sigint_handler(int signum){
 }
 
 int main(int argc, char** argv){
-	signal(SIGINT, sigint_handler);
+ 	signal(SIGINT, sigint_handler);
 	if(argc == 1){
 		printf("No rom specified, loading asm/DMG_ROM.bin (if it exists).\n");
 		//To test with the bootROM lets just pass thru true.
@@ -37,24 +37,24 @@ int main(int argc, char** argv){
 		printf("Loading %s\n", argv[1]);
 		myGB.setStatus(myGB.load(argv[1]));
 	}
-	printf("File loaded successfully: %d\n", myGB.getStatus());
-	uint8_t smileyTile[16] = {0x00, 0xFF, 0x00,0xFF,
-							  0x24, 0xFF, 0x00,0xFF,
-							  0x42, 0xFF, 0x7E,0xFF,
-							  0x00, 0xFF, 0x00,0xFF};
+	// printf("File loaded successfully: %d\n", myGB.getStatus());
+	// uint8_t smileyTile[16] = {0x00, 0xFF, 0x00,0xFF,
+	// 						  0x24, 0xFF, 0x00,0xFF,
+	// 						  0x42, 0xFF, 0x7E,0xFF,
+	// 						  0x00, 0xFF, 0x00,0xFF};
 	
-	myGB.getMemory().putByte(LCD_CONTROL, 0x81); //Sets the bits 0 and 7 (LCD_ENABLE and BG_DISPLAY)
+	// myGB.getMemory().putByte(LCD_CONTROL, 0x81); //Sets the bits 0 and 7 (LCD_ENABLE and BG_DISPLAY)
 	//myGB.getPPU().render_tiles();
 	//Main loop
-	while(myGB.getStatus()){
-		int frameCount = 0;
-		//While GB is still running, run every 16ms (60 FPS).
-		while(frameCount < FRAMES_PER_SECOND){
-			myGB.run();
-			std::this_thread::sleep_for(std::chrono::milliseconds(16));
-			frameCount++;
-		}
-	}
+	// while(myGB.getStatus()){
+	// 	int frameCount = 0;
+	// 	//While GB is still running, run every 16ms (60 FPS).
+	// 	while(frameCount < FRAMES_PER_SECOND){
+	// 		myGB.run();
+	// 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
+	// 		frameCount++;
+	// 	}
+	// }
 }
 
 void gb::run(){
